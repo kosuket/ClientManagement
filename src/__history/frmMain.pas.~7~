@@ -1,0 +1,150 @@
+unit frmMain;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Data.DBXMySQL, Data.DB,
+  Data.SqlExpr, Data.FMTBcd, Vcl.Grids, Vcl.DBGrids, Vcl.DBCGrids, Vcl.ExtCtrls,
+  Vcl.DBCtrls, Datasnap.Provider, Datasnap.DBClient, LogInFrm, Vcl.Buttons,
+  Vcl.ComCtrls,frmClientSearch,frmAccounting, frmMaster, Vcl.Menus;
+
+type
+  TMainframe = class(TForm)
+    SQLQuery1: TSQLQuery;
+    DataSource1: TDataSource;
+    ClientDataSet1: TClientDataSet;
+    DataSetProvider1: TDataSetProvider;
+    pnlMenu: TPanel;
+    Splitter1: TSplitter;
+    pnlMain: TPanel;
+    btnClientStatus: TSpeedButton;
+    lblPnlTitle: TLabel;
+    btnAccounting: TSpeedButton;
+    btnMaster: TSpeedButton;
+    MainMenu1: TMainMenu;
+    mmFile: TMenuItem;
+    mmExit: TMenuItem;
+    mmEdit: TMenuItem;
+    mmMode: TMenuItem;
+    pnlMainTitle: TPanel;
+    lblCurrentTitle: TSpeedButton;
+    procedure SQLConnection1Login(Database: TSQLConnection;
+      LoginParams: TStrings);
+    procedure btnClientStatusClick(Sender: TObject);
+    procedure btnAccountingClick(Sender: TObject);
+    procedure btnMasterClick(Sender: TObject);
+  private
+    { Private declarations }
+    procedure cleanPnlMain;
+    procedure setCurrentTitle(str: String; glyph: TBitmap);
+  public
+    { Public declarations }
+    frmLogIn: TLogInFrame;
+    frmClientSearch: TClientSearchframe;
+    frmAccountingSearch: TAccountingFrame;
+    frmMasterSetting: TMasterFrame;
+    SQLConnection1: TSQLConnection;
+    g_Username: String;
+    g_Password: String;
+    g_Database: String;
+    g_SchemaName: String;
+    g_HostName: String;
+    constructor Create(AOwner: TComponent) ; override;
+  end;
+
+var
+  Mainframe: TMainframe;
+
+implementation
+
+{$R *.dfm}
+
+procedure TMainframe.btnAccountingClick(Sender: TObject);
+begin
+  cleanPnlMain;
+  frmAccountingSearch.pnlBase.Visible := True;
+end;
+
+procedure TMainframe.btnClientStatusClick(Sender: TObject);
+begin
+  cleanPnlMain;
+  frmClientSearch.pnlBase.Visible := True;
+end;
+
+procedure TMainframe.btnMasterClick(Sender: TObject);
+begin
+  cleanPnlMain;
+  frmMasterSetting.pnlBase.Visible := True;
+end;
+
+procedure TMainframe.cleanPnlMain;
+begin
+  frmClientSearch.pnlBase.Visible := False;
+  frmAccountingSearch.pnlBase.Visible := False;
+  frmMasterSetting.pnlBase.Visible := False;
+end;
+
+constructor TMainframe.Create(AOwner: TComponent);
+begin
+  frmLogIn := TLogInFrame.Create(Self);
+  If frmLogIn.ShowModal = 1 then begin
+  if not SQLConnection1.Connected then Application.Terminate;
+  inherited;
+  SQLQuery1.SQLConnection := SQLConnection1;
+  end else begin
+    Application.Terminate;
+  end;
+  //ClientSearch
+  frmClientSearch := TClientSearchframe.Create(self);
+  frmClientSearch.sqlqSchoolName.SQLConnection := SQLConnection1;
+  frmClientSearch.SQLQuery1 := SQLQuery1;
+  frmClientSearch.ClientDataSet1 := ClientDataSet1;
+  frmClientSearch.DBGrid1.DataSource := DataSource1;
+  frmClientSearch.pnlBase.Parent := pnlMain;
+  frmClientSearch.Initialize;
+  frmClientSearch.pnlBase.Visible := False;
+
+  //AccountingSearch
+  frmAccountingSearch := TAccountingFrame.Create(Self);
+  frmAccountingSearch.pnlBase.Parent := pnlMain;
+  frmAccountingSearch.pnlBase.Visible := False;
+
+  //MasterSetting
+  frmMasterSetting := TMasterFrame.Create(Self);
+  frmMasterSetting.pnlBase.Parent := pnlMain;
+  frmMasterSetting.pnlBase.Visible := False;
+  //LastProc
+  frmClientSearch.pnlBase.Visible := True;
+
+end;
+
+procedure TMainframe.setCurrentTitle(str: String; glyph: TBitmap);
+begin
+  lblCurrentTitle.Caption := str;
+  //lblCurrentTitle.Glyph := glyph;
+end;
+
+procedure TMainframe.SQLConnection1Login(Database: TSQLConnection;
+  LoginParams: TStrings);
+var strList: TStrings;
+    i: Integer;
+begin
+  //ソースの内部実装がわからないためLoginParamsとSQLConnection1.Paramsの両方を変更する
+  strList := TStringList.Create;
+  strList.Add('Password=' + g_Password);
+  strList.Add('User_Name=' + g_UserName);
+  strList.Add('Database=edogijuku_db');
+  LoginParams := strList;
+  for i := 0 to SQLConnection1.Params.Count - 1 do begin
+    if LowerCase(Copy(SQLConnection1.Params[i],1,8))='password' then begin
+      SQLConnection1.Params[i] := 'Password=' + g_Password;
+    end;
+    if LowerCase(Copy(SQLConnection1.Params[i],1,9))='user_name' then begin
+      SQLConnection1.Params[i] := 'User_Name=' + g_UserName;
+    end;
+  end;
+  inherited;
+end;
+
+end.

@@ -102,12 +102,15 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             Height = 21
             AutoSize = False
             Caption = 'First Name'
+            Color = clCream
             Font.Charset = ANSI_CHARSET
             Font.Color = clWindowText
             Font.Height = -13
             Font.Name = 'Georgia'
             Font.Style = []
+            ParentColor = False
             ParentFont = False
+            Transparent = False
             Layout = tlBottom
           end
           object lblLastName: TLabel
@@ -117,12 +120,15 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             Height = 21
             AutoSize = False
             Caption = 'Last Name'
+            Color = clCream
             Font.Charset = ANSI_CHARSET
             Font.Color = clWindowText
             Font.Height = -13
             Font.Name = 'Georgia'
             Font.Style = []
+            ParentColor = False
             ParentFont = False
+            Transparent = False
             Layout = tlBottom
           end
           object lblEmail: TLabel
@@ -132,12 +138,15 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             Height = 21
             AutoSize = False
             Caption = 'Email Address'
+            Color = clCream
             Font.Charset = ANSI_CHARSET
             Font.Color = clWindowText
             Font.Height = -13
             Font.Name = 'Georgia'
             Font.Style = []
+            ParentColor = False
             ParentFont = False
+            Transparent = False
             Layout = tlBottom
           end
           object lblSponsored: TLabel
@@ -147,12 +156,15 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             Height = 21
             AutoSize = False
             Caption = 'Sponsored'
+            Color = clCream
             Font.Charset = ANSI_CHARSET
             Font.Color = clWindowText
             Font.Height = -13
             Font.Name = 'Georgia'
             Font.Style = []
+            ParentColor = False
             ParentFont = False
+            Transparent = False
             Layout = tlBottom
           end
           object lblUniversityName: TLabel
@@ -162,12 +174,15 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             Height = 21
             AutoSize = False
             Caption = 'University'
+            Color = clCream
             Font.Charset = ANSI_CHARSET
             Font.Color = clWindowText
             Font.Height = -13
             Font.Name = 'Georgia'
             Font.Style = []
+            ParentColor = False
             ParentFont = False
+            Transparent = False
             Layout = tlBottom
           end
           object lblDegree: TLabel
@@ -177,12 +192,15 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             Height = 21
             AutoSize = False
             Caption = 'Degree'
+            Color = clCream
             Font.Charset = ANSI_CHARSET
             Font.Color = clWindowText
             Font.Height = -13
             Font.Name = 'Georgia'
             Font.Style = []
+            ParentColor = False
             ParentFont = False
+            Transparent = False
             Layout = tlBottom
           end
           object lblMajor: TLabel
@@ -192,12 +210,15 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             Height = 21
             AutoSize = False
             Caption = 'Major'
+            Color = clCream
             Font.Charset = ANSI_CHARSET
             Font.Color = clWindowText
             Font.Height = -13
             Font.Name = 'Georgia'
             Font.Style = []
+            ParentColor = False
             ParentFont = False
+            Transparent = False
             Layout = tlBottom
           end
           object lblGPA: TLabel
@@ -207,12 +228,15 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             Height = 21
             AutoSize = False
             Caption = 'GPA'
+            Color = clCream
             Font.Charset = ANSI_CHARSET
             Font.Color = clWindowText
             Font.Height = -13
             Font.Name = 'Georgia'
             Font.Style = []
+            ParentColor = False
             ParentFont = False
+            Transparent = False
             Layout = tlBottom
           end
           object lblAcademicAward: TLabel
@@ -222,12 +246,15 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             Height = 21
             AutoSize = False
             Caption = 'Academic'
+            Color = clCream
             Font.Charset = ANSI_CHARSET
             Font.Color = clWindowText
             Font.Height = -13
             Font.Name = 'Georgia'
             Font.Style = []
+            ParentColor = False
             ParentFont = False
+            Transparent = False
             Layout = tlBottom
           end
           object lblPublication: TLabel
@@ -237,12 +264,15 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             Height = 21
             AutoSize = False
             Caption = 'Publication'
+            Color = clCream
             Font.Charset = ANSI_CHARSET
             Font.Color = clWindowText
             Font.Height = -13
             Font.Name = 'Georgia'
             Font.Style = []
+            ParentColor = False
             ParentFont = False
+            Transparent = False
             Layout = tlBottom
           end
           object lblStudyAbroad: TLabel
@@ -252,12 +282,15 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             Height = 21
             AutoSize = False
             Caption = 'Study Abroad'
+            Color = clCream
             Font.Charset = ANSI_CHARSET
             Font.Color = clWindowText
             Font.Height = -13
             Font.Name = 'Georgia'
             Font.Style = []
+            ParentColor = False
             ParentFont = False
+            Transparent = False
             Layout = tlBottom
           end
           object lblPlace: TLabel
@@ -267,12 +300,15 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             Height = 21
             AutoSize = False
             Caption = 'Place'
+            Color = clCream
             Font.Charset = ANSI_CHARSET
             Font.Color = clWindowText
             Font.Height = -13
             Font.Name = 'Georgia'
             Font.Style = []
+            ParentColor = False
             ParentFont = False
+            Transparent = False
             Layout = tlBottom
           end
           object lblWorkPlace: TLabel
@@ -282,12 +318,15 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             Height = 21
             AutoSize = False
             Caption = 'Work Place'
+            Color = clCream
             Font.Charset = ANSI_CHARSET
             Font.Color = clWindowText
             Font.Height = -13
             Font.Name = 'Georgia'
             Font.Style = []
+            ParentColor = False
             ParentFont = False
+            Transparent = False
             Layout = tlBottom
           end
           object lblUseEnglish: TLabel
@@ -297,12 +336,15 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             Height = 21
             AutoSize = False
             Caption = 'Use English'
+            Color = clCream
             Font.Charset = ANSI_CHARSET
             Font.Color = clWindowText
             Font.Height = -13
             Font.Name = 'Georgia'
             Font.Style = []
+            ParentColor = False
             ParentFont = False
+            Transparent = False
             Layout = tlBottom
           end
           object lblFutureGoal: TLabel
@@ -312,12 +354,15 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             Height = 21
             AutoSize = False
             Caption = 'Future Goal'
+            Color = clCream
             Font.Charset = ANSI_CHARSET
             Font.Color = clWindowText
             Font.Height = -13
             Font.Name = 'Georgia'
             Font.Style = []
+            ParentColor = False
             ParentFont = False
+            Transparent = False
             Layout = tlBottom
           end
           object edtFirstName: TEdit
@@ -593,13 +638,14 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             Width = 587
             Height = 24
             Align = alTop
+            BevelOuter = bvNone
             TabOrder = 0
             object lblGMATTitle: TLabel
               AlignWithMargins = True
-              Left = 4
-              Top = 4
+              Left = 3
+              Top = 3
               Width = 107
-              Height = 16
+              Height = 18
               Align = alLeft
               Alignment = taCenter
               AutoSize = False
@@ -616,24 +662,29 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
               ExplicitHeight = 22
             end
             object btnGAdd: TSpeedButton
-              Left = 114
-              Top = 1
+              Left = 113
+              Top = 0
               Width = 41
-              Height = 22
+              Height = 24
               Align = alLeft
               Caption = 'Add'
               Transparent = False
               OnClick = btnGAddClick
+              ExplicitLeft = 114
+              ExplicitTop = 1
+              ExplicitHeight = 22
             end
             object btnGDelete: TSpeedButton
-              Left = 155
-              Top = 1
+              Left = 154
+              Top = 0
               Width = 41
-              Height = 22
+              Height = 24
               Align = alLeft
               Caption = 'Delete'
               OnClick = btnGDeleteClick
               ExplicitLeft = 141
+              ExplicitTop = 1
+              ExplicitHeight = 22
             end
           end
           object grdGMAT: TStringGrid
@@ -643,6 +694,7 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             Height = 261
             Align = alClient
             FixedCols = 0
+            Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing]
             TabOrder = 1
             OnClick = grdGMATClick
             RowHeights = (
@@ -668,13 +720,14 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             Width = 564
             Height = 24
             Align = alTop
+            BevelOuter = bvNone
             TabOrder = 0
             object lblTOEFLTitle: TLabel
               AlignWithMargins = True
-              Left = 4
-              Top = 4
+              Left = 3
+              Top = 3
               Width = 107
-              Height = 16
+              Height = 18
               Align = alLeft
               Alignment = taCenter
               AutoSize = False
@@ -691,24 +744,29 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
               ExplicitHeight = 22
             end
             object SpeedButton1: TSpeedButton
-              Left = 114
-              Top = 1
+              Left = 113
+              Top = 0
               Width = 41
-              Height = 22
+              Height = 24
               Align = alLeft
               Caption = 'Add'
               Transparent = False
               OnClick = SpeedButton1Click
+              ExplicitLeft = 114
+              ExplicitTop = 1
+              ExplicitHeight = 22
             end
             object SpeedButton2: TSpeedButton
-              Left = 155
-              Top = 1
+              Left = 154
+              Top = 0
               Width = 41
-              Height = 22
+              Height = 24
               Align = alLeft
               Caption = 'Delete'
               OnClick = SpeedButton2Click
               ExplicitLeft = 141
+              ExplicitTop = 1
+              ExplicitHeight = 22
             end
           end
           object grdTOEFL: TStringGrid
@@ -720,6 +778,7 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             ColCount = 8
             FixedCols = 0
             RowCount = 2
+            Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing]
             TabOrder = 1
             OnClick = grdTOEFLClick
           end

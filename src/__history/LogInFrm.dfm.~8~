@@ -1,0 +1,247 @@
+object LogInFrame: TLogInFrame
+  Left = 0
+  Top = 0
+  Caption = 'LogInFrame'
+  ClientHeight = 206
+  ClientWidth = 363
+  Color = 13627640
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object pnlBase: TPanel
+    Left = 0
+    Top = 0
+    Width = 363
+    Height = 206
+    Align = alClient
+    TabOrder = 0
+    object pnlTop: TPanel
+      Left = 1
+      Top = 1
+      Width = 361
+      Height = 95
+      Align = alClient
+      Color = clWhite
+      ParentBackground = False
+      TabOrder = 0
+      ExplicitHeight = 85
+      DesignSize = (
+        361
+        95)
+      object lblLogInTitle: TLabel
+        Left = 28
+        Top = 41
+        Width = 305
+        Height = 25
+        Alignment = taCenter
+        AutoSize = False
+        Caption = 'Client DataBase '
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -21
+        Font.Name = 'Georgia'
+        Font.Style = []
+        ParentFont = False
+      end
+      object lbldeveloper: TLabel
+        Left = 238
+        Top = 80
+        Width = 119
+        Height = 13
+        Anchors = [akTop, akRight]
+        Caption = 'developed by Kosuke Takano'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Gentium Basic'
+        Font.Style = [fsItalic]
+        ParentFont = False
+      end
+      object pnlEdogijuku: TPanel
+        Left = 28
+        Top = 17
+        Width = 86
+        Height = 23
+        BevelOuter = bvNone
+        TabOrder = 0
+        object lblEdo: TLabel
+          Left = 0
+          Top = 0
+          Width = 31
+          Height = 23
+          Align = alLeft
+          AutoSize = False
+          Caption = 'Edo'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = #12513#12452#12522#12458
+          Font.Style = [fsBold]
+          ParentFont = False
+          ExplicitLeft = 40
+          ExplicitTop = 15
+          ExplicitHeight = 17
+        end
+        object lblGijuku: TLabel
+          Left = 31
+          Top = 0
+          Width = 55
+          Height = 23
+          Align = alClient
+          AutoSize = False
+          Caption = 'Gijuku'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Verdana'
+          Font.Style = [fsItalic]
+          ParentFont = False
+          Layout = tlCenter
+          ExplicitLeft = 88
+          ExplicitTop = 8
+          ExplicitWidth = 31
+          ExplicitHeight = 13
+        end
+      end
+    end
+    object pnlBottom: TPanel
+      Left = 1
+      Top = 96
+      Width = 361
+      Height = 109
+      Align = alBottom
+      Color = 14342870
+      ParentBackground = False
+      TabOrder = 1
+      DesignSize = (
+        361
+        109)
+      object btnOK: TSpeedButton
+        Left = 70
+        Top = 77
+        Width = 105
+        Height = 25
+        Anchors = [akLeft, akBottom]
+        Caption = 'OK'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Georgia'
+        Font.Style = []
+        ParentFont = False
+        OnClick = btnOKClick
+        ExplicitTop = 66
+      end
+      object btnCancel: TSpeedButton
+        Left = 181
+        Top = 77
+        Width = 105
+        Height = 25
+        Anchors = [akRight, akBottom]
+        Caption = 'Cancel'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Georgia'
+        Font.Style = []
+        ParentFont = False
+        OnClick = btnCancelClick
+        ExplicitTop = 66
+      end
+      object lblUser: TLabel
+        Left = 28
+        Top = 13
+        Width = 95
+        Height = 21
+        AutoSize = False
+        Caption = 'User Name'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Georgia'
+        Font.Style = []
+        ParentFont = False
+      end
+      object lblPassword: TLabel
+        Left = 28
+        Top = 46
+        Width = 95
+        Height = 21
+        Anchors = [akLeft, akTop, akRight]
+        AutoSize = False
+        Caption = 'Password'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Georgia'
+        Font.Style = []
+        ParentFont = False
+      end
+      object edtUserName: TEdit
+        Left = 143
+        Top = 13
+        Width = 190
+        Height = 21
+        TabOrder = 0
+      end
+      object edtPassword: TMaskEdit
+        Left = 143
+        Top = 46
+        Width = 190
+        Height = 21
+        Anchors = [akLeft, akTop, akRight]
+        PasswordChar = '*'
+        TabOrder = 1
+        Text = ''
+        OnKeyPress = edtPasswordKeyPress
+      end
+    end
+  end
+  object SQLConnection1: TSQLConnection
+    DriverName = 'MySQL'
+    Params.Strings = (
+      'User_Name=test'
+      'Password=test'
+      'DriverUnit=Data.DBXMySQL'
+      
+        'DriverPackageLoader=TDBXDynalinkDriverLoader,DbxCommonDriver180.' +
+        'bpl'
+      
+        'DriverAssemblyLoader=Borland.Data.TDBXDynalinkDriverLoader,Borla' +
+        'nd.Data.DbxCommonDriver,Version=18.0.0.0,Culture=neutral,PublicK' +
+        'eyToken=91d62ebb5b0d1b1b'
+      
+        'MetaDataPackageLoader=TDBXMySqlMetaDataCommandFactory,DbxMySQLDr' +
+        'iver180.bpl'
+      
+        'MetaDataAssemblyLoader=Borland.Data.TDBXMySqlMetaDataCommandFact' +
+        'ory,Borland.Data.DbxMySQLDriver,Version=18.0.0.0,Culture=neutral' +
+        ',PublicKeyToken=91d62ebb5b0d1b1b'
+      'GetDriverFunc=getSQLDriverMYSQL'
+      'LibraryName=dbxmys.dll'
+      'LibraryNameOsx=libsqlmys.dylib'
+      
+        'VendorLib=C:\Program Files (x86)\MySQL\MySQL Server 5.1\lib\libm' +
+        'ysql.dll'
+      
+        'VendorLibWin64=C:\Program Files (x86)\MySQL\MySQL Server 5.1\lib' +
+        '\libmysql.dll'
+      'VendorLibOsx=libmysqlclient.dylib'
+      'HostName=test'
+      'Database=test'
+      'MaxBlobSize=-1'
+      'LocaleCode=0000'
+      'Compressed=False'
+      'Encrypted=False'
+      'BlobSize=-1'
+      'ErrorResourceFile=')
+    OnLogin = SQLConnection1Login
+    Left = 304
+  end
+end

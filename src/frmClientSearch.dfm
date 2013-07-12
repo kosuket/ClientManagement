@@ -1,21 +1,33 @@
 inherited ClientSearchframe: TClientSearchframe
   Caption = 'ClientSearchframe'
-  ExplicitWidth = 767
-  ExplicitHeight = 477
+  ClientHeight = 595
+  ClientWidth = 1158
+  Position = poScreenCenter
+  ExplicitWidth = 1174
+  ExplicitHeight = 633
   PixelsPerInch = 96
   TextHeight = 13
   inherited pnlBase: TPanel
+    Width = 1158
+    Height = 595
+    ExplicitWidth = 1158
+    ExplicitHeight = 595
     inherited Splitter1: TSplitter
       Top = 171
+      Width = 1158
       ExplicitTop = 171
+      ExplicitWidth = 1158
     end
     inherited Panel2: TPanel
       Top = 174
-      Height = 265
+      Width = 1158
+      Height = 421
       ExplicitTop = 174
-      ExplicitHeight = 265
+      ExplicitWidth = 1158
+      ExplicitHeight = 421
       inherited DBGrid1: TDBGrid
-        Height = 265
+        Width = 1158
+        Height = 421
         Ctl3D = False
         FixedColor = 14221016
         ParentCtl3D = False
@@ -23,24 +35,32 @@ inherited ClientSearchframe: TClientSearchframe
       end
     end
     inherited pnlCondition: TPanel
+      Width = 1158
       Height = 171
+      ExplicitWidth = 1158
       ExplicitHeight = 171
       inherited pnlCondBar: TPanel
         Top = 136
+        Width = 1158
         ExplicitTop = 136
+        ExplicitWidth = 1158
+        inherited Image1: TImage
+          Width = 1158
+          ExplicitWidth = 1158
+        end
         inherited btnLoad: TButton
-          Left = 107
+          Left = 968
           Top = 5
           Width = 75
           Height = 25
-          ExplicitLeft = 107
+          ExplicitLeft = 968
           ExplicitTop = 5
           ExplicitWidth = 75
           ExplicitHeight = 25
         end
         object btnAdd: TButton
-          Left = 12
-          Top = 5
+          Left = 466
+          Top = 4
           Width = 75
           Height = 25
           Caption = 'Add'
@@ -48,7 +68,7 @@ inherited ClientSearchframe: TClientSearchframe
           OnClick = btnAddClick
         end
         object btnMail: TButton
-          Left = 201
+          Left = 1062
           Top = 5
           Width = 75
           Height = 25
@@ -63,11 +83,20 @@ inherited ClientSearchframe: TClientSearchframe
           TabOrder = 2
           OnClick = btnMailClick
         end
+        object btnClear: TButton
+          Left = 16
+          Top = 5
+          Width = 75
+          Height = 25
+          Caption = 'Clear'
+          TabOrder = 3
+          OnClick = btnClearClick
+        end
       end
       object pgctrlCond: TPageControl
         Left = 0
         Top = 0
-        Width = 751
+        Width = 1158
         Height = 136
         ActivePage = tbSchoolScore
         Align = alClient
@@ -85,7 +114,7 @@ inherited ClientSearchframe: TClientSearchframe
           object pnlSchoolScore: TPanel
             Left = 0
             Top = 0
-            Width = 743
+            Width = 1150
             Height = 104
             Align = alClient
             BevelOuter = bvNone
@@ -239,12 +268,12 @@ inherited ClientSearchframe: TClientSearchframe
           Caption = 'Basic Info'
           ExplicitLeft = 0
           ExplicitTop = 0
-          ExplicitWidth = 0
+          ExplicitWidth = 743
           ExplicitHeight = 0
           object ScrollBox1: TScrollBox
             Left = 0
             Top = 0
-            Width = 743
+            Width = 1150
             Height = 104
             VertScrollBar.Color = 13627640
             VertScrollBar.ParentColor = False
@@ -259,16 +288,18 @@ inherited ClientSearchframe: TClientSearchframe
             BevelOuter = bvNone
             BorderStyle = bsNone
             TabOrder = 0
+            ExplicitWidth = 743
             object pnlBasic: TPanel
               Left = 0
               Top = 0
-              Width = 726
+              Width = 1133
               Height = 256
               Align = alClient
               BevelOuter = bvNone
               Color = clCream
               ParentBackground = False
               TabOrder = 0
+              ExplicitWidth = 726
               object lblFirstName: TLabel
                 Left = 8
                 Top = 13

@@ -1,0 +1,23 @@
+program Project1;
+
+uses
+  Vcl.Forms,
+  frmMain in 'frmMain.pas' {Mainframe},
+  LogInFrm in 'LogInFrm.pas' {LogInFrame},
+  frmClientSearch in 'frmClientSearch.pas' {ClientSearchframe},
+  frmAccounting in 'frmAccounting.pas' {AccountingFrame},
+  frmMaster in 'frmMaster.pas' {MasterFrame},
+  Unit2 in 'Unit2.pas' {Form2};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TMainframe, Mainframe);
+  Application.CreateForm(TClientSearchframe, ClientSearchframe);
+  Application.CreateForm(TAccountingFrame, AccountingFrame);
+  Application.CreateForm(TMasterFrame, MasterFrame);
+  Application.CreateForm(TForm2, Form2);
+  Application.Run;
+end.

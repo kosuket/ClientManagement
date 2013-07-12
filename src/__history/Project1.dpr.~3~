@@ -1,0 +1,17 @@
+program Project1;
+
+uses
+  Vcl.Forms,
+  frmMain in 'frmMain.pas' {Mainframe},
+  LogInFrm in 'LogInFrm.pas' {LogInFrame},
+  frmClientSearch in 'frmClientSearch.pas' {ClientSearchframe};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TMainframe, Mainframe);
+  Application.CreateForm(TClientSearchframe, ClientSearchframe);
+  Application.Run;
+end.

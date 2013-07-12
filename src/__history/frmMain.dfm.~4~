@@ -1,0 +1,127 @@
+object Mainframe: TMainframe
+  Left = 0
+  Top = 0
+  Caption = 'Mainframe'
+  ClientHeight = 443
+  ClientWidth = 791
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Splitter1: TSplitter
+    Left = 113
+    Top = 0
+    Height = 443
+    ExplicitLeft = 96
+    ExplicitTop = 88
+    ExplicitHeight = 100
+  end
+  object pnlMenu: TPanel
+    Left = 0
+    Top = 0
+    Width = 113
+    Height = 443
+    Align = alLeft
+    Color = clWhite
+    ParentBackground = False
+    TabOrder = 0
+    object btnClientStatus: TSpeedButton
+      Left = 1
+      Top = 25
+      Width = 111
+      Height = 22
+      Align = alTop
+      Caption = 'Client Status'
+      Flat = True
+      OnClick = btnClientStatusClick
+      ExplicitLeft = 32
+      ExplicitTop = 32
+      ExplicitWidth = 23
+    end
+    object lblPnlTitle: TLabel
+      Left = 1
+      Top = 1
+      Width = 111
+      Height = 24
+      Align = alTop
+      Alignment = taCenter
+      AutoSize = False
+      Caption = 'Menu'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -16
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      ExplicitWidth = 79
+    end
+    object btnAccounting: TSpeedButton
+      Left = 1
+      Top = 47
+      Width = 111
+      Height = 22
+      Align = alTop
+      Caption = 'Accounting'
+      Flat = True
+      OnClick = btnAccountingClick
+      ExplicitLeft = -1
+      ExplicitTop = 97
+      ExplicitWidth = 79
+    end
+    object btnMaster: TSpeedButton
+      Left = 1
+      Top = 69
+      Width = 111
+      Height = 22
+      Align = alTop
+      Caption = 'Master Maintenance'
+      Flat = True
+      OnClick = btnMasterClick
+      ExplicitLeft = -1
+      ExplicitTop = 119
+      ExplicitWidth = 79
+    end
+  end
+  object pnlMain: TPanel
+    Left = 116
+    Top = 0
+    Width = 675
+    Height = 443
+    Align = alClient
+    Color = clWhite
+    ParentBackground = False
+    TabOrder = 1
+    ExplicitLeft = 84
+    ExplicitWidth = 647
+    ExplicitHeight = 376
+  end
+  object SQLQuery1: TSQLQuery
+    SchemaName = 'edogijuku_db'
+    MaxBlobSize = -1
+    Params = <>
+    SQL.Strings = (
+      'SELECT *  FROM SCHOOL')
+    Left = 601
+  end
+  object DataSource1: TDataSource
+    AutoEdit = False
+    DataSet = ClientDataSet1
+    Left = 697
+  end
+  object ClientDataSet1: TClientDataSet
+    Aggregates = <>
+    FetchOnDemand = False
+    Params = <>
+    ProviderName = 'DataSetProvider1'
+    Left = 665
+  end
+  object DataSetProvider1: TDataSetProvider
+    DataSet = SQLQuery1
+    Left = 633
+  end
+end

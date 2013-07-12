@@ -1,0 +1,428 @@
+unit FWGridBasefrm;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Grids, Vcl.DBGrids, Vcl.StdCtrls,
+  Vcl.ExtCtrls,Data.DBXMySQL, Data.DB,
+  Data.SqlExpr, Data.FMTBcd, Datasnap.DBClient, Datasnap.Provider, Vcl.DBCtrls,
+  Vcl.ComCtrls, Vcl.Samples.Spin, Vcl.AppEvnts, Vcl.Imaging.jpeg;
+
+type
+  TFWGridBaseframe = class(TForm)
+    pnlBase: TPanel;
+    Panel2: TPanel;
+    DBGrid1: TDBGrid;
+    Splitter1: TSplitter;
+    pnlCondition: TPanel;
+    sqlqSchoolName: TSQLQuery;
+    cdsSchoolName: TClientDataSet;
+    dsSchoolName: TDataSource;
+    dspSchoolName: TDataSetProvider;
+    pgctrlCond: TPageControl;
+    tbBasic: TTabSheet;
+    tbSchoolScore: TTabSheet;
+    pnlSchoolScore: TPanel;
+    lblSchool: TLabel;
+    cmbSchoolName: TComboBox;
+    lblRound: TLabel;
+    cmbRound: TComboBox;
+    lblGMAT: TLabel;
+    edtGMATScore: TSpinEdit;
+    cmbGMATCond: TComboBox;
+    lblTOEFL: TLabel;
+    edtTOEFLScore: TSpinEdit;
+    cmbTOEFLCond: TComboBox;
+    pnlCondBar: TPanel;
+    btnLoad: TButton;
+    ScrollBox1: TScrollBox;
+    pnlBasic: TPanel;
+    lblFirstName: TLabel;
+    lblLastName: TLabel;
+    lblEmail: TLabel;
+    edtFirstName: TEdit;
+    edtLastName: TEdit;
+    edtEmail: TEdit;
+    lblSponsored: TLabel;
+    cmbSponsored: TComboBox;
+    lblUniversityName: TLabel;
+    edtUniversityName: TEdit;
+    lblDegree: TLabel;
+    edtDegree: TEdit;
+    lblMajor: TLabel;
+    edtMajor: TEdit;
+    lblGPA: TLabel;
+    edtGPA: TEdit;
+    lblAcademicAward: TLabel;
+    cmbAcademicAward: TComboBox;
+    lblPublication: TLabel;
+    cmbPublication: TComboBox;
+    lblStudyAbroad: TLabel;
+    cmbStudyAbroad: TComboBox;
+    lblPlace: TLabel;
+    edtPlace: TEdit;
+    lblWorkPlace: TLabel;
+    edtWorkPlace: TEdit;
+    lblUseEnglish: TLabel;
+    cmbUseEnglish: TComboBox;
+    lblFutureGoal: TLabel;
+    edtFutureGoal: TEdit;
+    Image1: TImage;
+    ApplicationEvents1: TApplicationEvents;
+    procedure btnLoadClick(Sender: TObject);
+    procedure cmbGMATCategoryChange(Sender: TObject);
+    procedure cmbTOEFLCategoryChange(Sender: TObject);
+    procedure ApplicationEvents1Message(var Msg: tagMSG; var Handled: Boolean);
+  private
+    { Private declarations }
+    slSchoolId: TStringList;
+    //SQL生成関係
+    procedure createSQL;
+    procedure createSQLFix;
+    procedure createWhere;
+    //グリッド表示関係
+    procedure adjustGridWidth;
+  public
+    { Public declarations }
+    SQLQuery1: TSQLQuery;
+    ClientDataSet1: TClientDataSet;
+    SQLConnection1: TSQLConnection;
+    m_DebugMode: Boolean;
+    constructor Create(AOwner: TComponent) ; override;
+    procedure Initialize;
+  end;
+
+var
+  FWGridBaseframe: TFWGridBaseframe;
+
+const
+  cmbIndexAll = 0;
+  cmbIndexYes = 1;
+  cmbIndexNo  = 2;
+  cmbDivAllYesNo : Array[0..2] of String =(
+  '2',
+  '1',
+  '0');
+
+implementation
+
+{$R *.dfm}
+
+procedure TFWGridBaseframe.cmbGMATCategoryChange(Sender: TObject);
+begin
+  {if cmbGMATCategory.ItemIndex = 0 then begin
+    edtGMATScore.Increment := 10;
+    edtGMATScore.MaxLength := 3;
+    edtGMATScore.MaxValue := 800;
+    edtGMATScore.MinValue := 0;
+    edtGMATScore.Value := 0;
+    edtGMATScore.Enabled := False;
+    cmbGMATCond.ItemIndex := 0;
+    cmbGMATCond.Enabled := False;
+  end else if cmbGMATCategory.ItemIndex = 1 then begin
+    edtGMATScore.Increment := 10;
+    edtGMATScore.MaxLength := 3;
+    edtGMATScore.MaxValue := 800;
+    edtGMATScore.MinValue := 0;
+    edtGMATScore.Value := 700;
+    edtGMATScore.Enabled := True;
+    cmbGMATCond.Enabled := True;
+  end else if cmbGMATCategory.ItemIndex = 2 then begin
+    edtGMATScore.Increment := 1;
+    edtGMATScore.MaxLength := 2;
+    edtGMATScore.MaxValue := 80;
+    edtGMATScore.MinValue := 0;
+    edtGMATScore.Value := 40;
+    edtGMATScore.Enabled := True;
+    cmbGMATCond.Enabled := True;
+  end else if cmbGMATCategory.ItemIndex = 3 then begin
+    edtGMATScore.Increment := 1;
+    edtGMATScore.MaxLength := 2;
+    edtGMATScore.MaxValue := 80;
+    edtGMATScore.MinValue := 50;
+    edtGMATScore.Value := 0;
+    edtGMATScore.Enabled := True;
+    cmbGMATCond.Enabled := True;
+  end else if cmbGMATCategory.ItemIndex = 4 then begin
+    edtGMATScore.Increment := 1;
+    edtGMATScore.MaxLength := 1;
+    edtGMATScore.MaxValue := 6;
+    edtGMATScore.MinValue := 0;
+    edtGMATScore.Value := 5;
+    edtGMATScore.Enabled := True;
+    cmbGMATCond.Enabled := True;
+  end else if cmbGMATCategory.ItemIndex = 5 then begin
+    edtGMATScore.Increment := 1;
+    edtGMATScore.MaxLength := 1;
+    edtGMATScore.MaxValue := 6;
+    edtGMATScore.MinValue := 0;
+    edtGMATScore.Value := 5;
+    edtGMATScore.Enabled := True;
+    cmbGMATCond.Enabled := True;
+  end;  }
+end;
+
+procedure TFWGridBaseframe.cmbTOEFLCategoryChange(Sender: TObject);
+begin
+  {if cmbTOEFLCategory.ItemIndex = 0 then begin
+    edtTOEFLScore.Increment := 1;
+    edtTOEFLScore.MaxLength := 3;
+    edtTOEFLScore.MaxValue := 120;
+    edtTOEFLScore.MinValue := 0;
+    edtTOEFLScore.Value := 0;
+    edtTOEFLScore.Enabled := False;
+    cmbTOEFLCond.ItemIndex := 0;
+    cmbTOEFLCond.Enabled := False;
+  end else if cmbTOEFLCategory.ItemIndex = 1 then begin
+    edtTOEFLScore.Increment := 1;
+    edtTOEFLScore.MaxLength := 1;
+    edtTOEFLScore.MaxValue := 120;
+    edtTOEFLScore.MinValue := 0;
+    edtTOEFLScore.Value := 100;
+    edtTOEFLScore.Enabled := True;
+    cmbTOEFLCond.Enabled := True;
+  end else if cmbTOEFLCategory.ItemIndex = 2 then begin
+    edtTOEFLScore.Increment := 1;
+    edtTOEFLScore.MaxLength := 2;
+    edtTOEFLScore.MaxValue := 30;
+    edtTOEFLScore.MinValue := 0;
+    edtTOEFLScore.Value := 25;
+    edtTOEFLScore.Enabled := True;
+    cmbTOEFLCond.Enabled := True;
+  end else if cmbTOEFLCategory.ItemIndex = 3 then begin
+    edtTOEFLScore.Increment := 1;
+    edtTOEFLScore.MaxLength := 2;
+    edtTOEFLScore.MaxValue := 30;
+    edtTOEFLScore.MinValue := 0;
+    edtTOEFLScore.Value := 25;
+    edtTOEFLScore.Enabled := True;
+    cmbTOEFLCond.Enabled := True;
+  end else if cmbTOEFLCategory.ItemIndex = 4 then begin
+    edtTOEFLScore.Increment := 1;
+    edtTOEFLScore.MaxLength := 2;
+    edtTOEFLScore.MaxValue := 30;
+    edtTOEFLScore.MinValue := 0;
+    edtTOEFLScore.Value := 25;
+    edtTOEFLScore.Enabled := True;
+    cmbTOEFLCond.Enabled := True;
+  end;}
+end;
+
+procedure TFWGridBaseframe.createSQL;
+begin
+  createSQLFix;
+  createWhere;
+end;
+
+procedure TFWGridBaseframe.createSQLFix;
+begin
+  SQLQuery1.SQL.Add('SELECT ');
+  SQLQuery1.SQL.Add('    C.CLIENT_ID,C.FIRST_NAME, C.LAST_NAME, C.EMAIL_ADDRESS, C.TOEFL, C.GMAT');
+  SQLQuery1.SQL.Add('FROM');
+  SQLQuery1.SQL.Add('    (SELECT ');
+  SQLQuery1.SQL.Add('            CL.CLIENT_ID,');
+  SQLQuery1.SQL.Add('            CL.LAST_NAME,');
+  SQLQuery1.SQL.Add('            CL.FIRST_NAME,');
+  SQLQuery1.SQL.Add('            CL.MIDDLE_NAME,');
+  SQLQuery1.SQL.Add('            CL.EMAIL_ADDRESS,');
+  SQLQuery1.SQL.Add('            CL.WORK_PLACE,');
+  SQLQuery1.SQL.Add('            CL.SPONSORED_FLG,');
+  SQLQuery1.SQL.Add('            CL.UNIVERSITY_NAME,');
+  SQLQuery1.SQL.Add('            CL.UNIVERSITY_MAJOR,');
+  SQLQuery1.SQL.Add('            CL.UNIVERSITY_DEGREE,');
+  SQLQuery1.SQL.Add('            CL.UNIVERSITY_GPA,');
+  SQLQuery1.SQL.Add('            CL.ACADEMIC_AWARDS_FLG,');
+  SQLQuery1.SQL.Add('            CL.PUBLICATION_FLG,');
+  SQLQuery1.SQL.Add('            CL.STUDIED_ABROAD_FLG,');
+  SQLQuery1.SQL.Add('            CL.STUDIED_ABROAD_PLACE,');
+  SQLQuery1.SQL.Add('            CL.USE_ENGLISH_AT_WORK_FLG,');
+  SQLQuery1.SQL.Add('            CL.FUTURE_GOAL,');
+  SQLQuery1.SQL.Add('            CL.CLIENT_MEMO,');
+  SQLQuery1.SQL.Add('            CL.COUNSELOR_MEMO,');
+  SQLQuery1.SQL.Add('            MAX(T.TOTAL) TOEFL,');
+  SQLQuery1.SQL.Add('            MAX(G.TOTAL) GMAT');
+  SQLQuery1.SQL.Add('    FROM');
+  SQLQuery1.SQL.Add('        CLIENT CL');
+  SQLQuery1.SQL.Add('    LEFT JOIN CLIENT_TOEFL T ON CL.CLIENT_ID = T.CLIENT_ID');
+  SQLQuery1.SQL.Add('    LEFT JOIN CLIENT_GMAT G ON CL.CLIENT_ID = G.CLIENT_ID) C');
+end;
+
+constructor TFWGridBaseframe.Create(AOwner: TComponent) ;
+begin
+  inherited;
+  slSchoolId := TStringList.Create;
+end;
+
+procedure TFWGridBaseframe.createWhere;
+  procedure _checkforand(sl: TstringList);
+  begin
+    if sl.Count > 0 then sl.Add(' AND ');
+  end;
+var sl: TstringList;
+    i: Integer;
+begin
+  sl := TStringList.Create;
+  if edtFirstName.Text <> '' then sl.Add('FIRST_NAME LIKE ' + '''' + '%' + edtFirstName.Text + '%' + '''');
+
+  if edtLastName.Text <> '' then begin
+    _checkforand(sl);
+    sl.Add('LAST_NAME LIKE ' + '''' + '%' + edtLastName.Text + '%' + '''');
+  end;
+  if edtEmail.Text <> '' then begin
+    _checkforand(sl);
+    sl.Add('EMAIL_ADDRESS LIKE ' + '''' + '%' + edtEmail.Text + '%' + '''');
+  end;
+  if cmbSponsored.ItemIndex <> cmbIndexAll then begin
+    _checkforand(sl);
+    sl.Add('SPONSORED_FLG = '  + cmbDivAllYesNo[cmbSponsored.ItemIndex]);
+  end;
+  if edtUniversityName.Text <> '' then begin
+    _checkforand(sl);
+    sl.Add('UNIVERSITY_NAME LIKE ' + '''' + '%' + edtUniversityName.Text + '%' + '''');
+  end;
+  if StrToIntDef(edtGPA.Text,-1) <> -1 then begin
+    _checkforand(sl);
+    sl.Add('UNIVERSITY_GPA = ' + edtGPA.Text);
+  end;
+  if edtDegree.Text <> '' then begin
+    _checkforand(sl);
+    sl.Add('UNIVERSITY_DEGREE LIKE ' + '''' + '%' + edtDegree.Text + '%' + '''');
+  end;
+  if edtMajor.Text <> '' then begin
+    _checkforand(sl);
+    sl.Add('UNIVERISTY_MAJOR LIKE ' + '''' + '%' + edtMajor.Text + '%' + '''');
+  end;
+  if cmbAcademicAward.ItemIndex <> cmbIndexAll then begin
+    _checkforand(sl);
+    sl.Add('ACADEMIC_AWARDS_FLG = ' + cmbDivAllYesNo[cmbAcademicAward.ItemIndex]);
+  end;
+  if cmbPublication.ItemIndex <> cmbIndexAll then begin
+    _checkforand(sl);
+    sl.Add('PUBLICATION_FLG = ' + cmbDivAllYesNo[cmbAcademicAward.ItemIndex]);
+  end;
+  if cmbStudyAbroad.ItemIndex <> cmbIndexAll then begin
+    _checkforand(sl);
+    sl.Add('STUDIED_ABROAD_FLG = ' + cmbDivAllYesNo[cmbPublication.ItemIndex]);
+  end;
+  if edtPlace.Text <> '' then begin
+    _checkforand(sl);
+    sl.Add('STUDIED_ABROAD_PLACE LIKE ' + '''' + '%' + edtPlace.Text + '%' + '''');
+  end;
+  if edtWorkPlace.Text <> '' then begin
+    _checkforand(sl);
+    sl.Add('WORK_PLACE LIKE ' + '''' + '%' + edtWorkPlace.Text + '%' + '''');
+  end;
+  if cmbUseEnglish.ItemIndex <> cmbIndexAll then begin
+    _checkforand(sl);
+    sl.Add('USE_ENGLISH_AT_WORK_FLG = ' + cmbDivAllYesNo[cmbUseEnglish.ItemIndex]);
+  end;
+  if edtFutureGoal.Text <> '' then begin
+    _checkforand(sl);
+    sl.Add('FUTURE_GOAL LIKE ' + '''' + '%' + edtFutureGoal.Text + '%' + '''');
+  end;
+  if cmbSchoolName.ItemIndex <> cmbIndexAll  then begin
+    _checkforand(sl);
+    sl.Add('CLIENT_ID = (SELECT CLIENT_ID FROM CLIENT_SCHOOL_MAP WHERE C.CLIENT_ID = CLIENT_ID AND SCHOOL_ID = ' + slSchoolId[cmbSchoolName.ItemIndex] +')');
+  end;
+  if cmbRound.ItemIndex <> cmbIndexAll then begin
+    _checkforand(sl);
+    sl.Add('CLIENT_ID = (SELECT CLIENT_ID FROM CLIENT_SCHOOL_MAP WHERE C.CLIENT_ID = CLIENT_ID AND ROUND = ' + IntToStr(cmbRound.ItemIndex) + ')');
+  end;
+  if cmbGMATCond.ItemIndex <> cmbIndexAll then begin
+    _checkforand(sl);
+    case cmbGMATCond.ItemIndex of
+      1: sl.Add('(GMAT <= ' + IntToStr(edtGMATScore.Value) + ' OR GMAT IS NULL)');
+      2: sl.Add('GMAT <= ' + IntToStr(edtGMATScore.Value));
+      3: sl.Add('(GMAT >= ' + IntToStr(edtGMATScore.Value) + ' OR GMAT IS NULL');
+      4: sl.Add('GMAT >= ' + IntToStr(edtGMATScore.Value));
+    end;
+  end;
+  if sl.Count > 0 then begin
+    SQLQuery1.SQL.Add(' WHERE ');
+    for i := 0 to sl.Count -1 do begin
+      SQLQuery1.SQL.Add(sl[i]);
+    end;
+  end;
+  if m_DebugMode then ShowMessage(SQLQuery1.SQL.CommaText);
+end;
+
+procedure TFWGridBaseframe.adjustGridWidth;
+var i,ii: Integer;
+begin
+  for i := 0 to DBGrid1.Columns.Count -1 do begin
+    DBGrid1.Columns[i].Width := 50;
+    for ii := 0 to DBGrid1.DataSource.DataSet.RecordCount -1 do begin
+      if Trunc(Canvas.TextWidth(DBGrid1.Fields[i].Text)*1.3) + 5 > DBGrid1.Columns[i].Width then
+        DBGrid1.Columns[i].Width := Trunc(Canvas.TextWidth(DBGrid1.Fields[i].Text)*1.3) + 5;
+      DBGrid1.DataSource.DataSet.Next;
+    end;
+  end;
+end;
+
+procedure TFWGridBaseframe.ApplicationEvents1Message(var Msg: tagMSG;
+  var Handled: Boolean);
+begin
+if Msg.message = WM_MOUSEWHEEL then
+  begin
+    // 上方向
+    if Msg.wParam > 0 then
+    begin
+      ScrollBox1.VertScrollBar.Position :=
+        ScrollBox1.VertScrollBar.Position - 32;
+    end
+    else
+    // 下方向
+    begin
+      ScrollBox1.VertScrollBar.Position :=
+        ScrollBox1.VertScrollBar.Position + 32;
+    end;
+
+    ScrollBox1.Invalidate;
+
+    Handled := False;
+    // Handled は，コントロールがイベントを処理したかどうかを示します。
+    // Handled を false に設定すると，オブジェクトの親がイベントを
+    // 処理するようにすることができます。
+  end;
+end;
+
+procedure TFWGridBaseframe.btnLoadClick(Sender: TObject);
+begin
+  SQLQuery1.SQL.Clear;
+  createSQL;
+  ClientDataSet1.Close;
+  ClientDataSet1.Open;
+  adjustGridWidth;
+end;
+
+procedure TFWGridBaseframe.Initialize;
+var i: Integer;
+begin
+  try
+    slSchoolId.Add('-1');
+    cmbSchoolName.Items.Add('All');
+    cdsSchoolName.Open;
+    for i := 0 to sqlqSchoolName.RecordCount  -1 do begin
+      slSchoolId.Add(cdsSchoolName.Fields[0].AsString);
+      cmbSchoolName.Items.Add(cdsSchoolName.Fields[1].AsString);
+      cdsSchoolName.Next;
+    end;
+    cmbSponsored.ItemIndex := 0;
+    cmbAcademicAward.ItemIndex := 0;
+    cmbPublication.ItemIndex := 0;
+    cmbStudyAbroad.ItemIndex := 0;
+    cmbUseEnglish.ItemIndex := 0;
+    cmbSchoolName.ItemIndex := 0;
+    cmbRound.ItemIndex := 0;
+    //cmbGMATCategory.ItemIndex := 0;
+    cmbGMATCategoryChange(Self);
+    cmbGMATCond.ItemIndex := 0;
+    //cmbTOEFLCategory.ItemIndex := 0;
+    cmbTOEFLCategoryChange(Self);
+    cmbTOEFLCond.ItemIndex := 0;
+  except
+    ShowMessage('Something Wrong Happened');
+  end;
+end;
+end.

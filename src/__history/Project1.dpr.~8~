@@ -1,0 +1,21 @@
+program Project1;
+
+uses
+  Vcl.Forms,
+  frmMain in 'frmMain.pas' {Mainframe},
+  LogInFrm in 'LogInFrm.pas' {LogInFrame},
+  frmMaster in 'frmMaster.pas' {MasterFrame},
+  frmClientSearch in 'frmClientSearch.pas' {ClientSearchframe},
+  FWGridBasefrm in 'FWGridBasefrm.pas' {FWGridBaseframe},
+  frmAccounting in 'frmAccounting.pas' {Accountingframe},
+  FWSQLBaseDlgfrm in 'FWSQLBaseDlgfrm.pas' {FWSQLBaseDialogframe},
+  frmClientdlg in 'frmClientdlg.pas' {frmClientCarteDlg};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TMainframe, Mainframe);
+  Application.Run;
+end.

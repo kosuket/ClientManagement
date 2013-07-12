@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.FMTBcd,
   Vcl.AppEvnts, Datasnap.Provider, Data.DB, Datasnap.DBClient, Data.SqlExpr,
   Vcl.StdCtrls, Vcl.Imaging.jpeg, Vcl.ExtCtrls, Vcl.Samples.Spin, Vcl.ComCtrls,
-  Vcl.Grids, Vcl.DBGrids, FWGridBasefrm,frmClientdlg,frmMaildlg;
+  Vcl.Grids, Vcl.DBGrids, FWGridBasefrm,frmClientdlg,frmMaildlg, Vcl.Buttons;
 
 type
   TClientSearchframe = class(TFWGridBaseframe)
@@ -60,12 +60,15 @@ type
     btnAdd: TButton;
     Memo1: TMemo;
     btnMail: TButton;
+    btnClear: TButton;
     procedure btnAddClick(Sender: TObject);
     procedure DBGrid1DblClick(Sender: TObject);
     procedure btnMailClick(Sender: TObject);
+    procedure btnClearClick(Sender: TObject);
   private
     { Private declarations }
       slSchoolId: TStringList;
+      procedure clearCond(ctrl:TWinControl);
   protected
     //SQL生成関係
     procedure createSQLFix;  override;
@@ -80,7 +83,16 @@ type
 
 var
   ClientSearchframe: TClientSearchframe;
-
+const
+  cmbIndexYes = 1;
+  cmbIndexNo  = 2;
+  cmbIndexAll = 0;
+  defGMATValue =700;
+  defTOEFLTValue=100;
+  cmbDivAllYesNo : Array[0..2] of String =(
+  '-1',
+  '1',
+  '0');
 implementation
 
 {$R *.dfm}
@@ -98,6 +110,12 @@ begin
   finally
     frmClientDialog.Destroy;
   end;
+end;
+
+procedure TClientSearchframe.btnClearClick(Sender: TObject);
+begin
+  inherited;
+  clearCond(pgctrlCond);
 end;
 
 procedure TClientSearchframe.btnMailClick(Sender: TObject);
@@ -122,6 +140,19 @@ begin
   finally
     slRecepient.Free;
     frmMailDialog.Destroy;
+  end;
+end;
+
+procedure TClientSearchframe.clearCond(ctrl: TWinControl);
+var i :Integer;
+begin
+  for i := 0 to ctrl.ControlCount -1 do begin
+    if ctrl.Controls[i].ClassType = TComboBox then TCombobox(ctrl.Controls[i]).ItemIndex := 0;
+    if LowerCase(ctrl.Controls[i].Name) = 'edtgmatscore' then TSpinEdit(ctrl.Controls[i]).Value := defGMATValue;
+    if LowerCase(ctrl.Controls[i].Name) = 'edttoeflscore' then TSpinEdit(ctrl.Controls[i]).Value := defTOEFLTValue;
+    if ctrl.Controls[i].ClassType = TEdit then TEdit(ctrl.Controls[i]).Text := '';
+    //再帰処理
+    if (ctrl.Controls[i].ClassType = TPanel) OR (ctrl.Controls[i].ClassType = TTabsheet) OR (ctrl.Controls[i].ClassType = TScrollbox) then clearCond(TPanel(ctrl.Controls[i]));
   end;
 end;
 
@@ -237,13 +268,18 @@ begin
     _checkforand(sl);
     sl.Add('FUTURE_GOAL LIKE ' + '''' + '%' + edtFutureGoal.Text + '%' + '''');
   end;
-  if cmbSchoolName.ItemIndex <> cmbIndexAll  then begin
-    _checkforand(sl);
-    sl.Add('CLIENT_ID = (SELECT CLIENT_ID FROM CLIENT_SCHOOL_MAP WHERE C.CLIENT_ID = CLIENT_ID AND SCHOOL_ID = ' + slSchoolId[cmbSchoolName.ItemIndex] +')');
-  end;
-  if cmbRound.ItemIndex <> cmbIndexAll then begin
-    _checkforand(sl);
-    sl.Add('CLIENT_ID IN (SELECT CLIENT_ID FROM CLIENT_SCHOOL_MAP WHERE C.CLIENT_ID = CLIENT_ID AND ROUND = ' + '''' + IntToStr(cmbRound.ItemIndex) + '''' + ')');
+  if (cmbSchoolName.ItemIndex <> cmbIndexAll) AND (cmbRound.ItemIndex <> cmbIndexAll) then begin
+      _checkforand(sl);
+      sl.Add('CLIENT_ID = (SELECT CLIENT_ID FROM CLIENT_SCHOOL_MAP WHERE C.CLIENT_ID = CLIENT_ID AND SCHOOL_ID = ' + slSchoolId[cmbSchoolName.ItemIndex] + ' AND ROUND = ' + '''' + IntToStr(cmbRound.ItemIndex) + '''' + ')');
+  end else begin
+    if cmbSchoolName.ItemIndex <> cmbIndexAll  then begin
+      _checkforand(sl);
+      sl.Add('CLIENT_ID = (SELECT CLIENT_ID FROM CLIENT_SCHOOL_MAP WHERE C.CLIENT_ID = CLIENT_ID AND SCHOOL_ID = ' + slSchoolId[cmbSchoolName.ItemIndex] +')');
+    end;
+    if cmbRound.ItemIndex <> cmbIndexAll then begin
+      _checkforand(sl);
+      sl.Add('CLIENT_ID IN (SELECT CLIENT_ID FROM CLIENT_SCHOOL_MAP WHERE C.CLIENT_ID = CLIENT_ID AND ROUND = ' + '''' + IntToStr(cmbRound.ItemIndex) + '''' + ')');
+    end;
   end;
   if cmbGMATCond.ItemIndex <> cmbIndexAll then begin
     _checkforand(sl);
@@ -268,9 +304,14 @@ begin
 end;
 
 procedure TClientSearchframe.DBGrid1DblClick(Sender: TObject);
+  function _hasRecord:Boolean;
+  begin
+    result := true;
+  end;
 begin
   inherited;
   try
+    if not _hasRecord then exit;  //1行しかなくてデータが入っていないときはExit
     frmClientDialog := TfrmClientCarteDlg.Create(Self);
     frmClientDialog.g_OpenMode := omModify;
     frmClientDialog.SchoolList := cmbSchoolName.Items;

@@ -123,6 +123,9 @@ type
     function isDynamicComp(Sender :TObject): Boolean;
     function hasRecord(sg:TStringGrid): Boolean;
     function isSufficientRecord:Boolean;
+    procedure resetLabelColor;
+    function checkRequiredValue(edt:TEdit): Boolean;
+    function checkStringGridIdDuplication(sg:TStringGrid; checkCol:Integer): Boolean;
   public
     { Public declarations }
     cmbSchool: TComboBox;
@@ -147,6 +150,7 @@ var
 const
   cmbIndexYes = 0;
   cmbIndexNo  = 1;
+  clError = clRed;
   cmbDivAllYesNo : Array[0..1] of String =(
   '1',
   '0');
@@ -261,6 +265,41 @@ procedure TfrmClientCarteDlg.btnSDeleteClick(Sender: TObject);
 begin
   inherited;
   deleteRow(grdSchool);
+end;
+
+function TfrmClientCarteDlg.checkRequiredValue(edt: TEdit): Boolean;
+var lbl: TLabel;
+begin
+  result := False;
+  if Length(edt.Text) = 0 then begin
+    if Assigned(FindComponent('lbl' + Copy(edt.Name,4,Length(edt.Name)-3))) then begin
+      lbl := TLabel(FindComponent('lbl' + Copy(edt.Name,4,Length(edt.Name)-3)));
+      lbl.Color := clError;
+      exit;
+    end;
+  end;
+  result := True;
+end;
+
+function TfrmClientCarteDlg.checkStringGridIdDuplication(
+  sg: TStringGrid; checkCol:Integer): Boolean;
+var i,ii: Integer;
+    str : String;
+    Rect: TRect;
+begin
+  result := true;
+  for i := 0 to sg.RowCount -1 do begin
+    str := grdTOEFL.Cells[checkCol,i];
+    for ii := i + 1 to sg.RowCount -1 do begin
+      if str = sg.Cells[checkCol,ii] then begin
+        result := False;
+        Rect := sg.CellRect(checkCol,ii);
+        sg.Canvas.Brush.Color := clError;
+        sg.Canvas.FillRect(Rect);
+        exit;
+      end;
+    end;
+  end;
 end;
 
 procedure TfrmClientCarteDlg.cmbGMATAWAClick(Sender: TObject);
@@ -594,7 +633,8 @@ procedure TfrmClientCarteDlg.createInsertGMATSQL;
       True: comma := '';
       False: comma := ',';
     end;
-    result := '''' + str + '''' + comma;
+    if Length(Trim(str)) = 0 then result := 'null' + comma
+                             else result := '''' + str + '''' + comma;
   end;
   function _Integer(str: String; isLast: Boolean = False): String;
   var comma: String;
@@ -1063,21 +1103,29 @@ end;
 
 function TfrmClientCarteDlg.isSufficientRecord: Boolean;
 begin
-  result := False;
-  //Client入力項目チェック
-  if Length(edtFirstName.Text) = 0 then exit;
-  if Length(edtLastName.Text) = 0 then exit;
-  if Length(edtEmail.Text) = 0 then exit;
-  if StrToIntDef(edtGPA.Text,-1) = -1 then begin
-    if MessageDlg('GPA Entered Is Not Number' + #13#10
-                  + 'Put 0 Automatically?',mtConfirmation,[mbYes,mbNo],0,mbYes) <> mrYes then exit
-                  else edtGPA.Text := '0';
-  end;
-  //School入力チェック
-  //GMAT入力チェック
-  //TOEFL入力チェック
-
   result := True;
+  try
+    resetLabelColor;
+    //Client入力項目チェック
+    if not checkRequiredValue(edtFirstName) then result := False;
+    if not checkRequiredValue(edtLastName) then result := False;
+    if not checkRequiredValue(edtEmail) then result := False;
+    if StrToFloatDef(edtGPA.Text,-1) = -1 then begin
+      if MessageDlg('GPA Entered Is Not Number' + #13#10
+                    + 'Put 0 Automatically?',mtConfirmation,[mbYes,mbNo],0,mbYes) <> mrYes then begin
+                      lblGPA.Color := clError;
+                      result := False;
+                    end else edtGPA.Text := '0';
+    end;
+    //School入力チェック
+    if not checkStringGridIdDuplication(grdSchool,0) then result := False;
+    //GMAT入力チェック
+    if not checkStringGridIdDuplication(grdGMAT,0) then result := False;
+    //TOEFL入力チェック
+    if not checkStringGridIdDuplication(grdTOEFL,0) then result := False;
+  except
+    result := False;
+  end;
 end;
 
 function TfrmClientCarteDlg.ModifyRecord: String;
@@ -1085,7 +1133,10 @@ var tran: TDBXTransaction;
 begin
   try
     //Check
-    if not isSufficientRecord then exit;
+    if not isSufficientRecord then begin
+      result := 'Data is not sufficient.';
+      exit;
+    end;
 
     tran := SQLQuery1.SQLConnection.BeginTransaction;
     //Update Client
@@ -1120,6 +1171,14 @@ begin
       SQLQuery1.SQLConnection.RollbackFreeAndNil(tran);
       result := e.Message + ':' + e.StackTrace;
     end;
+  end;
+end;
+
+procedure TfrmClientCarteDlg.resetLabelColor;
+var i :Integer;
+begin
+  for i := 0 to pnlBasic.ControlCount -1 do begin
+    if pnlBasic.Controls[i].ClassType = TLabel then TLabel(pnlBasic.Controls[i]).Color := pnlBasic.Color;
   end;
 end;
 
