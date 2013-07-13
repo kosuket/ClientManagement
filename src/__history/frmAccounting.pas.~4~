@@ -1,0 +1,56 @@
+unit frmAccounting;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, FWGridBasefrm, Data.FMTBcd,
+  Vcl.AppEvnts, Datasnap.Provider, Data.DB, Datasnap.DBClient, Data.SqlExpr,
+  Vcl.StdCtrls, Vcl.Imaging.jpeg, Vcl.ExtCtrls, Vcl.Grids, Vcl.DBGrids;
+
+type
+  TAccountingframe = class(TFWGridBaseframe)
+  private
+    { Private declarations }
+  protected
+    //SQLê∂ê¨ä÷åW
+    procedure createSQLFix;  override;
+    procedure createWhere;  override;
+  public
+    { Public declarations }
+  end;
+
+var
+  Accountingframe: TAccountingframe;
+
+implementation
+
+{$R *.dfm}
+
+{ TAccountingframe }
+
+procedure TAccountingframe.createSQLFix;
+begin
+  inherited;
+  SQLQuery1.SQL.Add('SELECT ');
+  SQLQuery1.SQL.Add('    C.CLIENT_ID,');
+  SQLQuery1.SQL.Add('    C.LAST_NAME,');
+  SQLQuery1.SQL.Add('    C.FIRST_NAME,');
+  SQLQuery1.SQL.Add('    C.MIDDLE_NAME,');
+  SQLQuery1.SQL.Add('    C.EMAIL_ADDRESS,');
+  SQLQuery1.SQL.Add('    SUM(B.BOOK_AMOUNT)');
+  SQLQuery1.SQL.Add('FROM');
+  SQLQuery1.SQL.Add('    CLIENT C');
+  SQLQuery1.SQL.Add('        LEFT JOIN');
+  SQLQuery1.SQL.Add('    BILLING_REQUEST B ON C.CLIENT_ID = B.CLIENT_ID');
+end;
+
+procedure TAccountingframe.createWhere;
+begin
+  inherited;
+  SQLQuery1.SQL.Add('        AND B.BOOK_DATE BETWEEN ' + '''' + '2013/01/01' + '''' + ' AND ' + '''' + '2013/01/31' + '''');
+  SQLQuery1.SQL.Add('        AND C.LAST_NAME = ' + '''' + 'Takano' + '''');
+  SQLQuery1.SQL.Add('GROUP BY C.CLIENT_ID');
+end;
+
+end.

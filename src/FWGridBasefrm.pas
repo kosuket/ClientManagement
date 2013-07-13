@@ -24,6 +24,10 @@ type
     btnLoad: TButton;
     Image1: TImage;
     ApplicationEvents1: TApplicationEvents;
+    SQLQuery1: TSQLQuery;
+    DataSetProvider1: TDataSetProvider;
+    ClientDataSet1: TClientDataSet;
+    DataSource1: TDataSource;
     procedure btnLoadClick(Sender: TObject);
     procedure cmbGMATCategoryChange(Sender: TObject);
     procedure cmbTOEFLCategoryChange(Sender: TObject);
@@ -40,9 +44,9 @@ type
     procedure createWhere; virtual;
   public
     { Public declarations }
-    SQLQuery1: TSQLQuery;
-    ClientDataSet1: TClientDataSet;
-    SQLConnection1: TSQLConnection;
+    //SQLQuery1: TSQLQuery;
+    //ClientDataSet1: TClientDataSet;
+    //SQLConnection1: TSQLConnection;
     m_DebugMode: Boolean;
     constructor Create(AOwner: TComponent) ; override;
     procedure Initialize; virtual;
@@ -230,6 +234,7 @@ procedure TFWGridBaseframe.btnLoadClick(Sender: TObject);
 begin
   SQLQuery1.SQL.Clear;
   createSQL;
+  ShowMessage(SQLQuery1.SQL.Text);
   ClientDataSet1.Close;
   ClientDataSet1.Open;
   //ClientDataSet1.Last;

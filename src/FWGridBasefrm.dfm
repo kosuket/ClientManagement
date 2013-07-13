@@ -49,6 +49,7 @@ object FWGridBaseframe: TFWGridBaseframe
         Width = 751
         Height = 151
         Align = alClient
+        DataSource = DataSource1
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
         Font.Height = -11
@@ -397,5 +398,33 @@ object FWGridBaseframe: TFWGridBaseframe
   object ApplicationEvents1: TApplicationEvents
     OnMessage = ApplicationEvents1Message
     Left = 528
+  end
+  object SQLQuery1: TSQLQuery
+    SchemaName = 'edogijuku_db'
+    MaxBlobSize = -1
+    Params = <>
+    SQL.Strings = (
+      'SELECT *  FROM SCHOOL')
+    Left = 532
+    Top = 45
+  end
+  object DataSetProvider1: TDataSetProvider
+    DataSet = SQLQuery1
+    Left = 564
+    Top = 45
+  end
+  object ClientDataSet1: TClientDataSet
+    Aggregates = <>
+    FetchOnDemand = False
+    Params = <>
+    ProviderName = 'DataSetProvider1'
+    Left = 596
+    Top = 45
+  end
+  object DataSource1: TDataSource
+    AutoEdit = False
+    DataSet = ClientDataSet1
+    Left = 628
+    Top = 45
   end
 end

@@ -148,9 +148,9 @@ begin
   //ClientSearch
   frmClientSearch := TClientSearchframe.Create(self);
   frmClientSearch.sqlqSchoolName.SQLConnection := SQLConnection1;
-  frmClientSearch.SQLQuery1 := SQLQuery1;
-  frmClientSearch.ClientDataSet1 := ClientDataSet1;
-  frmClientSearch.DBGrid1.DataSource := DataSource1;
+  frmClientSearch.SQLQuery1.SQLConnection := SQLConnection1;
+  //frmClientSearch.ClientDataSet1 := ClientDataSet1;
+  //frmClientSearch.DBGrid1.DataSource := DataSource1;
   frmClientSearch.pnlBase.Parent := pnlMain;
   frmClientSearch.Initialize;
   frmClientSearch.pnlBase.Visible := False;
@@ -158,6 +158,10 @@ begin
 
   //AccountingSearch
   frmAccountingSearch := TAccountingFrame.Create(Self);
+  frmAccountingSearch.sqlqSchoolName.SQLConnection := SQLConnection1;
+  frmAccountingSearch.SQLQuery1.SQLConnection := SQLConnection1;
+  //frmAccountingSearch.ClientDataSet1 := ClientDataSet1;
+  //frmAccountingSearch.DBGrid1.DataSource := DataSource1;
   frmAccountingSearch.pnlBase.Parent := pnlMain;
   frmAccountingSearch.pnlBase.Visible := False;
 

@@ -266,10 +266,6 @@ inherited ClientSearchframe: TClientSearchframe
         end
         object tbBasic: TTabSheet
           Caption = 'Basic Info'
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 743
-          ExplicitHeight = 0
           object ScrollBox1: TScrollBox
             Left = 0
             Top = 0
@@ -288,7 +284,6 @@ inherited ClientSearchframe: TClientSearchframe
             BevelOuter = bvNone
             BorderStyle = bsNone
             TabOrder = 0
-            ExplicitWidth = 743
             object pnlBasic: TPanel
               Left = 0
               Top = 0
@@ -299,7 +294,6 @@ inherited ClientSearchframe: TClientSearchframe
               Color = clCream
               ParentBackground = False
               TabOrder = 0
-              ExplicitWidth = 726
               object lblFirstName: TLabel
                 Left = 8
                 Top = 13

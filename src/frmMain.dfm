@@ -36,7 +36,6 @@ object Mainframe: TMainframe
     Color = clWindow
     ParentBackground = False
     TabOrder = 0
-    ExplicitHeight = 476
     object lblPnlTitle: TLabel
       Left = 1
       Top = 1
@@ -825,8 +824,6 @@ object Mainframe: TMainframe
     Color = clWhite
     ParentBackground = False
     TabOrder = 1
-    ExplicitWidth = 839
-    ExplicitHeight = 476
     object pnlMainTitle: TPanel
       Left = 1
       Top = 1
@@ -837,7 +834,6 @@ object Mainframe: TMainframe
       Color = clMenu
       ParentBackground = False
       TabOrder = 0
-      ExplicitWidth = 837
       object Image2: TImage
         Left = 28
         Top = 0
@@ -941,7 +937,7 @@ object Mainframe: TMainframe
     Left = 528
     Top = 9
     Bitmap = {
-      494C010103000800500010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010103000800540010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
       0000000000000000000000000000000000000000000000000000000000000000
       00000000000000000000C0DCC000A4A0A0008080800080808000C0C0C000C0C0
