@@ -193,7 +193,7 @@ procedure TFWGridBaseframe.adjustGridWidth;
 var i,ii: Integer;
 begin
   for i := 0 to DBGrid1.Columns.Count -1 do begin
-    DBGrid1.Columns[i].Width := 50;
+    DBGrid1.Columns[i].Width := Trunc(Canvas.TextWidth(DBGrid1.Columns[i].Title.Caption)*1.3) + 5;
     DBGrid1.DataSource.DataSet.First;
     for ii := 0 to DBGrid1.DataSource.DataSet.RecordCount -1 do begin
       if Trunc(Canvas.TextWidth(DBGrid1.Fields[i].Text)*1.3) + 5 > DBGrid1.Columns[i].Width then
@@ -234,7 +234,7 @@ procedure TFWGridBaseframe.btnLoadClick(Sender: TObject);
 begin
   SQLQuery1.SQL.Clear;
   createSQL;
-  ShowMessage(SQLQuery1.SQL.Text);
+  if m_DebugMode then ShowMessage(SQLQuery1.SQL.Text);
   ClientDataSet1.Close;
   ClientDataSet1.Open;
   //ClientDataSet1.Last;

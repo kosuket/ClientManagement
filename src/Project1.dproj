@@ -104,8 +104,8 @@
             <Form>FWGridBaseframe</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="frmAccounting.pas">
-            <Form>Accountingframe</Form>
+        <DCCReference Include="frmBilling.pas">
+            <Form>Billingframe</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frmClientdlg.pas">
