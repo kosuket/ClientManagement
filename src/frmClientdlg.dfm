@@ -85,453 +85,6 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
           OnMoved = Splitter1Moved
           ExplicitLeft = 588
         end
-        object pnlBasic: TPanel
-          Left = 0
-          Top = 0
-          Width = 587
-          Height = 276
-          Align = alLeft
-          BevelOuter = bvNone
-          Color = clCream
-          ParentBackground = False
-          TabOrder = 0
-          object lblFirstName: TLabel
-            Left = 8
-            Top = 13
-            Width = 95
-            Height = 21
-            AutoSize = False
-            Caption = 'First Name'
-            Color = clCream
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -13
-            Font.Name = 'Georgia'
-            Font.Style = []
-            ParentColor = False
-            ParentFont = False
-            Transparent = False
-            Layout = tlBottom
-          end
-          object lblLastName: TLabel
-            Left = 302
-            Top = 13
-            Width = 95
-            Height = 21
-            AutoSize = False
-            Caption = 'Last Name'
-            Color = clCream
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -13
-            Font.Name = 'Georgia'
-            Font.Style = []
-            ParentColor = False
-            ParentFont = False
-            Transparent = False
-            Layout = tlBottom
-          end
-          object lblEmail: TLabel
-            Left = 8
-            Top = 40
-            Width = 95
-            Height = 21
-            AutoSize = False
-            Caption = 'Email Address'
-            Color = clCream
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -13
-            Font.Name = 'Georgia'
-            Font.Style = []
-            ParentColor = False
-            ParentFont = False
-            Transparent = False
-            Layout = tlBottom
-          end
-          object lblSponsored: TLabel
-            Left = 8
-            Top = 67
-            Width = 95
-            Height = 21
-            AutoSize = False
-            Caption = 'Sponsored'
-            Color = clCream
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -13
-            Font.Name = 'Georgia'
-            Font.Style = []
-            ParentColor = False
-            ParentFont = False
-            Transparent = False
-            Layout = tlBottom
-          end
-          object lblUniversityName: TLabel
-            Left = 8
-            Top = 94
-            Width = 95
-            Height = 21
-            AutoSize = False
-            Caption = 'University'
-            Color = clCream
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -13
-            Font.Name = 'Georgia'
-            Font.Style = []
-            ParentColor = False
-            ParentFont = False
-            Transparent = False
-            Layout = tlBottom
-          end
-          object lblDegree: TLabel
-            Left = 8
-            Top = 121
-            Width = 95
-            Height = 21
-            AutoSize = False
-            Caption = 'Degree'
-            Color = clCream
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -13
-            Font.Name = 'Georgia'
-            Font.Style = []
-            ParentColor = False
-            ParentFont = False
-            Transparent = False
-            Layout = tlBottom
-          end
-          object lblMajor: TLabel
-            Left = 302
-            Top = 121
-            Width = 95
-            Height = 21
-            AutoSize = False
-            Caption = 'Major'
-            Color = clCream
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -13
-            Font.Name = 'Georgia'
-            Font.Style = []
-            ParentColor = False
-            ParentFont = False
-            Transparent = False
-            Layout = tlBottom
-          end
-          object lblGPA: TLabel
-            Left = 302
-            Top = 94
-            Width = 95
-            Height = 21
-            AutoSize = False
-            Caption = 'GPA'
-            Color = clCream
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -13
-            Font.Name = 'Georgia'
-            Font.Style = []
-            ParentColor = False
-            ParentFont = False
-            Transparent = False
-            Layout = tlBottom
-          end
-          object lblAcademicAward: TLabel
-            Left = 8
-            Top = 148
-            Width = 95
-            Height = 21
-            AutoSize = False
-            Caption = 'Academic'
-            Color = clCream
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -13
-            Font.Name = 'Georgia'
-            Font.Style = []
-            ParentColor = False
-            ParentFont = False
-            Transparent = False
-            Layout = tlBottom
-          end
-          object lblPublication: TLabel
-            Left = 302
-            Top = 148
-            Width = 95
-            Height = 21
-            AutoSize = False
-            Caption = 'Publication'
-            Color = clCream
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -13
-            Font.Name = 'Georgia'
-            Font.Style = []
-            ParentColor = False
-            ParentFont = False
-            Transparent = False
-            Layout = tlBottom
-          end
-          object lblStudyAbroad: TLabel
-            Left = 8
-            Top = 175
-            Width = 95
-            Height = 21
-            AutoSize = False
-            Caption = 'Study Abroad'
-            Color = clCream
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -13
-            Font.Name = 'Georgia'
-            Font.Style = []
-            ParentColor = False
-            ParentFont = False
-            Transparent = False
-            Layout = tlBottom
-          end
-          object lblPlace: TLabel
-            Left = 302
-            Top = 175
-            Width = 95
-            Height = 21
-            AutoSize = False
-            Caption = 'Place'
-            Color = clCream
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -13
-            Font.Name = 'Georgia'
-            Font.Style = []
-            ParentColor = False
-            ParentFont = False
-            Transparent = False
-            Layout = tlBottom
-          end
-          object lblWorkPlace: TLabel
-            Left = 8
-            Top = 202
-            Width = 95
-            Height = 21
-            AutoSize = False
-            Caption = 'Work Place'
-            Color = clCream
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -13
-            Font.Name = 'Georgia'
-            Font.Style = []
-            ParentColor = False
-            ParentFont = False
-            Transparent = False
-            Layout = tlBottom
-          end
-          object lblUseEnglish: TLabel
-            Left = 302
-            Top = 202
-            Width = 95
-            Height = 21
-            AutoSize = False
-            Caption = 'Use English'
-            Color = clCream
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -13
-            Font.Name = 'Georgia'
-            Font.Style = []
-            ParentColor = False
-            ParentFont = False
-            Transparent = False
-            Layout = tlBottom
-          end
-          object lblFutureGoal: TLabel
-            Left = 8
-            Top = 229
-            Width = 95
-            Height = 21
-            AutoSize = False
-            Caption = 'Future Goal'
-            Color = clCream
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -13
-            Font.Name = 'Georgia'
-            Font.Style = []
-            ParentColor = False
-            ParentFont = False
-            Transparent = False
-            Layout = tlBottom
-          end
-          object edtFirstName: TEdit
-            Left = 103
-            Top = 13
-            Width = 182
-            Height = 21
-            TabOrder = 0
-          end
-          object edtLastName: TEdit
-            Left = 397
-            Top = 13
-            Width = 182
-            Height = 21
-            TabOrder = 1
-          end
-          object edtEmail: TEdit
-            Left = 103
-            Top = 40
-            Width = 476
-            Height = 21
-            TabOrder = 2
-          end
-          object cmbSponsored: TComboBox
-            Left = 104
-            Top = 67
-            Width = 83
-            Height = 22
-            Style = csOwnerDrawFixed
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -11
-            Font.Name = 'Georgia'
-            Font.Style = []
-            ParentFont = False
-            TabOrder = 3
-            Items.Strings = (
-              'Corporate'
-              'Private')
-          end
-          object edtUniversityName: TEdit
-            Left = 104
-            Top = 94
-            Width = 181
-            Height = 21
-            TabOrder = 4
-          end
-          object edtDegree: TEdit
-            Left = 104
-            Top = 121
-            Width = 181
-            Height = 21
-            TabOrder = 6
-          end
-          object edtMajor: TEdit
-            Left = 398
-            Top = 121
-            Width = 181
-            Height = 21
-            TabOrder = 7
-          end
-          object edtGPA: TEdit
-            Left = 398
-            Top = 94
-            Width = 181
-            Height = 21
-            TabOrder = 5
-          end
-          object cmbAcademicAward: TComboBox
-            Left = 104
-            Top = 148
-            Width = 83
-            Height = 22
-            Style = csOwnerDrawFixed
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -11
-            Font.Name = 'Georgia'
-            Font.Style = []
-            ParentFont = False
-            TabOrder = 8
-            Items.Strings = (
-              'Yes'
-              'No')
-          end
-          object cmbPublication: TComboBox
-            Left = 397
-            Top = 148
-            Width = 83
-            Height = 22
-            Style = csOwnerDrawFixed
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -11
-            Font.Name = 'Georgia'
-            Font.Style = []
-            ParentFont = False
-            TabOrder = 9
-            Items.Strings = (
-              'Yes'
-              'No')
-          end
-          object cmbStudyAbroad: TComboBox
-            Left = 104
-            Top = 175
-            Width = 83
-            Height = 22
-            Style = csOwnerDrawFixed
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -11
-            Font.Name = 'Georgia'
-            Font.Style = []
-            ParentFont = False
-            TabOrder = 10
-            Items.Strings = (
-              'Yes'
-              'No')
-          end
-          object edtPlace: TEdit
-            Left = 398
-            Top = 175
-            Width = 181
-            Height = 21
-            TabOrder = 11
-          end
-          object edtWorkPlace: TEdit
-            Left = 104
-            Top = 202
-            Width = 181
-            Height = 21
-            TabOrder = 12
-          end
-          object cmbUseEnglish: TComboBox
-            Left = 398
-            Top = 202
-            Width = 83
-            Height = 22
-            Style = csOwnerDrawFixed
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -11
-            Font.Name = 'Georgia'
-            Font.Style = []
-            ParentFont = False
-            TabOrder = 13
-            Items.Strings = (
-              'Yes'
-              'No')
-          end
-          object edtFutureGoal: TEdit
-            Left = 104
-            Top = 229
-            Width = 475
-            Height = 21
-            TabOrder = 14
-          end
-          object edtDate: TDateTimePicker
-            Left = 291
-            Top = 67
-            Width = 186
-            Height = 21
-            Date = 41455.633558726860000000
-            Time = 41455.633558726860000000
-            TabOrder = 15
-            Visible = False
-            OnExit = edtDateExit
-          end
-        end
         object pnlUpperGrid: TPanel
           Left = 590
           Top = 0
@@ -540,7 +93,7 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
           Align = alClient
           BevelOuter = bvNone
           Caption = 'pnlUpperGrid'
-          TabOrder = 1
+          TabOrder = 0
           object grdSchool: TStringGrid
             Left = 0
             Top = 24
@@ -599,6 +152,466 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
               Caption = 'Delete'
               OnClick = btnSDeleteClick
               ExplicitLeft = 141
+            end
+          end
+        end
+        object ScrollBox2: TScrollBox
+          Left = 0
+          Top = 0
+          Width = 587
+          Height = 276
+          VertScrollBar.Range = 400
+          VertScrollBar.Size = 400
+          Align = alLeft
+          AutoScroll = False
+          BevelInner = bvNone
+          BevelOuter = bvNone
+          TabOrder = 1
+          object pnlBasic: TPanel
+            Left = 0
+            Top = 0
+            Width = 566
+            Height = 400
+            Align = alClient
+            BevelOuter = bvNone
+            Color = clCream
+            ParentBackground = False
+            TabOrder = 0
+            object lblFirstName: TLabel
+              Left = 8
+              Top = 13
+              Width = 95
+              Height = 21
+              AutoSize = False
+              Caption = 'First Name'
+              Color = clCream
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -13
+              Font.Name = 'Georgia'
+              Font.Style = []
+              ParentColor = False
+              ParentFont = False
+              Transparent = False
+              Layout = tlBottom
+            end
+            object lblLastName: TLabel
+              Left = 286
+              Top = 13
+              Width = 95
+              Height = 21
+              AutoSize = False
+              Caption = 'Last Name'
+              Color = clCream
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -13
+              Font.Name = 'Georgia'
+              Font.Style = []
+              ParentColor = False
+              ParentFont = False
+              Transparent = False
+              Layout = tlBottom
+            end
+            object lblEmail: TLabel
+              Left = 8
+              Top = 40
+              Width = 95
+              Height = 21
+              AutoSize = False
+              Caption = 'Email Address'
+              Color = clCream
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -13
+              Font.Name = 'Georgia'
+              Font.Style = []
+              ParentColor = False
+              ParentFont = False
+              Transparent = False
+              Layout = tlBottom
+            end
+            object lblSponsored: TLabel
+              Left = 8
+              Top = 67
+              Width = 95
+              Height = 21
+              AutoSize = False
+              Caption = 'Sponsored'
+              Color = clCream
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -13
+              Font.Name = 'Georgia'
+              Font.Style = []
+              ParentColor = False
+              ParentFont = False
+              Transparent = False
+              Layout = tlBottom
+            end
+            object lblUniversityName: TLabel
+              Left = 8
+              Top = 94
+              Width = 95
+              Height = 21
+              AutoSize = False
+              Caption = 'University'
+              Color = clCream
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -13
+              Font.Name = 'Georgia'
+              Font.Style = []
+              ParentColor = False
+              ParentFont = False
+              Transparent = False
+              Layout = tlBottom
+            end
+            object lblDegree: TLabel
+              Left = 8
+              Top = 121
+              Width = 95
+              Height = 21
+              AutoSize = False
+              Caption = 'Degree'
+              Color = clCream
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -13
+              Font.Name = 'Georgia'
+              Font.Style = []
+              ParentColor = False
+              ParentFont = False
+              Transparent = False
+              Layout = tlBottom
+            end
+            object lblMajor: TLabel
+              Left = 286
+              Top = 121
+              Width = 95
+              Height = 21
+              AutoSize = False
+              Caption = 'Major'
+              Color = clCream
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -13
+              Font.Name = 'Georgia'
+              Font.Style = []
+              ParentColor = False
+              ParentFont = False
+              Transparent = False
+              Layout = tlBottom
+            end
+            object lblGPA: TLabel
+              Left = 286
+              Top = 94
+              Width = 95
+              Height = 21
+              AutoSize = False
+              Caption = 'GPA'
+              Color = clCream
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -13
+              Font.Name = 'Georgia'
+              Font.Style = []
+              ParentColor = False
+              ParentFont = False
+              Transparent = False
+              Layout = tlBottom
+            end
+            object lblAcademicAward: TLabel
+              Left = 8
+              Top = 148
+              Width = 95
+              Height = 21
+              AutoSize = False
+              Caption = 'Academic'
+              Color = clCream
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -13
+              Font.Name = 'Georgia'
+              Font.Style = []
+              ParentColor = False
+              ParentFont = False
+              Transparent = False
+              Layout = tlBottom
+            end
+            object lblPublication: TLabel
+              Left = 286
+              Top = 148
+              Width = 95
+              Height = 21
+              AutoSize = False
+              Caption = 'Publication'
+              Color = clCream
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -13
+              Font.Name = 'Georgia'
+              Font.Style = []
+              ParentColor = False
+              ParentFont = False
+              Transparent = False
+              Layout = tlBottom
+            end
+            object lblStudyAbroad: TLabel
+              Left = 8
+              Top = 175
+              Width = 95
+              Height = 21
+              AutoSize = False
+              Caption = 'Study Abroad'
+              Color = clCream
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -13
+              Font.Name = 'Georgia'
+              Font.Style = []
+              ParentColor = False
+              ParentFont = False
+              Transparent = False
+              Layout = tlBottom
+            end
+            object lblPlace: TLabel
+              Left = 286
+              Top = 175
+              Width = 95
+              Height = 21
+              AutoSize = False
+              Caption = 'Place'
+              Color = clCream
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -13
+              Font.Name = 'Georgia'
+              Font.Style = []
+              ParentColor = False
+              ParentFont = False
+              Transparent = False
+              Layout = tlBottom
+            end
+            object lblWorkPlace: TLabel
+              Left = 8
+              Top = 202
+              Width = 95
+              Height = 21
+              AutoSize = False
+              Caption = 'Work Place'
+              Color = clCream
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -13
+              Font.Name = 'Georgia'
+              Font.Style = []
+              ParentColor = False
+              ParentFont = False
+              Transparent = False
+              Layout = tlBottom
+            end
+            object lblUseEnglish: TLabel
+              Left = 286
+              Top = 202
+              Width = 95
+              Height = 21
+              AutoSize = False
+              Caption = 'Use English'
+              Color = clCream
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -13
+              Font.Name = 'Georgia'
+              Font.Style = []
+              ParentColor = False
+              ParentFont = False
+              Transparent = False
+              Layout = tlBottom
+            end
+            object lblFutureGoal: TLabel
+              Left = 8
+              Top = 229
+              Width = 95
+              Height = 21
+              AutoSize = False
+              Caption = 'Future Goal'
+              Color = clCream
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -13
+              Font.Name = 'Georgia'
+              Font.Style = []
+              ParentColor = False
+              ParentFont = False
+              Transparent = False
+              Layout = tlBottom
+            end
+            object edtFirstName: TEdit
+              Left = 103
+              Top = 13
+              Width = 166
+              Height = 21
+              TabOrder = 0
+            end
+            object edtLastName: TEdit
+              Left = 381
+              Top = 13
+              Width = 166
+              Height = 21
+              TabOrder = 1
+            end
+            object edtEmail: TEdit
+              Left = 103
+              Top = 40
+              Width = 444
+              Height = 21
+              TabOrder = 2
+            end
+            object cmbSponsored: TComboBox
+              Left = 104
+              Top = 67
+              Width = 83
+              Height = 22
+              Style = csOwnerDrawFixed
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Georgia'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 3
+              Items.Strings = (
+                'Corporate'
+                'Private')
+            end
+            object edtUniversityName: TEdit
+              Left = 104
+              Top = 94
+              Width = 165
+              Height = 21
+              TabOrder = 4
+            end
+            object edtDegree: TEdit
+              Left = 104
+              Top = 121
+              Width = 165
+              Height = 21
+              TabOrder = 6
+            end
+            object edtMajor: TEdit
+              Left = 382
+              Top = 121
+              Width = 165
+              Height = 21
+              TabOrder = 7
+            end
+            object edtGPA: TEdit
+              Left = 382
+              Top = 94
+              Width = 165
+              Height = 21
+              TabOrder = 5
+            end
+            object cmbAcademicAward: TComboBox
+              Left = 104
+              Top = 148
+              Width = 83
+              Height = 22
+              Style = csOwnerDrawFixed
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Georgia'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 8
+              Items.Strings = (
+                'Yes'
+                'No')
+            end
+            object cmbPublication: TComboBox
+              Left = 381
+              Top = 148
+              Width = 83
+              Height = 22
+              Style = csOwnerDrawFixed
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Georgia'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 9
+              Items.Strings = (
+                'Yes'
+                'No')
+            end
+            object cmbStudyAbroad: TComboBox
+              Left = 104
+              Top = 175
+              Width = 83
+              Height = 22
+              Style = csOwnerDrawFixed
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Georgia'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 10
+              Items.Strings = (
+                'Yes'
+                'No')
+            end
+            object edtPlace: TEdit
+              Left = 382
+              Top = 175
+              Width = 165
+              Height = 21
+              TabOrder = 11
+            end
+            object edtWorkPlace: TEdit
+              Left = 104
+              Top = 202
+              Width = 165
+              Height = 21
+              TabOrder = 12
+            end
+            object cmbUseEnglish: TComboBox
+              Left = 382
+              Top = 202
+              Width = 83
+              Height = 22
+              Style = csOwnerDrawFixed
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Georgia'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 13
+              Items.Strings = (
+                'Yes'
+                'No')
+            end
+            object edtFutureGoal: TEdit
+              Left = 104
+              Top = 229
+              Width = 443
+              Height = 21
+              TabOrder = 14
+            end
+            object edtDate: TDateTimePicker
+              Left = 291
+              Top = 67
+              Width = 186
+              Height = 21
+              Date = 41455.633558726860000000
+              Time = 41455.633558726860000000
+              TabOrder = 15
+              Visible = False
+              OnExit = edtDateExit
             end
           end
         end

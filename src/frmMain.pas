@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Data.DBXMySQL, Data.DB,
   Data.SqlExpr, Data.FMTBcd, Vcl.Grids, Vcl.DBGrids, Vcl.DBCGrids, Vcl.ExtCtrls,
   Vcl.DBCtrls, Datasnap.Provider, Datasnap.DBClient, LogInFrm, Vcl.Buttons,
-  Vcl.ComCtrls,frmClientSearch,frmAccounting, frmMaster, Vcl.Menus, Vcl.ImgList,
+  Vcl.ComCtrls,frmClientSearch,frmBilling, frmMaster, Vcl.Menus, Vcl.ImgList,
   Vcl.Imaging.jpeg, frmMailSetting;
 
 type
@@ -32,18 +32,19 @@ type
     lblCurrentTitle: TLabel;
     pnlClient: TPanel;
     imgClient: TImage;
-    pnlAccounting: TPanel;
+    pnlBilling: TPanel;
     imgAccounting: TImage;
     pnlCustom: TPanel;
     imgCustom: TImage;
     mmMailSetting: TMenuItem;
+    mmDebugMode: TMenuItem;
     procedure SQLConnection1Login(Database: TSQLConnection;
       LoginParams: TStrings);
-    procedure pnlAccountingMouseDown(Sender: TObject; Button: TMouseButton;
+    procedure pnlBillingMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
-    procedure pnlAccountingMouseEnter(Sender: TObject);
-    procedure pnlAccountingMouseLeave(Sender: TObject);
-    procedure pnlAccountingMouseUp(Sender: TObject; Button: TMouseButton;
+    procedure pnlBillingMouseEnter(Sender: TObject);
+    procedure pnlBillingMouseLeave(Sender: TObject);
+    procedure pnlBillingMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure pnlClientMouseEnter(Sender: TObject);
     procedure pnlClientMouseLeave(Sender: TObject);
@@ -52,7 +53,7 @@ type
     procedure pnlClientMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure pnlClientClick(Sender: TObject);
-    procedure pnlAccountingClick(Sender: TObject);
+    procedure pnlBillingClick(Sender: TObject);
     procedure pnlCustomMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure pnlCustomMouseEnter(Sender: TObject);
@@ -61,6 +62,7 @@ type
       Shift: TShiftState; X, Y: Integer);
     procedure pnlCustomClick(Sender: TObject);
     procedure mmMailSettingClick(Sender: TObject);
+    procedure mmDebugModeClick(Sender: TObject);
   private
     { Private declarations }
     procedure cleanPnlMain;
@@ -71,11 +73,13 @@ type
     procedure behavePLBMouseEnter(pnl: TPanel;img:TImage);
     procedure behavePLBMouseLeave(pnl: TPanel;img:TImage);
     procedure initializeVariables;
+    //Enable to change Debug Mode from Screen
+    procedure reflectDebugMode(b:Boolean);
   public
     { Public declarations }
     frmLogIn: TLogInFrame;
     frmClientSearch: TClientSearchframe;
-    frmAccountingSearch: TAccountingFrame;
+    frmBillingSearch: TBillingFrame;
     frmMasterSetting: TMasterFrame;
     frmMailSetting: TMailSettingFrame;
     SQLConnection1: TSQLConnection;
@@ -130,7 +134,7 @@ end;
 procedure TMainframe.cleanPnlMain;
 begin
   frmClientSearch.pnlBase.Visible := False;
-  frmAccountingSearch.pnlBase.Visible := False;
+  frmBillingSearch.pnlBase.Visible := False;
   frmMasterSetting.pnlBase.Visible := False;
 end;
 
@@ -145,21 +149,24 @@ begin
   end else begin
     Application.Terminate;
   end;
+  mmDebugMode.Checked := g_DebugMode;
   //ClientSearch
   frmClientSearch := TClientSearchframe.Create(self);
   frmClientSearch.sqlqSchoolName.SQLConnection := SQLConnection1;
-  frmClientSearch.SQLQuery1 := SQLQuery1;
-  frmClientSearch.ClientDataSet1 := ClientDataSet1;
-  frmClientSearch.DBGrid1.DataSource := DataSource1;
+  frmClientSearch.SQLQuery1.SQLConnection := SQLConnection1;
   frmClientSearch.pnlBase.Parent := pnlMain;
   frmClientSearch.Initialize;
   frmClientSearch.pnlBase.Visible := False;
   frmClientSearch.m_DebugMode := g_DebugMode;
 
   //AccountingSearch
-  frmAccountingSearch := TAccountingFrame.Create(Self);
-  frmAccountingSearch.pnlBase.Parent := pnlMain;
-  frmAccountingSearch.pnlBase.Visible := False;
+  frmBillingSearch := TBillingFrame.Create(Self);
+  frmBillingSearch.sqlqSchoolName.SQLConnection := SQLConnection1;
+  frmBillingSearch.SQLQuery1.SQLConnection := SQLConnection1;
+  frmBillingSearch.pnlBase.Parent := pnlMain;
+  frmBillingSearch.Initialize;
+  frmBillingSearch.pnlBase.Visible := False;
+  frmBillingSearch.m_DebugMode := g_DebugMode;
 
   //MasterSetting
   frmMasterSetting := TMasterFrame.Create(Self);
@@ -168,7 +175,7 @@ begin
   //LastProc
   frmClientSearch.pnlBase.Visible := True;
   pnlClientMouseLeave(self);
-  pnlAccountingMouseLeave(self);
+  pnlBillingMouseLeave(self);
   pnlCustomMouseLeave(Self);
   pnlClientClick(Self);
 end;
@@ -207,6 +214,13 @@ begin
   g_MailFrom := '';
 end;
 
+procedure TMainframe.mmDebugModeClick(Sender: TObject);
+begin
+  inherited;
+  mmDebugMode.Checked := not mmDebugMode.Checked;
+  reflectDebugMode(mmDebugMode.Checked);
+end;
+
 procedure TMainframe.mmMailSettingClick(Sender: TObject);
 begin
   frmMailSetting := TMailSettingframe.Create(Self);
@@ -243,33 +257,40 @@ begin
   behavePLBMouseUp(pnlCustom);
 end;
 
-procedure TMainframe.pnlAccountingClick(Sender: TObject);
+procedure TMainframe.reflectDebugMode(b: Boolean);
+begin
+  g_DebugMode := b;
+  frmClientSearch.m_DebugMode := b;
+  frmBillingSearch.m_DebugMode := b;
+end;
+
+procedure TMainframe.pnlBillingClick(Sender: TObject);
 begin
   cleanPnlMain;
-  frmAccountingSearch.pnlBase.Visible := True;
-  setCurrentTitle(pnlAccounting.Caption,1);
+  frmBillingSearch.pnlBase.Visible := True;
+  setCurrentTitle(pnlBilling.Caption,1);
 end;
 
-procedure TMainframe.pnlAccountingMouseDown(Sender: TObject;
+procedure TMainframe.pnlBillingMouseDown(Sender: TObject;
   Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 begin
-  behavePLBMouseDown(pnlAccounting);
+  behavePLBMouseDown(pnlBilling);
 end;
 
-procedure TMainframe.pnlAccountingMouseEnter(Sender: TObject);
+procedure TMainframe.pnlBillingMouseEnter(Sender: TObject);
 begin
-  behavePLBMouseEnter(pnlAccounting,imgAccounting);
+  behavePLBMouseEnter(pnlBilling,imgAccounting);
 end;
 
-procedure TMainframe.pnlAccountingMouseLeave(Sender: TObject);
+procedure TMainframe.pnlBillingMouseLeave(Sender: TObject);
 begin
-  behavePLBMouseLeave(pnlAccounting,imgAccounting);
+  behavePLBMouseLeave(pnlBilling,imgAccounting);
 end;
 
-procedure TMainframe.pnlAccountingMouseUp(Sender: TObject; Button: TMouseButton;
+procedure TMainframe.pnlBillingMouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
-  behavePLBMouseUp(pnlAccounting);
+  behavePLBMouseUp(pnlBilling);
 end;
 
 procedure TMainframe.pnlClientClick(Sender: TObject);

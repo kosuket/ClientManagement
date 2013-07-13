@@ -7,7 +7,7 @@ uses
   frmMaster in 'frmMaster.pas' {MasterFrame},
   frmClientSearch in 'frmClientSearch.pas' {ClientSearchframe},
   FWGridBasefrm in 'FWGridBasefrm.pas' {FWGridBaseframe},
-  frmAccounting in 'frmAccounting.pas' {Accountingframe},
+  frmBilling in 'frmBilling.pas' {Billingframe},
   frmClientdlg in 'frmClientdlg.pas' {frmClientCarteDlg},
   FWSQLBaseDlgfrm in 'FWSQLBaseDlgfrm.pas' {FWSQLBaseDialogframe},
   frmMaildlg in 'frmMaildlg.pas' {MailDlgframe},
