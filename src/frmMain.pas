@@ -73,6 +73,7 @@ type
     procedure behavePLBMouseEnter(pnl: TPanel;img:TImage);
     procedure behavePLBMouseLeave(pnl: TPanel;img:TImage);
     procedure initializeVariables;
+    //Enable to change Debug Mode from Screen
     procedure reflectDebugMode(b:Boolean);
   public
     { Public declarations }
