@@ -31,6 +31,7 @@ inherited ClientSearchframe: TClientSearchframe
         Ctl3D = False
         FixedColor = 14221016
         ParentCtl3D = False
+        PopupMenu = pmGrid
         OnDblClick = DBGrid1DblClick
       end
     end
@@ -683,6 +684,19 @@ inherited ClientSearchframe: TClientSearchframe
           end
         end
       end
+    end
+  end
+  object pmGrid: TPopupMenu
+    OnPopup = pmGridPopup
+    Left = 392
+    Top = 270
+    object pmDetail: TMenuItem
+      Caption = 'View Detail'
+      OnClick = pmDetailClick
+    end
+    object pmMail: TMenuItem
+      Caption = 'Send Mail'
+      OnClick = pmMailClick
     end
   end
 end

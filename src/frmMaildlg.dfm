@@ -177,10 +177,12 @@ inherited MailDlgframe: TMailDlgframe
             A48BF0BDAAF0D6CCF7F0EDFDFFFFFFFFFFFFFFFF0000FEFEFEFDFFFFF6DBAFF6
             CA7DF7C46CE98559E57658E89277EBA690EEBBACF0D4CAF4EAE6FBFFFFFFFFFF
             FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFCFCFCFEFEFE0000}
+          ParentShowHint = False
+          ShowHint = True
           OnClick = btnAttachClick
           ExplicitLeft = 1
         end
-        object SpeedButton2: TSpeedButton
+        object btnDelete: TSpeedButton
           Left = 23
           Top = 0
           Width = 23
@@ -236,6 +238,9 @@ inherited MailDlgframe: TMailDlgframe
             FFFFFFFEFEFEFEFEFEFEFEFE0000FFFFFFFFFFFFFFFFFFFFFFFFB3B3CE000077
             21218C6868B0ADAED1F1F2F3FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
             FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000}
+          ParentShowHint = False
+          ShowHint = True
+          OnClick = btnDeleteClick
         end
         object lbAttachment: TListBox
           Left = 46
@@ -245,10 +250,6 @@ inherited MailDlgframe: TMailDlgframe
           Align = alClient
           ItemHeight = 13
           TabOrder = 0
-          ExplicitLeft = 120
-          ExplicitTop = 8
-          ExplicitWidth = 121
-          ExplicitHeight = 97
         end
       end
     end

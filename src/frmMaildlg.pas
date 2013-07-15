@@ -26,12 +26,13 @@ type
     OpenDialog1: TOpenDialog;
     pnlAttachment: TPanel;
     btnAttach: TSpeedButton;
-    SpeedButton2: TSpeedButton;
+    btnDelete: TSpeedButton;
     lbAttachment: TListBox;
     procedure btnSendClick(Sender: TObject);
     procedure sgRecepientSetEditText(Sender: TObject; ACol, ARow: Integer;
       const Value: string);
     procedure btnAttachClick(Sender: TObject);
+    procedure btnDeleteClick(Sender: TObject);
   private
     { Private declarations }
     slAttachment: TStringList;
@@ -52,6 +53,19 @@ implementation
 uses frmMain;
 
 {$R *.dfm}
+
+procedure TMailDlgframe.btnDeleteClick(Sender: TObject);
+begin
+  inherited;
+  if lbAttachment.Items.Count > 0 then begin
+    if lbAttachment.ItemIndex = -1 then begin
+      ShowMessage('File Not Selected');
+      exit;
+    end;
+    DeleteFile('Attach\' + lbAttachment.Items[lbAttachment.ItemIndex]);
+    lbAttachment.Items.Delete(lbAttachment.ItemIndex);
+  end;
+end;
 
 procedure TMailDlgframe.btnSendClick(Sender: TObject);
 var

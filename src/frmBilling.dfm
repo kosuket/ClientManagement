@@ -14,6 +14,7 @@ inherited Billingframe: TBillingframe
       ExplicitHeight = 299
       inherited DBGrid1: TDBGrid
         Height = 299
+        PopupMenu = pmGrid
       end
     end
     inherited pnlCondition: TPanel
@@ -185,6 +186,19 @@ inherited Billingframe: TBillingframe
           TabOrder = 5
         end
       end
+    end
+  end
+  object pmGrid: TPopupMenu
+    Left = 392
+    Top = 270
+    object pmDetail: TMenuItem
+      Caption = 'View Detail'
+      Enabled = False
+      Visible = False
+    end
+    object pmMail: TMenuItem
+      Caption = 'Send Mail'
+      OnClick = pmMailClick
     end
   end
 end

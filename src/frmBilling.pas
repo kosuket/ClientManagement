@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, FWGridBasefrm, Data.FMTBcd,
   Vcl.AppEvnts, Datasnap.Provider, Data.DB, Datasnap.DBClient, Data.SqlExpr,
   Vcl.StdCtrls, Vcl.Imaging.jpeg, Vcl.ExtCtrls, Vcl.Grids, Vcl.DBGrids,
-  Vcl.ComCtrls;
+  Vcl.ComCtrls, frmMaildlg, Vcl.Menus;
 
 type
   TBillingframe = class(TFWGridBaseframe)
@@ -22,15 +22,21 @@ type
     lblLastName: TLabel;
     edtLastName: TEdit;
     chkExcludeZero: TCheckBox;
+    pmGrid: TPopupMenu;
+    pmDetail: TMenuItem;
+    pmMail: TMenuItem;
     procedure cmbPeriodChange(Sender: TObject);
+    procedure pmMailClick(Sender: TObject);
   private
     { Private declarations }
+    function isMailable: Boolean;
   protected
     //SQLê∂ê¨ä÷åW
     procedure createSQLFix;  override;
     procedure createWhere;  override;
   public
     { Public declarations }
+    frmMailDialog: TMailDlgframe;
     procedure Initialize; override;
   end;
 
@@ -134,6 +140,41 @@ begin
   inherited;
   cmbPeriod.ItemIndex := 1;
   cmbPeriod.OnChange(Self);
+end;
+
+function TBillingframe.isMailable: Boolean;
+begin
+  result := False;
+  try
+    if not DBGrid1.DataSource.DataSet.Active then exit;
+    if DBGrid1.DataSource.DataSet.RecordCount <= 0 then exit;
+    result := True;
+  except
+    on E: Exception do begin
+      if m_DebugMode then ShowMessage(E.Message);
+    end;
+  end;
+end;
+
+procedure TBillingframe.pmMailClick(Sender: TObject);
+var slRecepient,slAddress: TStringList;
+begin
+  inherited;
+  if not isMailable then exit;
+
+  slRecepient := TStringList.Create;
+  slAddress := TStringList.Create;
+  try
+    slRecepient.Add(DBGrid1.Fields[1].Text + ' ' + DBGrid1.Fields[2].Text);
+    slAddress.Add(DBGrid1.Fields[3].Text);
+    frmMailDialog := TMailDlgframe.Create(Self);
+    frmMailDialog.setRecepient(slRecepient,slAddress);
+    frmMailDialog.ShowModal;
+  finally
+    slRecepient.Free;
+    slAddress.Free;
+    frmMailDialog.Destroy;
+  end;
 end;
 
 end.

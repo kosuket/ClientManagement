@@ -7,7 +7,8 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.FMTBcd,
   Vcl.AppEvnts, Datasnap.Provider, Data.DB, Datasnap.DBClient, Data.SqlExpr,
   Vcl.StdCtrls, Vcl.Imaging.jpeg, Vcl.ExtCtrls, Vcl.Samples.Spin, Vcl.ComCtrls,
-  Vcl.Grids, Vcl.DBGrids, FWGridBasefrm,frmClientdlg,frmMaildlg, Vcl.Buttons;
+  Vcl.Grids, Vcl.DBGrids, FWGridBasefrm,frmClientdlg,frmMaildlg, Vcl.Buttons,
+  Vcl.Menus;
 
 type
   TClientSearchframe = class(TFWGridBaseframe)
@@ -61,14 +62,22 @@ type
     Memo1: TMemo;
     btnMail: TButton;
     btnClear: TButton;
+    pmGrid: TPopupMenu;
+    pmDetail: TMenuItem;
+    pmMail: TMenuItem;
     procedure btnAddClick(Sender: TObject);
     procedure DBGrid1DblClick(Sender: TObject);
     procedure btnMailClick(Sender: TObject);
     procedure btnClearClick(Sender: TObject);
+    procedure pmDetailClick(Sender: TObject);
+    procedure pmMailClick(Sender: TObject);
+    procedure pmGridPopup(Sender: TObject);
   private
     { Private declarations }
       slSchoolId: TStringList;
       procedure clearCond(ctrl:TWinControl);
+      function isMailable: Boolean;
+      function hasData: Boolean;
   protected
     //SQL生成関係
     procedure createSQLFix;  override;
@@ -123,14 +132,8 @@ var slRecepient,slAddress: TStringList;
     i: Integer;
 begin
   inherited;
-  if not DBGrid1.DataSource.DataSet.Active then begin
-    ShowMessage('Data Not Loaded');
-    exit;
-  end;
-  if Length(DBGrid1.Fields[3].Text) = 0 then begin
-    ShowMessage('Mail Address Cannot Be Specified');
-    exit;
-  end;
+  if not isMailable then exit;
+
   slRecepient := TStringList.Create;
   slAddress := TStringList.Create;
   try
@@ -145,6 +148,7 @@ begin
     frmMailDialog.ShowModal;
   finally
     slRecepient.Free;
+    slAddress.Free;
     frmMailDialog.Destroy;
   end;
 end;
@@ -319,14 +323,10 @@ begin
 end;
 
 procedure TClientSearchframe.DBGrid1DblClick(Sender: TObject);
-  function _hasRecord:Boolean;
-  begin
-    result := true;
-  end;
 begin
   inherited;
   try
-    if not _hasRecord then exit;  //1行しかなくてデータが入っていないときはExit
+    if not hasData then exit;
     frmClientDialog := TfrmClientCarteDlg.Create(Self);
     frmClientDialog.g_OpenMode := omModify;
     frmClientDialog.SchoolList := cmbSchoolName.Items;
@@ -336,7 +336,21 @@ begin
     frmClientDialog.g_DebugMode := m_DebugMode;
     if frmClientDialog.ShowModal = mrOk then btnLoadClick(self);
   finally
-    frmClientDialog.Destroy;
+    if Assigned(frmClientDialog) then frmClientDialog.Destroy;
+  end;
+end;
+
+function TClientSearchframe.hasData: Boolean;
+begin
+  result := False;
+  try
+    if not DBGrid1.DataSource.DataSet.Active then exit;
+    if DBGrid1.DataSource.DataSet.RecordCount <= 0 then exit;
+    result := True;
+  except
+    on E: Exception do begin
+      if m_DebugMode then ShowMessage(E.Message);
+    end;
   end;
 end;
 
@@ -364,6 +378,57 @@ begin
     cmbTOEFLCond.ItemIndex := 0;
   except
     ShowMessage('Something Wrong Happened');
+  end;
+end;
+
+function TClientSearchframe.isMailable: Boolean;
+begin
+  result := False;
+  if not hasData then begin
+    ShowMessage('Data Not Loaded');
+    exit;
+  end;
+  if Length(DBGrid1.Fields[3].Text) = 0 then begin
+    ShowMessage('Mail Address Cannot Be Specified');
+    exit;
+  end;
+  result := True;
+end;
+
+procedure TClientSearchframe.pmDetailClick(Sender: TObject);
+begin
+  inherited;
+  DBGrid1DblClick(Self);
+end;
+
+procedure TClientSearchframe.pmGridPopup(Sender: TObject);
+begin
+  inherited;
+  pmDetail.Enabled := False;
+  pmMail.Enabled := False;
+  if not hasData then exit;
+  pmDetail.Enabled := True;
+  pmMail.Enabled := True;
+end;
+
+procedure TClientSearchframe.pmMailClick(Sender: TObject);
+var slRecepient,slAddress: TStringList;
+begin
+  inherited;
+  if not isMailable then exit;
+
+  slRecepient := TStringList.Create;
+  slAddress := TStringList.Create;
+  try
+    slRecepient.Add(DBGrid1.Fields[1].Text + ' ' + DBGrid1.Fields[2].Text);
+    slAddress.Add(DBGrid1.Fields[3].Text);
+    frmMailDialog := TMailDlgframe.Create(Self);
+    frmMailDialog.setRecepient(slRecepient,slAddress);
+    frmMailDialog.ShowModal;
+  finally
+    slRecepient.Free;
+    slAddress.Free;
+    frmMailDialog.Destroy;
   end;
 end;
 
