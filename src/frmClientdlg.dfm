@@ -447,6 +447,42 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
               Transparent = False
               Layout = tlBottom
             end
+            object lblClientMemo: TLabel
+              Left = 9
+              Top = 256
+              Width = 95
+              Height = 21
+              AutoSize = False
+              Caption = 'Client'
+              Color = clCream
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -13
+              Font.Name = 'Georgia'
+              Font.Style = []
+              ParentColor = False
+              ParentFont = False
+              Transparent = False
+              Layout = tlBottom
+            end
+            object lblCounselorMemo: TLabel
+              Left = 9
+              Top = 325
+              Width = 95
+              Height = 21
+              AutoSize = False
+              Caption = 'Counselor'
+              Color = clCream
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -13
+              Font.Name = 'Georgia'
+              Font.Style = []
+              ParentColor = False
+              ParentFont = False
+              Transparent = False
+              Layout = tlBottom
+            end
             object edtFirstName: TEdit
               Left = 103
               Top = 13
@@ -612,6 +648,22 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
               TabOrder = 15
               Visible = False
               OnExit = edtDateExit
+            end
+            object memoClientMemo: TRichEdit
+              Left = 104
+              Top = 256
+              Width = 443
+              Height = 63
+              ScrollBars = ssBoth
+              TabOrder = 16
+            end
+            object memoCounselorMemo: TRichEdit
+              Left = 104
+              Top = 325
+              Width = 443
+              Height = 63
+              ScrollBars = ssBoth
+              TabOrder = 17
             end
           end
         end

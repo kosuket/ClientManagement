@@ -8,7 +8,7 @@ uses
   IdBaseComponent, IdComponent, IdTCPConnection, IdTCPClient,
   IdExplicitTLSClientServerBase, IdMessageClient, IdSMTPBase, IdSMTP,
   Vcl.StdCtrls, Vcl.ComCtrls, Vcl.ExtCtrls, Vcl.Grids, Vcl.Buttons, Data.DB,
-  Data.SqlExpr, IdMessage, IdSSLOpenSSL;
+  Data.SqlExpr, IdMessage, IdSSLOpenSSL, IdAttachmentFile;
 
 type
   TMailDlgframe = class(TFWSQLBaseDialogframe)
@@ -20,17 +20,28 @@ type
     pnlSubject: TPanel;
     lblSubject: TLabel;
     edtSubject: TEdit;
-    pnlContentsTitle: TPanel;
     memoContents: TRichEdit;
     IdSMTP1: TIdSMTP;
     IdMessage1: TIdMessage;
+    OpenDialog1: TOpenDialog;
+    pnlAttachment: TPanel;
+    btnAttach: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    lbAttachment: TListBox;
     procedure btnSendClick(Sender: TObject);
+    procedure sgRecepientSetEditText(Sender: TObject; ACol, ARow: Integer;
+      const Value: string);
+    procedure btnAttachClick(Sender: TObject);
   private
     { Private declarations }
+    slAttachment: TStringList;
+    procedure cleanAttachFolder;
   public
     { Public declarations }
     mailTo: String;
-    procedure setRecepient(sl:TStringList);
+    constructor create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure setRecepient(slR:TStringList;slA:TStringList);
     function checkConnection: Boolean;
   end;
 
@@ -48,6 +59,7 @@ var
   msg: TIdMessage;
   IdSMTP: TIdSMTP;
   SSL: TIdSSLIOHandlerSocketOpenSSL;
+  i: Integer;
 begin
   inherited;
   if MessageDlg('Send This Message?',mtConfirmation,[mbYes,mbNo],0,mbYes) <> mrYes then exit;
@@ -75,7 +87,8 @@ begin
     msg.Recipients.EMailAddresses := mailto;
     msg.From.Text := Mainframe.g_MailFrom;
     msg.Body.Text := body;
-    msg.ContentType := 'text/plain';
+    msg.ContentType := 'multipart/mixed';
+    for i  := 0 to lbAttachment.Items.Count -1 do TIdAttachmentFile.Create(Msg.MessageParts, lbAttachment.Items[i]).FileIsTempFile := True;
     IdSmtp.Send(msg);
     IdSmtp.Disconnect ;
     ShowMessage('Message Sent');
@@ -117,12 +130,70 @@ begin
   end;
 end;
 
-procedure TMailDlgframe.setRecepient(sl:TStringList);
+procedure TMailDlgframe.cleanAttachFolder;
+var
+  Rec: TSearchRec;
+begin
+  //指定ディレクトリのすべての種類のファイルを列挙
+  if FindFirst('Attach\' + '*.*', faAnyFile, Rec) = 0 then
+  try
+    repeat
+      //フォルダやカレントディレクトリや親ディレクトリは対象外
+      if not((Rec.Attr and faDirectory > 0)) and
+             (Rec.Name <> '.') and (Rec.Name <> '..') then begin
+      DeleteFile('Attach\' + Rec.Name);
+      end;
+    until (FindNext(Rec) <> 0);
+  finally
+    FindClose(Rec);
+  end;
+end;
+
+constructor TMailDlgframe.create(AOwner: TComponent);
+begin
+  inherited;
+  slAttachment := TStringList.Create;
+  cleanAttachFolder;
+end;
+
+destructor TMailDlgframe.Destroy;
+begin
+  cleanAttachFolder;
+  inherited;
+end;
+
+procedure TMailDlgframe.setRecepient(slR:TStringList;slA:TStringList);
 var i:Integer;
 begin
-  sgRecepient.RowCount := sl.Count;
-  for i := 0 to sl.Count -1 do begin
-    sgRecepient.Cells[1,i] := sl[i];
+  sgRecepient.RowCount := slR.Count;
+  for i := 0 to slR.Count -1 do begin
+    sgRecepient.Cells[0,i] := slR[i];
+    sgRecepient.Cells[1,i] := slA[i];
+  end;
+end;
+
+procedure TMailDlgframe.sgRecepientSetEditText(Sender: TObject; ACol,
+  ARow: Integer; const Value: string);
+begin
+  inherited;
+  //if ACol = 1 then sgRecepient.Cells[0,ARow] := '';
+end;
+
+procedure TMailDlgframe.btnAttachClick(Sender: TObject);
+var str : String;
+    i: Integer;
+begin
+  inherited;
+  str := '';
+  if OpenDialog1.Execute then begin
+    for i := 0 to slAttachment.Count -1 do begin
+      if OpenDialog1.FileName = slAttachment[i] then begin
+        ShowMessage('File Already Attached');
+        exit;
+      end;
+    end;
+    CopyFile(PChar(OpenDialog1.FileName),PChar('Attach\' + ExtractFileName(OpenDialog1.FileName)),False);
+    lbAttachment.Items.Add(ExtractFileName(OpenDialog1.FileName));
   end;
 end;
 

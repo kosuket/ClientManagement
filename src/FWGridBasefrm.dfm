@@ -396,7 +396,6 @@ object FWGridBaseframe: TFWGridBaseframe
     Top = 1
   end
   object ApplicationEvents1: TApplicationEvents
-    OnMessage = ApplicationEvents1Message
     Left = 528
   end
   object SQLQuery1: TSQLQuery

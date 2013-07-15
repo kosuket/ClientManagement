@@ -29,9 +29,6 @@ type
     ClientDataSet1: TClientDataSet;
     DataSource1: TDataSource;
     procedure btnLoadClick(Sender: TObject);
-    procedure cmbGMATCategoryChange(Sender: TObject);
-    procedure cmbTOEFLCategoryChange(Sender: TObject);
-    procedure ApplicationEvents1Message(var Msg: tagMSG; var Handled: Boolean);
   private
     { Private declarations }
     //グリッド表示関係
@@ -68,106 +65,6 @@ implementation
 
 {$R *.dfm}
 
-procedure TFWGridBaseframe.cmbGMATCategoryChange(Sender: TObject);
-begin
-  {if cmbGMATCategory.ItemIndex = 0 then begin
-    edtGMATScore.Increment := 10;
-    edtGMATScore.MaxLength := 3;
-    edtGMATScore.MaxValue := 800;
-    edtGMATScore.MinValue := 0;
-    edtGMATScore.Value := 0;
-    edtGMATScore.Enabled := False;
-    cmbGMATCond.ItemIndex := 0;
-    cmbGMATCond.Enabled := False;
-  end else if cmbGMATCategory.ItemIndex = 1 then begin
-    edtGMATScore.Increment := 10;
-    edtGMATScore.MaxLength := 3;
-    edtGMATScore.MaxValue := 800;
-    edtGMATScore.MinValue := 0;
-    edtGMATScore.Value := 700;
-    edtGMATScore.Enabled := True;
-    cmbGMATCond.Enabled := True;
-  end else if cmbGMATCategory.ItemIndex = 2 then begin
-    edtGMATScore.Increment := 1;
-    edtGMATScore.MaxLength := 2;
-    edtGMATScore.MaxValue := 80;
-    edtGMATScore.MinValue := 0;
-    edtGMATScore.Value := 40;
-    edtGMATScore.Enabled := True;
-    cmbGMATCond.Enabled := True;
-  end else if cmbGMATCategory.ItemIndex = 3 then begin
-    edtGMATScore.Increment := 1;
-    edtGMATScore.MaxLength := 2;
-    edtGMATScore.MaxValue := 80;
-    edtGMATScore.MinValue := 50;
-    edtGMATScore.Value := 0;
-    edtGMATScore.Enabled := True;
-    cmbGMATCond.Enabled := True;
-  end else if cmbGMATCategory.ItemIndex = 4 then begin
-    edtGMATScore.Increment := 1;
-    edtGMATScore.MaxLength := 1;
-    edtGMATScore.MaxValue := 6;
-    edtGMATScore.MinValue := 0;
-    edtGMATScore.Value := 5;
-    edtGMATScore.Enabled := True;
-    cmbGMATCond.Enabled := True;
-  end else if cmbGMATCategory.ItemIndex = 5 then begin
-    edtGMATScore.Increment := 1;
-    edtGMATScore.MaxLength := 1;
-    edtGMATScore.MaxValue := 6;
-    edtGMATScore.MinValue := 0;
-    edtGMATScore.Value := 5;
-    edtGMATScore.Enabled := True;
-    cmbGMATCond.Enabled := True;
-  end;  }
-end;
-
-procedure TFWGridBaseframe.cmbTOEFLCategoryChange(Sender: TObject);
-begin
-  {if cmbTOEFLCategory.ItemIndex = 0 then begin
-    edtTOEFLScore.Increment := 1;
-    edtTOEFLScore.MaxLength := 3;
-    edtTOEFLScore.MaxValue := 120;
-    edtTOEFLScore.MinValue := 0;
-    edtTOEFLScore.Value := 0;
-    edtTOEFLScore.Enabled := False;
-    cmbTOEFLCond.ItemIndex := 0;
-    cmbTOEFLCond.Enabled := False;
-  end else if cmbTOEFLCategory.ItemIndex = 1 then begin
-    edtTOEFLScore.Increment := 1;
-    edtTOEFLScore.MaxLength := 1;
-    edtTOEFLScore.MaxValue := 120;
-    edtTOEFLScore.MinValue := 0;
-    edtTOEFLScore.Value := 100;
-    edtTOEFLScore.Enabled := True;
-    cmbTOEFLCond.Enabled := True;
-  end else if cmbTOEFLCategory.ItemIndex = 2 then begin
-    edtTOEFLScore.Increment := 1;
-    edtTOEFLScore.MaxLength := 2;
-    edtTOEFLScore.MaxValue := 30;
-    edtTOEFLScore.MinValue := 0;
-    edtTOEFLScore.Value := 25;
-    edtTOEFLScore.Enabled := True;
-    cmbTOEFLCond.Enabled := True;
-  end else if cmbTOEFLCategory.ItemIndex = 3 then begin
-    edtTOEFLScore.Increment := 1;
-    edtTOEFLScore.MaxLength := 2;
-    edtTOEFLScore.MaxValue := 30;
-    edtTOEFLScore.MinValue := 0;
-    edtTOEFLScore.Value := 25;
-    edtTOEFLScore.Enabled := True;
-    cmbTOEFLCond.Enabled := True;
-  end else if cmbTOEFLCategory.ItemIndex = 4 then begin
-    edtTOEFLScore.Increment := 1;
-    edtTOEFLScore.MaxLength := 2;
-    edtTOEFLScore.MaxValue := 30;
-    edtTOEFLScore.MinValue := 0;
-    edtTOEFLScore.Value := 25;
-    edtTOEFLScore.Enabled := True;
-    cmbTOEFLCond.Enabled := True;
-  end;}
-end;
-
 procedure TFWGridBaseframe.createSQL;
 begin
   createSQLFix;
@@ -200,33 +97,6 @@ begin
         DBGrid1.Columns[i].Width := Trunc(Canvas.TextWidth(DBGrid1.Fields[i].Text)*1.3) + 5;
       DBGrid1.DataSource.DataSet.Next;
     end;
-  end;
-end;
-
-procedure TFWGridBaseframe.ApplicationEvents1Message(var Msg: tagMSG;
-  var Handled: Boolean);
-begin
-if Msg.message = WM_MOUSEWHEEL then
-  begin
-    {// 上方向
-    if Msg.wParam > 0 then
-    begin
-      ScrollBox1.VertScrollBar.Position :=
-        ScrollBox1.VertScrollBar.Position - 32;
-    end
-    else
-    // 下方向
-    begin
-      ScrollBox1.VertScrollBar.Position :=
-        ScrollBox1.VertScrollBar.Position + 32;
-    end;
-
-    ScrollBox1.Invalidate;
-
-    Handled := False;}
-    // Handled は，コントロールがイベントを処理したかどうかを示します。
-    // Handled を false に設定すると，オブジェクトの親がイベントを
-    // 処理するようにすることができます。
   end;
 end;
 

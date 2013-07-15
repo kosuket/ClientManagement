@@ -59,7 +59,7 @@ inherited ClientSearchframe: TClientSearchframe
           ExplicitHeight = 25
         end
         object btnAdd: TButton
-          Left = 466
+          Left = 109
           Top = 4
           Width = 75
           Height = 25
@@ -73,7 +73,7 @@ inherited ClientSearchframe: TClientSearchframe
           Width = 75
           Height = 25
           Anchors = [akRight, akBottom]
-          Caption = 'Mail'
+          Caption = 'Mail All'
           Font.Charset = ANSI_CHARSET
           Font.Color = clWindowText
           Font.Height = -11

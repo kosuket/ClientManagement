@@ -73,6 +73,10 @@ type
     cmbUseEnglish: TComboBox;
     edtFutureGoal: TEdit;
     edtDate: TDateTimePicker;
+    lblClientMemo: TLabel;
+    memoClientMemo: TRichEdit;
+    lblCounselorMemo: TLabel;
+    memoCounselorMemo: TRichEdit;
     procedure grdSchoolClick(Sender: TObject);
     procedure cmbSchoolClick(Sender: TObject);
     procedure cmbRankClick(Sender: TObject);
@@ -142,6 +146,7 @@ type
     slSchoolId: TStringList;
     g_ClientId: Int64;
     g_OpenMode: TOpenMode;
+    g_DebugMode: Boolean;
     constructor create(AOwner:TComponent);override;
     procedure initialize(OpenMode:TOpenMode;conn:TSQLConnection);
   end;
@@ -391,6 +396,7 @@ end;
 constructor TfrmClientCarteDlg.create(AOwner: TComponent);
 begin
   inherited;
+  g_DebugMode := False;
   cmbSchool := TComboBox.Create(Self);
   cmbSchool.Parent := pnlBasic;
   cmbRank := TComboBox.Create(Self);
@@ -499,8 +505,8 @@ begin
     Add(_String(edtPlace.Text));
     Add(_Div(cmbUseEnglish.ItemIndex));
     Add(_String(edtFutureGoal.Text));
-    Add(_String(''));
-    Add(_String('',True));
+    Add(_String(memoClientMemo.Lines.Text));
+    Add(_String(memoCounselorMemo.Lines.Text,True));
     Add(')');
   end;
 end;
@@ -620,8 +626,8 @@ begin
     Add('STUDIED_ABROAD_PLACE =' + _String(edtPlace.Text));
     Add('USE_ENGLISH_AT_WORK_FLG =' + _Div(cmbUseEnglish.ItemIndex));
     Add('FUTURE_GOAL =' + _String(edtFutureGoal.Text));
-    Add('CLIENT_MEMO =' + _String(''));
-    Add('COUNSELOR_MEMO =' + _String('',True));
+    Add('CLIENT_MEMO =' + _String(memoClientMemo.Lines.Text));
+    Add('COUNSELOR_MEMO =' + _String(memoCounselorMemo.Lines.Text,True));
     Add(' WHERE CLIENT_ID = ' + IntToStr(g_ClientId));
   end;
 end;
@@ -753,6 +759,8 @@ begin
   edtPlace.Text := cdsClientCarte.Fields[14].AsString;
   cmbUseEnglish.ItemIndex := getcmbIndex(cdsClientCarte.Fields[15].AsInteger);
   edtFutureGoal.Text := cdsClientCarte.Fields[16].AsString;
+  memoClientMemo.Text := cdsClientCarte.Fields[17].AsString;
+  memoCounselorMemo.Text := cdsClientCarte.Fields[18].AsString;
   cdsClientCarte.Close;
 end;
 
@@ -1150,6 +1158,7 @@ begin
       createInsertSchoolMapSQL;
       SQLQuery1.ExecSQL();
     end;
+    if g_DebugMode then ShowMessage(SQLQuery1.SQL.Text);
     //Delete Insert GMAT
     createDeleteGMATSQL;
     SQLQuery1.ExecSQL();
@@ -1157,6 +1166,7 @@ begin
       createInsertGMATSQL;
       SQLQuery1.ExecSQL();
     end;
+    if g_DebugMode then ShowMessage(SQLQuery1.SQL.Text);
     //Delete Insert TOEFL
     createDeleteTOEFLSQL;
     SQLQuery1.ExecSQL();
@@ -1164,6 +1174,7 @@ begin
       createInsertTOEFLSQL;
       SQLQuery1.ExecSQL();
     end;
+    if g_DebugMode then ShowMessage(SQLQuery1.SQL.Text);
 
     SQLQuery1.SQLConnection.CommitFreeAndNil(tran);
     result := '';

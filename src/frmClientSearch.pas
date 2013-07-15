@@ -119,7 +119,8 @@ begin
 end;
 
 procedure TClientSearchframe.btnMailClick(Sender: TObject);
-var slRecepient: TStringList;
+var slRecepient,slAddress: TStringList;
+    i: Integer;
 begin
   inherited;
   if not DBGrid1.DataSource.DataSet.Active then begin
@@ -131,11 +132,16 @@ begin
     exit;
   end;
   slRecepient := TStringList.Create;
+  slAddress := TStringList.Create;
   try
-    slRecepient.Add(DBGrid1.Fields[3].Text);
+    DBGrid1.DataSource.DataSet.First;
+    for i := 0 to DBGrid1.DataSource.DataSet.RecordCount -1 do begin
+      slRecepient.Add(DBGrid1.Fields[1].Text + ' ' + DBGrid1.Fields[2].Text);
+      slAddress.Add(DBGrid1.Fields[3].Text);
+      DBGrid1.DataSource.DataSet.Next;
+    end;
     frmMailDialog := TMailDlgframe.Create(Self);
-    frmMailDialog.setRecepient(slRecepient);
-    if not frmMailDialog.checkConnection then exit;
+    frmMailDialog.setRecepient(slRecepient,slAddress);
     frmMailDialog.ShowModal;
   finally
     slRecepient.Free;
@@ -286,8 +292,17 @@ begin
     case cmbGMATCond.ItemIndex of
       1: sl.Add('(GMAT <= ' + IntToStr(edtGMATScore.Value) + ' OR GMAT IS NULL)');
       2: sl.Add('GMAT <= ' + IntToStr(edtGMATScore.Value));
-      3: sl.Add('(GMAT >= ' + IntToStr(edtGMATScore.Value) + ' OR GMAT IS NULL');
+      3: sl.Add('(GMAT >= ' + IntToStr(edtGMATScore.Value) + ' OR GMAT IS NULL)');
       4: sl.Add('GMAT >= ' + IntToStr(edtGMATScore.Value));
+    end;
+  end;
+  if cmbTOEFLCond.ItemIndex <> cmbIndexAll then begin
+    _checkforand(sl);
+    case cmbTOEFLCond.ItemIndex of
+      1: sl.Add('(TOEFL <= ' + IntToStr(edtTOEFLScore.Value) + ' OR TOEFL IS NULL)');
+      2: sl.Add('TOEFL <= ' + IntToStr(edtTOEFLScore.Value));
+      3: sl.Add('(TOEFL >= ' + IntToStr(edtTOEFLScore.Value) + ' OR TOEFL IS NULL)');
+      4: sl.Add('TOEFL >= ' + IntToStr(edtTOEFLScore.Value));
     end;
   end;
   if sl.Count > 0 then begin
@@ -318,6 +333,7 @@ begin
     frmClientDialog.slSchoolId := slSchoolId;
     frmClientDialog.g_ClientId := StrToIntDef(DBGrid1.Fields[0].Text,-1);
     frmClientDialog.initialize(omModify,SQLQuery1.SQLConnection);
+    frmClientDialog.g_DebugMode := m_DebugMode;
     if frmClientDialog.ShowModal = mrOk then btnLoadClick(self);
   finally
     frmClientDialog.Destroy;
@@ -344,11 +360,7 @@ begin
     cmbUseEnglish.ItemIndex := 0;
     cmbSchoolName.ItemIndex := 0;
     cmbRound.ItemIndex := 0;
-    //cmbGMATCategory.ItemIndex := 0;
-    cmbGMATCategoryChange(Self);
     cmbGMATCond.ItemIndex := 0;
-    //cmbTOEFLCategory.ItemIndex := 0;
-    cmbTOEFLCategoryChange(Self);
     cmbTOEFLCond.ItemIndex := 0;
   except
     ShowMessage('Something Wrong Happened');
