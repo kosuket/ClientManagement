@@ -9,4 +9,5 @@ __history
 *.dll
 *.res
 *.ini
+*.vlb
 bin/*
