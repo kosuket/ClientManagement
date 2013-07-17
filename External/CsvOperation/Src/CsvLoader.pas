@@ -135,7 +135,9 @@ function TCsvLoader.GetTableName(FilePath: string): string;
 var
   TableName: string;
 begin
-  {TODO : check for file existence}
+  if not FileExists(FilePath) then begin
+    raise Exception.Create(Concat('File not found:', FilePath));
+  end;
   TableName := ExtractFileName(FilePath);
   TableName := StringReplace(TableName, ExtractFileExt(FilePath), '', [rfReplaceAll, rfIgnoreCase]);
   TableName := StringReplace(TableName, '_ins', '', [rfReplaceAll, rfIgnoreCase]);

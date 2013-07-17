@@ -16,6 +16,7 @@ type
     btnDBTest: TButton;
     btnSqlAccessor: TButton;
     btnCsvOut: TButton;
+    chkOverwrite: TCheckBox;
     procedure btnLoadCsvClick(Sender: TObject);
     procedure btnDBTest2Click(Sender: TObject);
     procedure btnDBTestClick(Sender: TObject);
@@ -45,7 +46,11 @@ var
 begin
   CsvOut := TCsvOutput.Create('localhost', 'root', 'manager', 'edogijuku_db');
   try
-    CsvOut.Execute(Concat(GetCurrentDir, '\test.dat'), 'test');
+    if chkOverwrite.Checked then begin
+      CsvOut.ExecuteOverWrite(Concat(GetCurrentDir, '\test.dat'), 'test');
+    end else begin
+      CsvOut.Execute(Concat(GetCurrentDir, '\test.dat'), 'test');
+    end;
   finally
     if Assigned(CsvOut) then CsvOut.Free;
   end;
@@ -108,7 +113,7 @@ begin
   loader := TCsvLoader.Create('localhost', 'root', 'manager', 'edogijuku_db');
   try
     //loader.execute(Concat(GetCurrentDir, '\test_ins.dat'));
-    loader.execute('test_ins.dat');
+    loader.execute('test_is.dat');
   finally
     loader.Free;
   end;

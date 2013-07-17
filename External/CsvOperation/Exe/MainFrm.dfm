@@ -23,8 +23,8 @@ object FrmMain: TFrmMain
     OnClick = btnLoadCsvClick
   end
   object btnDBTest2: TButton
-    Left = 56
-    Top = 102
+    Left = 271
+    Top = 63
     Width = 75
     Height = 25
     Caption = 'dbtest2'
@@ -32,8 +32,8 @@ object FrmMain: TFrmMain
     OnClick = btnDBTest2Click
   end
   object btnDBTest: TButton
-    Left = 56
-    Top = 71
+    Left = 271
+    Top = 32
     Width = 75
     Height = 25
     Caption = 'dbtest'
@@ -41,8 +41,8 @@ object FrmMain: TFrmMain
     OnClick = btnDBTestClick
   end
   object btnSqlAccessor: TButton
-    Left = 56
-    Top = 133
+    Left = 271
+    Top = 94
     Width = 75
     Height = 25
     Caption = 'SqlAccessor'
@@ -50,13 +50,21 @@ object FrmMain: TFrmMain
     OnClick = btnSqlAccessorClick
   end
   object btnCsvOut: TButton
-    Left = 168
-    Top = 32
+    Left = 56
+    Top = 72
     Width = 75
     Height = 25
     Caption = 'Csv Output'
     TabOrder = 4
     OnClick = btnCsvOutClick
+  end
+  object chkOverwrite: TCheckBox
+    Left = 64
+    Top = 103
+    Width = 97
+    Height = 17
+    Caption = 'Overwrite'
+    TabOrder = 5
   end
   object conn2: TSQLConnection
     DriverName = 'MySQL'

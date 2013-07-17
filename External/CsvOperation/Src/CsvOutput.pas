@@ -15,6 +15,7 @@ type TCsvOutput = class
     constructor Create(Host, User, Pass, DBName: string);
     destructor Destroy; override;
     procedure Execute(DestFile, TableName: string);
+    procedure ExecuteOverWrite(DestFile, TableName: string);
 end;
 implementation
 uses
@@ -43,6 +44,14 @@ begin
   MakeOutfile(DestFile, TableName);
   // insert a header
   InsertHeader(DestFile, GetHeader(TableName));
+end;
+
+procedure TCsvOutput.ExecuteOverWrite(DestFile, TableName: string);
+begin
+  if FileExists(DestFile) then begin
+    DeleteFile(DestFile);
+  end;
+  Execute(DestFile, TableName);
 end;
 
 function TCsvOutput.GetHeader(TableName: string): string;
