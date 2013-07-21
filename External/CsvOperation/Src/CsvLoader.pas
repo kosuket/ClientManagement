@@ -16,7 +16,8 @@ type TCsvLoader = class
     function GetTableName(FilePath: string): string;
     function GetSqlQuery(FilePath, TableName, Delim: string): string;
   public
-    constructor Create(Host, User, Pass, DBName: string);
+    constructor Create(Host, User, Pass, DBName: string); overload;
+    constructor Create(Accessor: TMySQLAccessor); overload;
     destructor Destroy; override;
     procedure Execute(FilePath: string); overload;
     procedure Execute(FilePath, Delim: string); overload;
@@ -25,7 +26,6 @@ end;
 
 implementation
 uses
-  FMX.Dialogs,
   SysUtils,
   Data.DB;
 
@@ -33,14 +33,19 @@ uses
 
 constructor TCsvLoader.Create(Host, User, Pass, DBName: string);
 begin
-  Accessor := TMySQLAccessor.Create(Host, User, Pass, DBName);
+  Create(TMySQLAccessor.Create(Host, User, Pass, DBName));
+end;
+
+constructor TCsvLoader.Create(Accessor: TMySQLAccessor);
+begin
+  inherited Create;
+  Self.Accessor := Accessor;
   Utils := TCsvOpUtils.Create;
 end;
 
 destructor TCsvLoader.Destroy;
 begin
-  if Assigned(Utils) then Utils.Free;
-  if Assigned(Accessor) then Accessor.Free;
+  Utils.Free;
   inherited;
 end;
 

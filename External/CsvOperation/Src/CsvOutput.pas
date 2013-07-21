@@ -12,7 +12,8 @@ type TCsvOutput = class
     function GetHeader(TableName: string): string;
     function MakeSqlString(DestFile, TableName: string): string;
   public
-    constructor Create(Host, User, Pass, DBName: string);
+    constructor Create(Host, User, Pass, DBName: string); overload;
+    constructor Create(Accessor: TMySQLAccessor); overload;
     destructor Destroy; override;
     procedure Execute(DestFile, TableName: string);
     procedure ExecuteOverWrite(DestFile, TableName: string);
@@ -27,14 +28,19 @@ uses
 
 constructor TCsvOutput.Create(Host, User, Pass, DBName: string);
 begin
-  Accessor := TMySQLAccessor.Create(Host, User, Pass, DBName);
+  Create(TMySQLAccessor.Create(Host, User, Pass, DBName));
+end;
+
+constructor TCsvOutput.Create(Accessor: TMySQLAccessor);
+begin
+  inherited Create;
+  Self.Accessor := Accessor;
   Utils := TCsvOpUtils.Create;
 end;
 
 destructor TCsvOutput.Destroy;
 begin
-  if Assigned(Utils) then Utils.Free;
-  if Assigned(Accessor) then Accessor.Free;
+  Utils.Free;
   inherited;
 end;
 

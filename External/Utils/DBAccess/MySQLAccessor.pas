@@ -30,6 +30,11 @@ constructor TMySQLAccessor.Create(HostName, UserName, Password, Database: String
 var
   Query: TSQLQuery;
 begin
+  FHostName := HostName;
+  FUserName := UserName;
+  FPassword := Password;
+  FDatabase := Database;
+
   Conn := TSQLConnection.Create(nil);
   // Setting DriverName property sets the default properties.
   // See dbxdrivers.ini for available drivers and the default properties.
