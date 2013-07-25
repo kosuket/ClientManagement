@@ -82,8 +82,8 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="..\Src\MainFrm.pas">
-            <Form>FrmMain</Form>
+        <DCCReference Include="..\Src\DBEditorMainFrm.pas">
+            <Form>FrmDBEditorMain</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="..\Src\DBGridBaseFrm.pas">
@@ -100,6 +100,10 @@
         <DCCReference Include="..\..\CsvOperation\Src\CsvLoader.pas"/>
         <DCCReference Include="..\Src\TableListFrm.pas">
             <Form>FrmTableList</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="MainFrm.pas">
+            <Form>FrmMain</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <BuildConfiguration Include="Release">

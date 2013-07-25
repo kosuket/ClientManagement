@@ -1,5 +1,5 @@
-// Test module for MySql Database Editor.
-unit MainFrm;
+// MySql Database Editor.
+unit DBEditorMainFrm;
 
 interface
 
@@ -9,58 +9,67 @@ uses
   Data.DBXMySQL, Data.DB, Data.SqlExpr, DBEditFrm, Vcl.ExtCtrls, TableListFrm, SyncObjs;
 
 type
-  TFrmMain = class(TForm)
+  TFrmDBEditorMain = class(TForm)
     pnlTableList: TPanel;
     pnlTableDisplay: TPanel;
     Splitter1: TSplitter;
     procedure FormShow(Sender: TObject);
   private
     { Private declarations }
+    AccessorCreationFlg: Boolean;
     Accessor: TMySQLAccessor;
     TableList: TFrmTableList;
     DBEdit: TFrmDBEdit;
     procedure OnSelectTable(TableName: string);
   public
     { Public declarations }
-    constructor Create(AOwner: TComponent); override;
+    constructor Create(AOwner: TComponent; Accessor: TMySQLAccessor); reintroduce; overload;
+    constructor Create(AOwner: TComponent; HostName, UserName, Password, Database: string); reintroduce; overload;
     destructor Destroy; override;
   end;
 
 var
-  FrmMain: TFrmMain;
+  FrmDBEditorMain: TFrmDBEditorMain;
 
 implementation
 
 {$R *.dfm}
 
-constructor TFrmMain.Create(AOwner: TComponent);
+constructor TFrmDBEditorMain.Create(AOwner: TComponent; Accessor: TMySQLAccessor);
 begin
-  inherited;
-  Accessor := TMySQLAccessor.Create('localhost', 'root', 'manager', 'edogijuku_db');
+  inherited Create(AOwner);
+  Self.Accessor := Accessor;
+  TableList := TFrmTableList.Create(Self, Accessor);
+  DBEdit := TFrmDBEdit.Create(Self, Accessor);
 end;
 
-procedure TFrmMain.OnSelectTable(TableName: string);
+procedure TFrmDBEditorMain.OnSelectTable(TableName: string);
 begin
   DBEdit.SetTable(TableName);
 end;
 
-destructor TFrmMain.Destroy;
+constructor TFrmDBEditorMain.Create(AOwner: TComponent; HostName, UserName,
+  Password, Database: string);
+begin
+  Accessor := TMySQLAccessor.Create(HostName, UserName, Password, Database);
+  Create(AOwner, Accessor);
+end;
+
+destructor TFrmDBEditorMain.Destroy;
 begin
   TableList.Release;
   DBEdit.Release;
-  Accessor.Free;
+  if AccessorCreationFlg then Accessor.Free;
   inherited;
 end;
 
-procedure TFrmMain.FormShow(Sender: TObject);
+procedure TFrmDBEditorMain.FormShow(Sender: TObject);
 begin
-  TableList := TFrmTableList.Create(Self, Accessor);
   TableList.OnSelectTableName := OnSelectTable;
   TableList.Parent := pnlTableList;
   TableList.BorderStyle := bsNone;
   TableList.Align := alClient;
 
-  DBEdit := TFrmDBEdit.Create(Self, Accessor);
   DBEdit.Parent := pnlTableDisplay;
   DBEdit.BorderStyle := bsNone;
   DBEdit.Align := alClient;

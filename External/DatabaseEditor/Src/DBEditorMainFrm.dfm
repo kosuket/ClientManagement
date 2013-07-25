@@ -1,7 +1,7 @@
-object FrmMain: TFrmMain
+object FrmDBEditorMain: TFrmDBEditorMain
   Left = 0
   Top = 0
-  Caption = 'FrmMain'
+  Caption = 'FrmDBEditorMain'
   ClientHeight = 327
   ClientWidth = 630
   Color = clBtnFace

@@ -8,7 +8,7 @@ uses
   Data.SqlExpr, Data.FMTBcd, Vcl.Grids, Vcl.DBGrids, Vcl.DBCGrids, Vcl.ExtCtrls,
   Vcl.DBCtrls, Datasnap.Provider, Datasnap.DBClient, LogInFrm, Vcl.Buttons,
   Vcl.ComCtrls,frmClientSearch,frmBilling, frmMaster, Vcl.Menus, Vcl.ImgList,
-  Vcl.Imaging.jpeg, frmMailSetting;
+  Vcl.Imaging.jpeg, frmMailSetting, DBEditorMainFrm, DBGridBaseFrm;
 
 type
   TMainframe = class(TForm)
@@ -65,6 +65,11 @@ type
     procedure mmDebugModeClick(Sender: TObject);
   private
     { Private declarations }
+    frmClientSearch: TClientSearchframe;
+    frmLogIn: TLogInFrame;
+    frmBillingSearch: TBillingFrame;
+    frmMailSetting: TMailSettingFrame;
+    frmDBEditor: TFrmDBEditorMain;
     procedure cleanPnlMain;
     procedure setCurrentTitle(str: String; int: Integer);
     //パネルをボタン風に動かすためのメソッドたち
@@ -77,11 +82,6 @@ type
     procedure reflectDebugMode(b:Boolean);
   public
     { Public declarations }
-    frmLogIn: TLogInFrame;
-    frmClientSearch: TClientSearchframe;
-    frmBillingSearch: TBillingFrame;
-    frmMasterSetting: TMasterFrame;
-    frmMailSetting: TMailSettingFrame;
     SQLConnection1: TSQLConnection;
     g_Username: String;
     g_Password: String;
@@ -135,7 +135,7 @@ procedure TMainframe.cleanPnlMain;
 begin
   frmClientSearch.pnlBase.Visible := False;
   frmBillingSearch.pnlBase.Visible := False;
-  frmMasterSetting.pnlBase.Visible := False;
+  frmDBEditor.Visible := False;
 end;
 
 constructor TMainframe.Create(AOwner: TComponent);
@@ -169,9 +169,12 @@ begin
   frmBillingSearch.m_DebugMode := g_DebugMode;
 
   //MasterSetting
-  frmMasterSetting := TMasterFrame.Create(Self);
-  frmMasterSetting.pnlBase.Parent := pnlMain;
-  frmMasterSetting.pnlBase.Visible := False;
+  frmDBEditor := TFrmDBEditorMain.Create(Self, g_HostName, g_Username, g_Password, g_Database);
+  frmDBEditor.Parent := pnlMain;
+  frmDBEditor.Align := alClient;
+  frmDBEditor.BorderStyle := bsNone;
+  frmDBEditor.Visible := False;
+
   //LastProc
   frmClientSearch.pnlBase.Visible := True;
   pnlClientMouseLeave(self);
@@ -196,6 +199,11 @@ begin
   if Length(g_MailUserName) > 0 then writer.WriteLine('MailUserName='+g_MailUserName);
   if Length(g_MailPassword) > 0 then writer.WriteLine('MailPassword='+g_MailPassword);
   writer.Free;
+
+  // Release child frames
+  frmDBEditor.Release;
+  frmBillingSearch.Release;
+  frmClientSearch.Release;
   inherited;
 end;
 
@@ -231,7 +239,7 @@ end;
 procedure TMainframe.pnlCustomClick(Sender: TObject);
 begin
   cleanPnlMain;
-  frmMasterSetting.pnlBase.Visible := True;
+  frmDBEditor.Visible := True;
   setCurrentTitle(pnlCustom.Caption,2);
 end;
 

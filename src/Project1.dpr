@@ -11,7 +11,15 @@ uses
   frmClientdlg in 'frmClientdlg.pas' {frmClientCarteDlg},
   FWSQLBaseDlgfrm in 'FWSQLBaseDlgfrm.pas' {FWSQLBaseDialogframe},
   frmMaildlg in 'frmMaildlg.pas' {MailDlgframe},
-  frmMailSetting in 'frmMailSetting.pas' {MailSettingframe};
+  frmMailSetting in 'frmMailSetting.pas' {MailSettingframe},
+  DBEditorMainFrm in '..\External\DatabaseEditor\Src\DBEditorMainFrm.pas' {FrmDBEditorMain},
+  DBGridBaseFrm in '..\External\DatabaseEditor\Src\DBGridBaseFrm.pas' {FrmDBGridBase},
+  MySQLAccessor in '..\External\Utils\DBAccess\MySQLAccessor.pas',
+  CsvOutput in '..\External\CsvOperation\Src\CsvOutput.pas',
+  CsvOpUtils in '..\External\CsvOperation\Src\CsvOpUtils.pas',
+  CsvLoader in '..\External\CsvOperation\Src\CsvLoader.pas',
+  DBEditFrm in '..\External\DatabaseEditor\Src\DBEditFrm.pas' {FrmDBEdit},
+  TableListFrm in '..\External\DatabaseEditor\Src\TableListFrm.pas' {FrmTableList};
 
 {$R *.res}
 
@@ -19,7 +27,5 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TMainframe, Mainframe);
-  Application.CreateForm(TMailDlgframe, MailDlgframe);
-  Application.CreateForm(TMailSettingframe, MailSettingframe);
   Application.Run;
 end.
