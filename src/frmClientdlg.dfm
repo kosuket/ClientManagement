@@ -11,8 +11,6 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
     Width = 1158
     Height = 595
     BevelOuter = bvNone
-    ExplicitLeft = 0
-    ExplicitTop = 0
     ExplicitWidth = 1158
     ExplicitHeight = 595
     inherited pnlTitle: TPanel

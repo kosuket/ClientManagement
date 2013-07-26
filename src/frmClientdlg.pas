@@ -105,7 +105,7 @@ type
     { Private declarations }
     procedure initializeNew;
     procedure initializeModify;
-    procedure setupGrdSchool;
+    procedure setupGrid;
     procedure setupCombobox;
     function AddNewRecord: String;
     function ModifyRecord: String;
@@ -171,7 +171,10 @@ var tran: TDBXTransaction;
 begin
   try
     //Check
-    if not isSufficientRecord then exit;
+    if not isSufficientRecord then begin
+      result := 'Data is not sufficient.';
+      exit;
+    end;
 
     tran := SQLQuery1.SQLConnection.BeginTransaction;
     //Insert Client
@@ -1067,7 +1070,7 @@ end;
 procedure TfrmClientCarteDlg.initialize(OpenMode: TOpenMode; conn:TSQLConnection);
 begin
   SQLQuery1.SQLConnection := conn;
-  setupGrdSchool;
+  setupGrid;
   setupCombobox;
   case OpenMode of
     omNew: initializeNew;//êVãKçÏê¨
@@ -1232,7 +1235,7 @@ begin
   cmbGMATAWA.OnCloseUp := componentExit;
 end;
 
-procedure TfrmClientCarteDlg.setupGrdSchool;
+procedure TfrmClientCarteDlg.setupGrid;
 begin
   With grdSchool do begin
   grdSchool.RowCount := 2;
