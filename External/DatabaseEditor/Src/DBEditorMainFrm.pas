@@ -21,11 +21,14 @@ type
     TableList: TFrmTableList;
     DBEdit: TFrmDBEdit;
     procedure OnSelectTable(TableName: string);
+    function OkToLeaveTable: Boolean;
+    function HasUnsavedChange: Boolean;
   public
     { Public declarations }
     constructor Create(AOwner: TComponent; Accessor: TMySQLAccessor); reintroduce; overload;
     constructor Create(AOwner: TComponent; HostName, UserName, Password, Database: string); reintroduce; overload;
     destructor Destroy; override;
+    procedure Embed(AParent: TWinControl);
   end;
 
 var
@@ -63,19 +66,32 @@ begin
   inherited;
 end;
 
+procedure TFrmDBEditorMain.Embed(AParent: TWinControl);
+begin
+  Parent := AParent;
+  Align := alClient;
+  BorderStyle := bsNone;
+end;
+
 procedure TFrmDBEditorMain.FormShow(Sender: TObject);
 begin
   TableList.OnSelectTableName := OnSelectTable;
-  TableList.Parent := pnlTableList;
-  TableList.BorderStyle := bsNone;
-  TableList.Align := alClient;
-
-  DBEdit.Parent := pnlTableDisplay;
-  DBEdit.BorderStyle := bsNone;
-  DBEdit.Align := alClient;
-
+  TableList.HasUnsavedChange := HasUnsavedChange;
+  TableList.OkToLeaveTable := OkToLeaveTable;
+  TableList.Embed(pnlTableList);
   TableList.Show;
+  DBEdit.Embed(pnlTableDisplay);
   DBEdit.Show;
+end;
+
+function TFrmDBEditorMain.HasUnsavedChange: Boolean;
+begin
+  Result := DBEdit.HasUnsavedChange;
+end;
+
+function TFrmDBEditorMain.OkToLeaveTable: Boolean;
+begin
+  Result := DBEdit.OkToLeaveTable;
 end;
 
 end.

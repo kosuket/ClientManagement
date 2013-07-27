@@ -5,6 +5,7 @@ inherited FrmTableList: TFrmTableList
   TextHeight = 13
   inherited MainGrid: TDBGrid
     OnCellClick = MainGridCellClick
+    OnKeyDown = MainGridKeyDown
     OnKeyUp = MainGridKeyUp
   end
 end

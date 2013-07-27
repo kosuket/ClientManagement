@@ -170,9 +170,7 @@ begin
 
   //MasterSetting
   frmDBEditor := TFrmDBEditorMain.Create(Self, g_HostName, g_Username, g_Password, g_Database);
-  frmDBEditor.Parent := pnlMain;
-  frmDBEditor.Align := alClient;
-  frmDBEditor.BorderStyle := bsNone;
+  frmDBEditor.Embed(pnlMain);
   frmDBEditor.Visible := False;
 
   //LastProc

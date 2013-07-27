@@ -16,12 +16,12 @@ type
   private
     { Private declarations }
     DataSource: TDataSource;
-    CDataSet: TClientDataSet;
     Provider: TDataSetProvider;
     CsvOutput: TCsvOutput;
     CsvLoader: TCsvLoader;
   protected
     Accessor: TMySQLAccessor;
+    CDataSet: TClientDataSet;
     procedure AddRow;
     procedure DeleteRow;
     procedure Commit;
@@ -33,6 +33,7 @@ type
     { Public declarations }
     constructor Create(AOwner: TComponent; Accessor: TMySQLAccessor); reintroduce;
     destructor Destroy; override;
+    procedure Embed(AParent: TWinControl);
   end;
 
 var
@@ -88,7 +89,16 @@ end;
 
 procedure TFrmDBGridBase.DeleteRow;
 begin
-  CDataSet.Delete;
+  if CDataSet.RecordCount > 0 then begin
+    CDataSet.Delete;
+  end;
+end;
+
+procedure TFrmDBGridBase.Embed(AParent: TWinControl);
+begin
+  Parent := AParent;
+  Align := alClient;
+  BorderStyle := bsNone;
 end;
 
 procedure TFrmDBGridBase.ExportData(DestFile, Table: string);
