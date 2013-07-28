@@ -108,7 +108,7 @@ end;
 
 procedure TFrmDBGridBase.ImportData(DestFile, Table: string);
 begin
-
+  CsvLoader.Execute(DestFile, Table, ',');
 end;
 
 procedure TFrmDBGridBase.LoadQuery(Sql: string);

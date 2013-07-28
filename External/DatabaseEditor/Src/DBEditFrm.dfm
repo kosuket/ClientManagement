@@ -1,18 +1,21 @@
 inherited FrmDBEdit: TFrmDBEdit
   Caption = 'FrmDBEdit'
   ClientHeight = 424
+  ClientWidth = 555
   OnCreate = FormCreate
+  ExplicitWidth = 571
   ExplicitHeight = 463
   PixelsPerInch = 96
   TextHeight = 13
   object Splitter1: TSplitter [0]
     Left = 0
     Top = 65
-    Width = 418
+    Width = 555
     Height = 3
     Cursor = crVSplit
     Align = alTop
     ExplicitTop = 41
+    ExplicitWidth = 418
   end
   inherited MainGrid: TDBGrid
     Left = 64
@@ -29,14 +32,14 @@ inherited FrmDBEdit: TFrmDBEdit
   object pnlHeader: TPanel
     Left = 0
     Top = 0
-    Width = 418
+    Width = 555
     Height = 65
     Align = alTop
     TabOrder = 2
     object pnlOperations: TPanel
       Left = 1
       Top = 1
-      Width = 416
+      Width = 553
       Height = 63
       Align = alClient
       BevelOuter = bvNone
@@ -44,7 +47,7 @@ inherited FrmDBEdit: TFrmDBEdit
       object btnAddRow: TSpeedButton
         Left = 9
         Top = 13
-        Width = 73
+        Width = 41
         Height = 36
         Hint = 'Add new record.'
         Action = actAddRow
@@ -53,9 +56,9 @@ inherited FrmDBEdit: TFrmDBEdit
         ShowHint = True
       end
       object btnDelete: TSpeedButton
-        Left = 88
+        Left = 58
         Top = 13
-        Width = 73
+        Width = 40
         Height = 36
         Hint = 'Delete selected row.'
         Action = actDeleteRow
@@ -64,9 +67,9 @@ inherited FrmDBEdit: TFrmDBEdit
         ShowHint = True
       end
       object btnLoad: TSpeedButton
-        Left = 175
+        Left = 254
         Top = 13
-        Width = 73
+        Width = 41
         Height = 36
         Hint = 'Discard changes and load table.'
         Action = actLoad
@@ -75,13 +78,35 @@ inherited FrmDBEdit: TFrmDBEdit
         ShowHint = True
       end
       object btnCommit: TSpeedButton
-        Left = 254
+        Left = 304
         Top = 13
-        Width = 71
+        Width = 41
         Height = 36
         Hint = 'Save changes.'
         Action = actCommit
         Caption = 'Save'
+        ParentShowHint = False
+        ShowHint = True
+      end
+      object btnExport: TSpeedButton
+        Left = 181
+        Top = 13
+        Width = 41
+        Height = 36
+        Hint = 'Export table to csv file.'
+        Action = actExport
+        Caption = 'Export'
+        ParentShowHint = False
+        ShowHint = True
+      end
+      object btnImport: TSpeedButton
+        Left = 131
+        Top = 13
+        Width = 41
+        Height = 36
+        Hint = 'Import csv file to table.'
+        Action = actImport
+        Caption = 'Import'
         ParentShowHint = False
         ShowHint = True
       end
@@ -109,6 +134,14 @@ inherited FrmDBEdit: TFrmDBEdit
       Caption = 'actDeleteRow'
       ShortCut = 16430
       OnExecute = actDeleteRowExecute
+    end
+    object actImport: TAction
+      Caption = 'actImport'
+      OnExecute = actImportExecute
+    end
+    object actExport: TAction
+      Caption = 'actExport'
+      OnExecute = actExportExecute
     end
   end
 end
