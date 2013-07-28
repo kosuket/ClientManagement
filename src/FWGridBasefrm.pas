@@ -39,6 +39,8 @@ type
     //子で宣言する
     procedure createSQLFix; virtual;
     procedure createWhere; virtual;
+    //グリッドメソッド
+    function hasData: Boolean; virtual;
   public
     { Public declarations }
     //SQLQuery1: TSQLQuery;
@@ -84,6 +86,20 @@ end;
 procedure TFWGridBaseframe.createWhere;
 begin
   //継承先で
+end;
+
+function TFWGridBaseframe.hasData: Boolean;
+begin
+  result := False;
+  try
+    if not DBGrid1.DataSource.DataSet.Active then exit;
+    if DBGrid1.DataSource.DataSet.RecordCount <= 0 then exit;
+    result := True;
+  except
+    on E: Exception do begin
+      if m_DebugMode then ShowMessage(E.Message);
+    end;
+  end;
 end;
 
 procedure TFWGridBaseframe.adjustGridWidth;

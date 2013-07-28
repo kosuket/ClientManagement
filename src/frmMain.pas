@@ -8,7 +8,8 @@ uses
   Data.SqlExpr, Data.FMTBcd, Vcl.Grids, Vcl.DBGrids, Vcl.DBCGrids, Vcl.ExtCtrls,
   Vcl.DBCtrls, Datasnap.Provider, Datasnap.DBClient, LogInFrm, Vcl.Buttons,
   Vcl.ComCtrls,frmClientSearch,frmBilling, frmMaster, Vcl.Menus, Vcl.ImgList,
-  Vcl.Imaging.jpeg, frmMailSetting, DBEditorMainFrm, DBGridBaseFrm;
+  Vcl.Imaging.jpeg, frmMailSetting, DBEditorMainFrm, DBGridBaseFrm,
+  Vcl.Imaging.pngimage;
 
 type
   TMainframe = class(TForm)
@@ -143,11 +144,15 @@ begin
   initializeVariables;
   frmLogIn := TLogInFrame.Create(Self);
   If frmLogIn.ShowModal = 1 then begin
-  if not SQLConnection1.Connected then Application.Terminate;
-  inherited;
-  SQLQuery1.SQLConnection := SQLConnection1;
+    if not SQLConnection1.Connected then begin
+      Self.Free;
+      exit;
+    end;
+    inherited;
+    SQLQuery1.SQLConnection := SQLConnection1;
   end else begin
-    Application.Terminate;
+    Self.Free;
+    exit;
   end;
   mmDebugMode.Checked := g_DebugMode;
   //ClientSearch
@@ -199,9 +204,9 @@ begin
   writer.Free;
 
   // Release child frames
-  frmDBEditor.Release;
-  frmBillingSearch.Release;
-  frmClientSearch.Release;
+  if Assigned(frmDBEditor) then frmDBEditor.Release;
+  if Assigned(frmBillingSearch) then frmBillingSearch.Release;
+  if Assigned(frmClientSearch) then frmClientSearch.Release;
   inherited;
 end;
 

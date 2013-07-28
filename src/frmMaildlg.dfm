@@ -105,6 +105,8 @@ inherited MailDlgframe: TMailDlgframe
         Width = 416
         Height = 388
         Align = alClient
+        BevelInner = bvNone
+        BorderStyle = bsNone
         ScrollBars = ssBoth
         TabOrder = 1
       end
@@ -114,13 +116,13 @@ inherited MailDlgframe: TMailDlgframe
         Width = 416
         Height = 22
         Align = alTop
-        BevelOuter = bvNone
+        BevelInner = bvRaised
         TabOrder = 2
         object btnAttach: TSpeedButton
-          Left = 0
-          Top = 0
-          Width = 23
-          Height = 22
+          Left = 2
+          Top = 2
+          Width = 19
+          Height = 18
           Hint = 'Attach File'
           Align = alLeft
           Glyph.Data = {
@@ -180,13 +182,12 @@ inherited MailDlgframe: TMailDlgframe
           ParentShowHint = False
           ShowHint = True
           OnClick = btnAttachClick
-          ExplicitLeft = 1
         end
         object btnDelete: TSpeedButton
-          Left = 23
-          Top = 0
-          Width = 23
-          Height = 22
+          Left = 21
+          Top = 2
+          Width = 19
+          Height = 18
           Align = alLeft
           Glyph.Data = {
             0E060000424D0E06000000000000360000002800000016000000160000000100
@@ -243,11 +244,10 @@ inherited MailDlgframe: TMailDlgframe
           OnClick = btnDeleteClick
         end
         object lbAttachment: TListBox
-          Left = 46
+          Left = 50
           Top = 0
-          Width = 370
+          Width = 366
           Height = 22
-          Align = alClient
           ItemHeight = 13
           TabOrder = 0
         end

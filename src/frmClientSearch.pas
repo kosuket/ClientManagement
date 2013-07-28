@@ -77,7 +77,6 @@ type
       slSchoolId: TStringList;
       procedure clearCond(ctrl:TWinControl);
       function isMailable: Boolean;
-      function hasData: Boolean;
   protected
     //SQLê∂ê¨ä÷åW
     procedure createSQLFix;  override;
@@ -337,20 +336,6 @@ begin
     if frmClientDialog.ShowModal = mrOk then btnLoadClick(self);
   finally
     if Assigned(frmClientDialog) then frmClientDialog.Destroy;
-  end;
-end;
-
-function TClientSearchframe.hasData: Boolean;
-begin
-  result := False;
-  try
-    if not DBGrid1.DataSource.DataSet.Active then exit;
-    if DBGrid1.DataSource.DataSet.RecordCount <= 0 then exit;
-    result := True;
-  except
-    on E: Exception do begin
-      if m_DebugMode then ShowMessage(E.Message);
-    end;
   end;
 end;
 

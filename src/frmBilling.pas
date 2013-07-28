@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, FWGridBasefrm, Data.FMTBcd,
   Vcl.AppEvnts, Datasnap.Provider, Data.DB, Datasnap.DBClient, Data.SqlExpr,
   Vcl.StdCtrls, Vcl.Imaging.jpeg, Vcl.ExtCtrls, Vcl.Grids, Vcl.DBGrids,
-  Vcl.ComCtrls, frmMaildlg, Vcl.Menus;
+  Vcl.ComCtrls, frmMaildlg, Vcl.Menus, frmBillingDlg;
 
 type
   TBillingframe = class(TFWGridBaseframe)
@@ -26,7 +26,7 @@ type
     pmDetail: TMenuItem;
     pmMail: TMenuItem;
     procedure cmbPeriodChange(Sender: TObject);
-    procedure pmMailClick(Sender: TObject);
+    procedure DBGrid1DblClick(Sender: TObject);
   private
     { Private declarations }
     function isMailable: Boolean;
@@ -36,7 +36,7 @@ type
     procedure createWhere;  override;
   public
     { Public declarations }
-    frmMailDialog: TMailDlgframe;
+    frmBillingDlg: TBillingDialogframe;
     procedure Initialize; override;
   end;
 
@@ -135,6 +135,30 @@ begin
   end;
 end;
 
+procedure TBillingframe.DBGrid1DblClick(Sender: TObject);
+var slRecepient,slAddress: TStringList;
+begin
+  inherited;
+  slRecepient := TStringList.Create;
+  slAddress := TStringList.Create;
+  try
+    slRecepient.Add(DBGrid1.Fields[1].Text + ' ' + DBGrid1.Fields[2].Text);
+    slAddress.Add(DBGrid1.Fields[3].Text);
+    frmBillingDlg := TBillingDialogframe.Create(Self);
+    frmBillingDlg.frmMailDialog.setRecepient(slRecepient,slAddress);
+    frmBillingDlg.cmbPeriod.ItemIndex := cmbPeriod.ItemIndex;
+    frmBillingDlg.edtFirstDate.DateTime := edtFirstDate.DateTime;
+    frmBillingDlg.edtLastDate.DateTime := edtLastDate.DateTime;
+    frmBillingDlg.g_ClientId := StrToIntDef(DBGrid1.Fields[0].Text,-1);
+    frmBillingDlg.initialize(SQLQuery1.SQLConnection);
+    frmBillingDlg.ShowModal;
+  finally
+    slRecepient.Free;
+    slAddress.Free;
+    frmBillingDlg.Destroy;
+  end;
+end;
+
 procedure TBillingframe.Initialize;
 begin
   inherited;
@@ -153,27 +177,6 @@ begin
     on E: Exception do begin
       if m_DebugMode then ShowMessage(E.Message);
     end;
-  end;
-end;
-
-procedure TBillingframe.pmMailClick(Sender: TObject);
-var slRecepient,slAddress: TStringList;
-begin
-  inherited;
-  if not isMailable then exit;
-
-  slRecepient := TStringList.Create;
-  slAddress := TStringList.Create;
-  try
-    slRecepient.Add(DBGrid1.Fields[1].Text + ' ' + DBGrid1.Fields[2].Text);
-    slAddress.Add(DBGrid1.Fields[3].Text);
-    frmMailDialog := TMailDlgframe.Create(Self);
-    frmMailDialog.setRecepient(slRecepient,slAddress);
-    frmMailDialog.ShowModal;
-  finally
-    slRecepient.Free;
-    slAddress.Free;
-    frmMailDialog.Destroy;
   end;
 end;
 

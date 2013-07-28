@@ -1,5 +1,7 @@
 inherited Billingframe: TBillingframe
   Caption = 'Billingframe'
+  ExplicitWidth = 767
+  ExplicitHeight = 477
   PixelsPerInch = 96
   TextHeight = 13
   inherited pnlBase: TPanel
@@ -15,6 +17,7 @@ inherited Billingframe: TBillingframe
       inherited DBGrid1: TDBGrid
         Height = 299
         PopupMenu = pmGrid
+        OnDblClick = DBGrid1DblClick
       end
     end
     inherited pnlCondition: TPanel
@@ -198,7 +201,6 @@ inherited Billingframe: TBillingframe
     end
     object pmMail: TMenuItem
       Caption = 'Send Mail'
-      OnClick = pmMailClick
     end
   end
 end

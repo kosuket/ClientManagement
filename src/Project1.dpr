@@ -19,7 +19,8 @@ uses
   CsvOpUtils in '..\External\CsvOperation\Src\CsvOpUtils.pas',
   CsvLoader in '..\External\CsvOperation\Src\CsvLoader.pas',
   DBEditFrm in '..\External\DatabaseEditor\Src\DBEditFrm.pas' {FrmDBEdit},
-  TableListFrm in '..\External\DatabaseEditor\Src\TableListFrm.pas' {FrmTableList};
+  TableListFrm in '..\External\DatabaseEditor\Src\TableListFrm.pas' {FrmTableList},
+  frmBillingDlg in 'frmBillingDlg.pas' {BillingDialogframe};
 
 {$R *.res}
 
