@@ -20,6 +20,8 @@ type
     btnLoad: TButton;
     Image1: TImage;
     ApplicationEvents1: TApplicationEvents;
+    Panel1: TPanel;
+    Image2: TImage;
     procedure btnLoadClick(Sender: TObject);
   private
     { Private declarations }

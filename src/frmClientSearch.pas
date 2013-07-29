@@ -58,13 +58,13 @@ type
     cmbGMATCond: TComboBox;
     edtTOEFLScore: TSpinEdit;
     cmbTOEFLCond: TComboBox;
-    btnAdd: TButton;
     Memo1: TMemo;
     btnMail: TButton;
-    btnClear: TButton;
     pmGrid: TPopupMenu;
     pmDetail: TMenuItem;
     pmMail: TMenuItem;
+    btnAdd: TSpeedButton;
+    btnClear: TSpeedButton;
     procedure btnAddClick(Sender: TObject);
     procedure DBGrid1DblClick(Sender: TObject);
     procedure btnMailClick(Sender: TObject);
@@ -109,7 +109,7 @@ procedure TClientSearchframe.btnAddClick(Sender: TObject);
 begin
   inherited;
   try
-    frmClientDialog := TfrmClientCarteDlg.Create(Self);
+    frmClientDialog := TfrmClientCarteDlg.Create(Self, Accessor);
     frmClientDialog.g_OpenMode := omNew;
     frmClientDialog.SchoolList := cmbSchoolName.Items;
     frmClientDialog.slSchoolId := slSchoolId;

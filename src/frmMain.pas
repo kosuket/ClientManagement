@@ -9,7 +9,7 @@ uses
   Vcl.DBCtrls, Datasnap.Provider, Datasnap.DBClient, LogInFrm, Vcl.Buttons,
   Vcl.ComCtrls,frmClientSearch,frmBilling, frmMaster, Vcl.Menus, Vcl.ImgList,
   Vcl.Imaging.jpeg, frmMailSetting, DBEditorMainFrm, DBGridBaseFrm,
-  Vcl.Imaging.pngimage, MySQLAccessor;
+  Vcl.Imaging.pngimage, MySQLAccessor, frmCounseling;
 
 type
   TMainframe = class(TForm)
@@ -26,11 +26,7 @@ type
     mmExit: TMenuItem;
     mmEdit: TMenuItem;
     mmOption: TMenuItem;
-    pnlMainTitle: TPanel;
     ImageList1: TImageList;
-    Image2: TImage;
-    Image1: TImage;
-    lblCurrentTitle: TLabel;
     pnlClient: TPanel;
     imgClient: TImage;
     pnlBilling: TPanel;
@@ -39,6 +35,8 @@ type
     imgCustom: TImage;
     mmMailSetting: TMenuItem;
     mmDebugMode: TMenuItem;
+    pnlCounseling: TPanel;
+    imgCounseling: TImage;
     procedure SQLConnection1Login(Database: TSQLConnection;
       LoginParams: TStrings);
     procedure pnlBillingMouseDown(Sender: TObject; Button: TMouseButton;
@@ -64,21 +62,29 @@ type
     procedure pnlCustomClick(Sender: TObject);
     procedure mmMailSettingClick(Sender: TObject);
     procedure mmDebugModeClick(Sender: TObject);
+    procedure pnlCounselingMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure pnlCounselingMouseEnter(Sender: TObject);
+    procedure pnlCounselingMouseLeave(Sender: TObject);
+    procedure pnlCounselingMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure pnlCounselingClick(Sender: TObject);
   private
     { Private declarations }
     Accessor: TMySQLAccessor;
     frmClientSearch: TClientSearchframe;
     frmLogIn: TLogInFrame;
+    frmCounselingSearch: TCounselingFrame;
     frmBillingSearch: TBillingFrame;
     frmMailSetting: TMailSettingFrame;
     frmDBEditor: TFrmDBEditorMain;
     procedure cleanPnlMain;
-    procedure setCurrentTitle(str: String; int: Integer);
     //パネルをボタン風に動かすためのメソッドたち
     procedure behavePLBMouseUp(pnl: TPanel);
     procedure behavePLBMouseDown(pnl: TPanel);
     procedure behavePLBMouseEnter(pnl: TPanel;img:TImage);
     procedure behavePLBMouseLeave(pnl: TPanel;img:TImage);
+    procedure behavePLBClick(pnl: TPanel;img:TImage);
     procedure initializeVariables;
     //Enable to change Debug Mode from Screen
     procedure reflectDebugMode(b:Boolean);
@@ -107,6 +113,26 @@ implementation
 
 {$R *.dfm}
 
+procedure TMainframe.behavePLBClick(pnl: TPanel; img: TImage);
+begin
+  //Set Color
+  pnlClient.Color := clWindow;
+  pnlCounseling.Color := clWindow;
+  pnlBilling.Color := clWindow;
+  pnlCustom.Color := clWindow;
+  pnl.Color := $00FFE2C4;
+
+  //Set Font Style
+  pnlClient.Font.Style := [];
+  pnlCounseling.Font.Style := [];
+  pnlBilling.Font.Style := [];
+  pnlCustom.Font.Style := [];
+  pnl.Font.Style := [fsBold,fsItalic];
+  pnl.Font.Color := clBlack;
+  pnl.BevelOuter := bvNone;
+  img.Repaint;
+end;
+
 procedure TMainframe.behavePLBMouseDown(pnl: TPanel);
 begin
   pnl.BevelOuter := bvLowered;
@@ -114,7 +140,8 @@ end;
 
 procedure TMainframe.behavePLBMouseEnter(pnl: TPanel;img:TImage);
 begin
-  pnl.Color := $00CBC2FE;
+  if pnl.Color = clWindow then pnl.Color := $00D8D1FE
+  else if pnl.Color = $00FFE2C4 then pnl.Color := $00FEC5EB;
   pnl.Font.Color := clWindow;
   pnl.Repaint;
   img.Repaint;
@@ -122,7 +149,9 @@ end;
 
 procedure TMainframe.behavePLBMouseLeave(pnl: TPanel; img: TImage);
 begin
-  pnl.Color := clWindow;
+  if pnl.Color = $00D8D1FE then pnl.Color := clWindow
+  else if pnl.Color = $00FEC5EB then pnl.Color := $00FFE2C4;
+
   pnl.Font.Color := clBlack;
   pnl.BevelOuter := bvNone;
   img.Repaint;
@@ -136,6 +165,7 @@ end;
 procedure TMainframe.cleanPnlMain;
 begin
   frmClientSearch.pnlBase.Visible := False;
+  frmCounselingSearch.pnlBase.Visible := False;
   frmBillingSearch.pnlBase.Visible := False;
   frmDBEditor.Visible := False;
 end;
@@ -164,6 +194,13 @@ begin
   frmClientSearch.pnlBase.Visible := False;
   frmClientSearch.m_DebugMode := g_DebugMode;
 
+  //Counseling
+  frmCounselingSearch := TCounselingframe.Create(Self,Accessor);
+  frmCounselingSearch.pnlBase.Parent := pnlMain;
+  frmCounselingSearch.Initialize;
+  frmCounselingSearch.pnlBase.Visible := False;
+  frmCounselingSearch.m_DebugMode := g_DebugMode;
+
   //AccountingSearch
   frmBillingSearch := TBillingFrame.Create(Self, Accessor);
   frmBillingSearch.pnlBase.Parent := pnlMain;
@@ -179,6 +216,7 @@ begin
   //LastProc
   frmClientSearch.pnlBase.Visible := True;
   pnlClientMouseLeave(self);
+  pnlCounselingMouseLeave(self);
   pnlBillingMouseLeave(self);
   pnlCustomMouseLeave(Self);
   pnlClientClick(Self);
@@ -241,7 +279,7 @@ procedure TMainframe.pnlCustomClick(Sender: TObject);
 begin
   cleanPnlMain;
   frmDBEditor.Visible := True;
-  setCurrentTitle(pnlCustom.Caption,2);
+  behavePLBClick(pnlCustom,imgCustom);
 end;
 
 procedure TMainframe.pnlCustomMouseDown(Sender: TObject; Button: TMouseButton;
@@ -277,7 +315,7 @@ procedure TMainframe.pnlBillingClick(Sender: TObject);
 begin
   cleanPnlMain;
   frmBillingSearch.pnlBase.Visible := True;
-  setCurrentTitle(pnlBilling.Caption,1);
+  behavePLBClick(pnlBilling,imgAccounting);
 end;
 
 procedure TMainframe.pnlBillingMouseDown(Sender: TObject;
@@ -306,7 +344,7 @@ procedure TMainframe.pnlClientClick(Sender: TObject);
 begin
   cleanPnlMain;
   frmClientSearch.pnlBase.Visible := True;
-  setCurrentTitle(pnlClient.Caption,0);
+  behavePLBClick(pnlClient,imgClient);
 end;
 
 procedure TMainframe.pnlClientMouseDown(Sender: TObject; Button: TMouseButton;
@@ -331,12 +369,33 @@ begin
   behavePLBMouseUp(pnlClient);
 end;
 
-procedure TMainframe.setCurrentTitle(str: String; int: Integer);
+procedure TMainframe.pnlCounselingClick(Sender: TObject);
 begin
-  lblCurrentTitle.Caption := str;
-  Image1.Picture := nil;
-  ImageList1.GetBitmap(int,Image1.Picture.Bitmap);
-  Image1.Repaint;
+  cleanPnlMain;
+  frmCounselingSearch.pnlBase.Visible := True;
+  behavePLBClick(pnlCounseling,imgCounseling);
+end;
+
+procedure TMainframe.pnlCounselingMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+  behavePLBMouseDown(pnlCounseling);
+end;
+
+procedure TMainframe.pnlCounselingMouseEnter(Sender: TObject);
+begin
+  behavePLBMouseEnter(pnlCounseling,imgAccounting);
+end;
+
+procedure TMainframe.pnlCounselingMouseLeave(Sender: TObject);
+begin
+  behavePLBMouseLeave(pnlCounseling,imgAccounting);
+end;
+
+procedure TMainframe.pnlCounselingMouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  behavePLBMouseUp(pnlCounseling);
 end;
 
 procedure TMainframe.SQLConnection1Login(Database: TSQLConnection;

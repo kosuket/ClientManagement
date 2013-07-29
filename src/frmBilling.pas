@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, FWGridBasefrm, Data.FMTBcd,
   Vcl.AppEvnts, Datasnap.Provider, Data.DB, Datasnap.DBClient, Data.SqlExpr,
   Vcl.StdCtrls, Vcl.Imaging.jpeg, Vcl.ExtCtrls, Vcl.Grids, Vcl.DBGrids,
-  Vcl.ComCtrls, frmMaildlg, Vcl.Menus, frmBillingDlg;
+  Vcl.ComCtrls, frmMaildlg, Vcl.Menus, frmBillingDlg, Vcl.Buttons;
 
 type
   TBillingframe = class(TFWGridBaseframe)
@@ -25,11 +25,14 @@ type
     pmGrid: TPopupMenu;
     pmDetail: TMenuItem;
     pmMail: TMenuItem;
+    btnClear: TSpeedButton;
     procedure cmbPeriodChange(Sender: TObject);
     procedure DBGrid1DblClick(Sender: TObject);
+    procedure btnClearClick(Sender: TObject);
   private
     { Private declarations }
     function isMailable: Boolean;
+    procedure clearCond(ctrl:TWinControl);
   protected
     //SQLê∂ê¨ä÷åW
     function createSQLFix: String;  override;
@@ -48,6 +51,25 @@ implementation
 {$R *.dfm}
 
 { TAccountingframe }
+
+procedure TBillingframe.btnClearClick(Sender: TObject);
+begin
+  inherited;
+  clearCond(pnlAccounting);
+end;
+
+procedure TBillingframe.clearCond(ctrl: TWinControl);
+var i :Integer;
+begin
+  cmbPeriod.ItemIndex := 1;
+  cmbPeriod.OnChange(Self);
+  for i := 0 to ctrl.ControlCount -1 do begin
+    if ctrl.Controls[i].ClassType = TEdit then TEdit(ctrl.Controls[i]).Text := '';
+    if ctrl.Controls[i].ClassType = TCheckBox then TCheckBox(ctrl.Controls[i]).Checked := False;
+    //çƒãAèàóù
+    if (ctrl.Controls[i].ClassType = TPanel) OR (ctrl.Controls[i].ClassType = TTabsheet) OR (ctrl.Controls[i].ClassType = TScrollbox) then clearCond(TPanel(ctrl.Controls[i]));
+  end;
+end;
 
 procedure TBillingframe.cmbPeriodChange(Sender: TObject);
 var d: TDate;

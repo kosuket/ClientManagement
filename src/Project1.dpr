@@ -20,7 +20,8 @@ uses
   CsvLoader in '..\External\CsvOperation\Src\CsvLoader.pas',
   DBEditFrm in '..\External\DatabaseEditor\Src\DBEditFrm.pas' {FrmDBEdit},
   TableListFrm in '..\External\DatabaseEditor\Src\TableListFrm.pas' {FrmTableList},
-  frmBillingDlg in 'frmBillingDlg.pas' {BillingDialogframe};
+  frmBillingDlg in 'frmBillingDlg.pas' {BillingDialogframe},
+  frmCounseling in 'frmCounseling.pas' {Counselingframe};
 
 {$R *.res}
 

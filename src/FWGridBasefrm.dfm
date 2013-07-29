@@ -367,6 +367,42 @@ object FWGridBaseframe: TFWGridBaseframe
           OnClick = btnLoadClick
         end
       end
+      object Panel1: TPanel
+        Left = 0
+        Top = 0
+        Width = 751
+        Height = 24
+        Align = alTop
+        BevelOuter = bvNone
+        Color = clWindow
+        ParentBackground = False
+        TabOrder = 1
+        object Image2: TImage
+          Left = 0
+          Top = 0
+          Width = 751
+          Height = 24
+          Align = alClient
+          Picture.Data = {
+            07544269746D617056010000424D560100000000000036000000280000000800
+            00000C0000000100180000000000200100000000000000000000000000000000
+            0000CECECECECECECECECECECECECECECECECECECECECECECECED1D1D1D1D1D1
+            D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D6D6D6D6D6D6D6D6D6D6D6D6D6D6
+            D6D6D6D6D6D6D6D6D6D6DBDBDBDBDBDBDBDBDBDBDBDBDBDBDBDBDBDBDBDBDBDB
+            DBDBDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFDFE3E3E3E3E3E3
+            E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E8E8E8E8E8E8E8E8E8E8E8E8E8E8
+            E8E8E8E8E8E8E8E8E8E8ECECECECECECECECECECECECECECECECECECECECECEC
+            ECECF0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F0F5F5F5F5F5F5
+            F5F5F5F5F5F5F5F5F5F5F5F5F5F5F5F5F5F5FAFAFAFAFAFAFAFAFAFAFAFAFAFA
+            FAFAFAFAFAFAFAFAFAFAFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFE
+            FEFE}
+          Stretch = True
+          ExplicitLeft = 640
+          ExplicitTop = 8
+          ExplicitWidth = 105
+          ExplicitHeight = 105
+        end
+      end
     end
   end
   object ApplicationEvents1: TApplicationEvents
