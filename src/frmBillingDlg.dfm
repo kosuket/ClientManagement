@@ -2,7 +2,6 @@ inherited BillingDialogframe: TBillingDialogframe
   Caption = 'BillingDialogframe'
   ClientHeight = 575
   ClientWidth = 978
-  ExplicitLeft = -257
   ExplicitWidth = 994
   ExplicitHeight = 613
   PixelsPerInch = 96
@@ -10,8 +9,6 @@ inherited BillingDialogframe: TBillingDialogframe
   inherited pnlBase: TPanel
     Width = 978
     Height = 575
-    ExplicitLeft = 0
-    ExplicitTop = 0
     ExplicitWidth = 978
     ExplicitHeight = 575
     object Splitter1: TSplitter [0]
@@ -84,7 +81,6 @@ inherited BillingDialogframe: TBillingDialogframe
           Align = alClient
           FixedCols = 0
           TabOrder = 0
-          ExplicitHeight = 193
         end
         object pnlBillSummary: TPanel
           Left = 0
@@ -94,7 +90,6 @@ inherited BillingDialogframe: TBillingDialogframe
           Align = alBottom
           BevelOuter = bvNone
           TabOrder = 1
-          ExplicitTop = 199
           object lblTotalCharge: TLabel
             Left = 9
             Top = 6

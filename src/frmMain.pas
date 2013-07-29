@@ -9,7 +9,7 @@ uses
   Vcl.DBCtrls, Datasnap.Provider, Datasnap.DBClient, LogInFrm, Vcl.Buttons,
   Vcl.ComCtrls,frmClientSearch,frmBilling, frmMaster, Vcl.Menus, Vcl.ImgList,
   Vcl.Imaging.jpeg, frmMailSetting, DBEditorMainFrm, DBGridBaseFrm,
-  Vcl.Imaging.pngimage;
+  Vcl.Imaging.pngimage, MySQLAccessor;
 
 type
   TMainframe = class(TForm)
@@ -66,6 +66,7 @@ type
     procedure mmDebugModeClick(Sender: TObject);
   private
     { Private declarations }
+    Accessor: TMySQLAccessor;
     frmClientSearch: TClientSearchframe;
     frmLogIn: TLogInFrame;
     frmBillingSearch: TBillingFrame;
@@ -154,27 +155,24 @@ begin
     Self.Free;
     exit;
   end;
+  Accessor := TMySQLAccessor.Create(g_HostName,g_UserName,g_Password,g_Database);
   mmDebugMode.Checked := g_DebugMode;
   //ClientSearch
-  frmClientSearch := TClientSearchframe.Create(self);
-  frmClientSearch.sqlqSchoolName.SQLConnection := SQLConnection1;
-  frmClientSearch.SQLQuery1.SQLConnection := SQLConnection1;
+  frmClientSearch := TClientSearchframe.Create(Self, Accessor);
   frmClientSearch.pnlBase.Parent := pnlMain;
   frmClientSearch.Initialize;
   frmClientSearch.pnlBase.Visible := False;
   frmClientSearch.m_DebugMode := g_DebugMode;
 
   //AccountingSearch
-  frmBillingSearch := TBillingFrame.Create(Self);
-  frmBillingSearch.sqlqSchoolName.SQLConnection := SQLConnection1;
-  frmBillingSearch.SQLQuery1.SQLConnection := SQLConnection1;
+  frmBillingSearch := TBillingFrame.Create(Self, Accessor);
   frmBillingSearch.pnlBase.Parent := pnlMain;
   frmBillingSearch.Initialize;
   frmBillingSearch.pnlBase.Visible := False;
   frmBillingSearch.m_DebugMode := g_DebugMode;
 
   //MasterSetting
-  frmDBEditor := TFrmDBEditorMain.Create(Self, g_HostName, g_Username, g_Password, g_Database);
+  frmDBEditor := TFrmDBEditorMain.Create(Self, Accessor);
   frmDBEditor.Embed(pnlMain);
   frmDBEditor.Visible := False;
 

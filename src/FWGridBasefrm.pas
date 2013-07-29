@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Grids, Vcl.DBGrids, Vcl.StdCtrls,
   Vcl.ExtCtrls,Data.DBXMySQL, Data.DB,
   Data.SqlExpr, Data.FMTBcd, Datasnap.DBClient, Datasnap.Provider, Vcl.DBCtrls,
-  Vcl.ComCtrls, Vcl.Samples.Spin, Vcl.AppEvnts, Vcl.Imaging.jpeg;
+  Vcl.ComCtrls, Vcl.Samples.Spin, Vcl.AppEvnts, Vcl.Imaging.jpeg, MySQLAccessor;
 
 type
   TFWGridBaseframe = class(TForm)
@@ -16,29 +16,26 @@ type
     DBGrid1: TDBGrid;
     Splitter1: TSplitter;
     pnlCondition: TPanel;
-    sqlqSchoolName: TSQLQuery;
-    cdsSchoolName: TClientDataSet;
-    dsSchoolName: TDataSource;
-    dspSchoolName: TDataSetProvider;
     pnlCondBar: TPanel;
     btnLoad: TButton;
     Image1: TImage;
     ApplicationEvents1: TApplicationEvents;
-    SQLQuery1: TSQLQuery;
-    DataSetProvider1: TDataSetProvider;
-    ClientDataSet1: TClientDataSet;
-    DataSource1: TDataSource;
     procedure btnLoadClick(Sender: TObject);
   private
     { Private declarations }
+    DataSource: TDataSource;
+    Provider: TDataSetProvider;
     //グリッド表示関係
     procedure adjustGridWidth;
   protected
+    Accessor: TMySQLAccessor;
+    CDataSet: TClientDataSet;
     //SQL生成関係
-    procedure createSQL;
+    function createSQL: String;
     //子で宣言する
-    procedure createSQLFix; virtual;
-    procedure createWhere; virtual;
+    function createSQLFix: String; virtual;
+    function createWhere: String; virtual;
+    procedure loadQuery(sql: String); virtual;
     //グリッドメソッド
     function hasData: Boolean; virtual;
   public
@@ -47,7 +44,7 @@ type
     //ClientDataSet1: TClientDataSet;
     //SQLConnection1: TSQLConnection;
     m_DebugMode: Boolean;
-    constructor Create(AOwner: TComponent) ; override;
+    constructor Create(AOwner: TComponent; Accessor: TMySQLAccessor); reintroduce; overload;
     procedure Initialize; virtual;
   end;
 
@@ -67,23 +64,33 @@ implementation
 
 {$R *.dfm}
 
-procedure TFWGridBaseframe.createSQL;
+function TFWGridBaseframe.createSQL: String;
 begin
-  createSQLFix;
-  createWhere;
+  result := createSQLFix + ' ' + createWhere;
 end;
 
-procedure TFWGridBaseframe.createSQLFix;
+function TFWGridBaseframe.createSQLFix: String;
 begin
 //継承先で
 end;
 
-constructor TFWGridBaseframe.Create(AOwner: TComponent) ;
+constructor TFWGridBaseframe.Create(AOwner: TComponent; Accessor: TMySQLAccessor) ;
 begin
-  inherited;
+  inherited Create(AOwner);
+  Self.Accessor := Accessor;
+  // Create DataSet coumponents
+  DataSource := TDataSource.Create(Self);
+  Provider := TDataSetProvider.Create(Self);
+  CDataSet := TClientDataSet.Create(Self);
+
+  // bind them
+  Provider.Name := 'Provider';
+  CDataSet.ProviderName := Provider.Name;
+  DataSource.DataSet := CDataSet;
+  DBGrid1.DataSource := DataSource;
 end;
 
-procedure TFWGridBaseframe.createWhere;
+function TFWGridBaseframe.createWhere: String;
 begin
   //継承先で
 end;
@@ -117,14 +124,11 @@ begin
 end;
 
 procedure TFWGridBaseframe.btnLoadClick(Sender: TObject);
+var sql:String;
 begin
-  SQLQuery1.SQL.Clear;
-  createSQL;
-  if m_DebugMode then ShowMessage(SQLQuery1.SQL.Text);
-  ClientDataSet1.Close;
-  ClientDataSet1.Open;
-  //ClientDataSet1.Last;
-  //ClientDataSet1.First;
+  sql := createSQL;
+  if m_DebugMode then ShowMessage(sql);
+  loadQuery(sql);
   adjustGridWidth;
 end;
 
@@ -132,4 +136,11 @@ procedure TFWGridBaseframe.Initialize;
 begin
   //継承先で
 end;
+procedure TFWGridBaseframe.loadQuery(sql: String);
+begin
+  CDataSet.Close;
+  Provider.DataSet := Accessor.ExecuteQuery(sql);
+  CDataSet.Open;
+end;
+
 end.

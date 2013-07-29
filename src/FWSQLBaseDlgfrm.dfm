@@ -20,10 +20,6 @@ object FWSQLBaseDialogframe: TFWSQLBaseDialogframe
     Height = 202
     Align = alClient
     TabOrder = 0
-    ExplicitLeft = 48
-    ExplicitTop = 40
-    ExplicitWidth = 185
-    ExplicitHeight = 41
     object pnlTitle: TPanel
       Left = 1
       Top = 1

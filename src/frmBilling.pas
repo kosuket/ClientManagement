@@ -32,8 +32,8 @@ type
     function isMailable: Boolean;
   protected
     //SQL¶¬ŠÖŒW
-    procedure createSQLFix;  override;
-    procedure createWhere;  override;
+    function createSQLFix: String;  override;
+    function createWhere: String;  override;
   public
     { Public declarations }
     frmBillingDlg: TBillingDialogframe;
@@ -82,39 +82,39 @@ begin
   end;
 end;
 
-procedure TBillingframe.createSQLFix;
+function TBillingframe.createSQLFix: String;
+var sl: TStringList;
 begin
   inherited;
-  SQLQuery1.SQL.Add('SELECT A.CLIENT_ID,A.FIRST_NAME,A.LAST_NAME,A.EMAIL_ADDRESS,A.CHARGE FROM (');
-  SQLQuery1.SQL.Add('SELECT ');
-  SQLQuery1.SQL.Add('    C.CLIENT_ID,');
-  SQLQuery1.SQL.Add('    C.LAST_NAME,');
-  SQLQuery1.SQL.Add('    C.FIRST_NAME,');
-  SQLQuery1.SQL.Add('    C.MIDDLE_NAME,');
-  SQLQuery1.SQL.Add('    C.EMAIL_ADDRESS,');
-  SQLQuery1.SQL.Add('    IFNULL(SUM(B.BOOK_AMOUNT),0) CHARGE');
-  SQLQuery1.SQL.Add('FROM');
-  SQLQuery1.SQL.Add('    CLIENT C');
-  SQLQuery1.SQL.Add('        LEFT JOIN');
-  SQLQuery1.SQL.Add('    BILLING_REQUEST B ON C.CLIENT_ID = B.CLIENT_ID');
+  sl := TStringList.Create;
+  sl.Add('SELECT A.CLIENT_ID,A.FIRST_NAME,A.LAST_NAME,A.EMAIL_ADDRESS,A.CHARGE FROM (');
+  sl.Add('SELECT ');
+  sl.Add('    C.CLIENT_ID,');
+  sl.Add('    C.LAST_NAME,');
+  sl.Add('    C.FIRST_NAME,');
+  sl.Add('    C.MIDDLE_NAME,');
+  sl.Add('    C.EMAIL_ADDRESS,');
+  sl.Add('    IFNULL(SUM(B.BOOK_AMOUNT),0) CHARGE');
+  sl.Add('FROM');
+  sl.Add('    CLIENT C');
+  sl.Add('        LEFT JOIN');
+  sl.Add('    BILLING_REQUEST B ON C.CLIENT_ID = B.CLIENT_ID');
+  result := sl.Text;
 end;
 
-procedure TBillingframe.createWhere;
+function TBillingframe.createWhere: String;
   procedure _checkforand(sl: TStrings);
   begin
     if sl.Count > 0 then sl.Add(' AND ');
   end;
 var sl: TstringList;
-    i: Integer;
 begin
   inherited;
-  if cmbPeriod.ItemIndex <> 0 then begin
-    _checkforand(SQLQuery1.SQL);
-    SQLQuery1.SQL.Add(' B.BOOK_DATE BETWEEN ' + '''' + FormatDateTime('yyyy/mm/dd',edtFirstDate.Date) + '''' + ' AND ' + '''' + FormatDateTime('yyyy/mm/dd',edtLastDate.Date) + '''');
-  end;
-  SQLQuery1.SQL.Add('GROUP BY C.CLIENT_ID) A');
-
   sl := TStringList.Create;
+  if cmbPeriod.ItemIndex <> 0 then begin
+    sl.Add(' AND B.BOOK_DATE BETWEEN ' + '''' + FormatDateTime('yyyy/mm/dd',edtFirstDate.Date) + '''' + ' AND ' + '''' + FormatDateTime('yyyy/mm/dd',edtLastDate.Date) + '''');
+  end;
+  sl.Add('GROUP BY C.CLIENT_ID) A');
   if Length(edtFirstName.Text) > 0 then begin
     _checkforand(sl);
     sl.Add(' A.FIRST_NAME = ' + '''' + edtFirstName.Text + '''');
@@ -127,12 +127,11 @@ begin
     _checkforand(sl);
     sl.Add(' A.CHARGE > 0 ');
   end;
-  if sl.Count > 0 then begin
-    SQLQuery1.SQL.Add(' WHERE ');
-    for i := 0 to sl.Count -1 do begin
-      SQLQuery1.SQL.Add(sl[i]);
-    end;
+  if sl.Count > 2 then begin
+    sl.Insert(2,' WHERE ');
   end;
+  result := sl.Text;
+  sl.Free;
 end;
 
 procedure TBillingframe.DBGrid1DblClick(Sender: TObject);
@@ -144,13 +143,13 @@ begin
   try
     slRecepient.Add(DBGrid1.Fields[1].Text + ' ' + DBGrid1.Fields[2].Text);
     slAddress.Add(DBGrid1.Fields[3].Text);
-    frmBillingDlg := TBillingDialogframe.Create(Self);
+    frmBillingDlg := TBillingDialogframe.Create(Self, Accessor);
     frmBillingDlg.frmMailDialog.setRecepient(slRecepient,slAddress);
     frmBillingDlg.cmbPeriod.ItemIndex := cmbPeriod.ItemIndex;
     frmBillingDlg.edtFirstDate.DateTime := edtFirstDate.DateTime;
     frmBillingDlg.edtLastDate.DateTime := edtLastDate.DateTime;
     frmBillingDlg.g_ClientId := StrToIntDef(DBGrid1.Fields[0].Text,-1);
-    frmBillingDlg.initialize(SQLQuery1.SQLConnection);
+    frmBillingDlg.initialize;
     frmBillingDlg.ShowModal;
   finally
     slRecepient.Free;

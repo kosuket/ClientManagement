@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, FWSQLBaseDlgfrm, Data.FMTBcd, Data.DB,
   Data.SqlExpr, Vcl.ExtCtrls,frmMaildlg, Vcl.Grids, Vcl.ComCtrls, Vcl.StdCtrls,
-  Datasnap.DBClient, Datasnap.Provider, Vcl.Buttons;
+  Datasnap.DBClient, Datasnap.Provider, Vcl.Buttons, MySQLAccessor;
 
 type
   TBillingDialogframe = class(TFWSQLBaseDialogframe)
@@ -43,8 +43,8 @@ type
     { Public declarations }
     frmMailDialog: TMailDlgframe;
     g_ClientId: Int64;
-    constructor create(AOwner: TComponent); override;
-    procedure initialize(conn:TSQLConnection);
+    constructor create(AOwner:TComponent; Accessor: TMySQLAccessor); reintroduce; overload; override;
+    procedure initialize;
   end;
 
 var
@@ -103,89 +103,80 @@ begin
   end;
 end;
 
-constructor TBillingDialogframe.create(AOwner: TComponent);
+constructor TBillingDialogframe.create(AOwner: TComponent; Accessor: TMySQLAccessor);
 begin
   inherited;
-  frmMailDialog := TMailDlgframe.Create(Self);
+  frmMailDialog := TMailDlgframe.Create(Self, Accessor);
   frmMailDialog.pnlBase.Parent := pnlMail;
   frmMailDialog.pnlTitle.Visible := False;
+  setupGrid;
 end;
 
 procedure TBillingDialogframe.getBillingInfo;
-var i,amt:Integer;
+var sql: String;
+    i,amt:Integer;
 begin
   amt := 0;
-  With SQLQuery1.SQL do begin
-    Clear;
-    Add('SELECT ');
-    Add('    BILL_ID,');
-    Add('    BOOK_DATE,');
-    Add('    BILLING_TYPE,');//To Do Ç†Ç∆Ç≈DECODEÇ≈à”ñ°Ç™ÇÌÇ©ÇÈÇÊÇ§Ç…Ç∑ÇÈ
-    Add('    BOOK_AMOUNT,');
-    Add('    MEMO');
-    Add(' FROM');
-    Add('    BILLING_REQUEST');
-    Add(' WHERE CLIENT_ID = ' + IntToStr(g_ClientId));
-    if cmbPeriod.ItemIndex <> 0 then begin
-      SQLQuery1.SQL.Add(' AND BOOK_DATE BETWEEN ' + '''' + FormatDateTime('yyyy/mm/dd',edtFirstDate.Date) + '''' + ' AND ' + '''' + FormatDateTime('yyyy/mm/dd',edtLastDate.Date) + '''');
-    end;
-    Add(' ORDER BY BILL_ID');
-  end;
-  cdsBilling.Close;
-  cdsBilling.Open;
-  if cdsBilling.RecordCount = 0 then grdBilling.RowCount := 2
-                                    else grdBilling.RowCount := cdsBilling.RecordCount + 1;
-  for i := 1 to cdsBilling.RecordCount do begin
-    grdBilling.Cells[0,i] := cdsBilling.Fields[0].AsString;
-    grdBilling.Cells[1,i] := cdsBilling.Fields[1].AsString;
-    grdBilling.Cells[2,i] := cdsBilling.Fields[2].AsString;
-    grdBilling.Cells[3,i] := cdsBilling.Fields[3].AsString;
-    grdBilling.Cells[4,i] := cdsBilling.Fields[4].AsString;
+  sql := 'SELECT ' +
+         '    BILL_ID,' +
+         '    BOOK_DATE,' +
+         '    BILLING_TYPE,' +//To Do Ç†Ç∆Ç≈DECODEÇ≈à”ñ°Ç™ÇÌÇ©ÇÈÇÊÇ§Ç…Ç∑ÇÈ
+         '    BOOK_AMOUNT,' +
+         '    MEMO' +
+         ' FROM' +
+         '    BILLING_REQUEST' +
+         ' WHERE CLIENT_ID = ' + IntToStr(g_ClientId);
+  if cmbPeriod.ItemIndex <> 0 then
+    sql := sql + ' AND BOOK_DATE BETWEEN ' + '''' + FormatDateTime('yyyy/mm/dd',edtFirstDate.Date) + '''' + ' AND ' + '''' + FormatDateTime('yyyy/mm/dd',edtLastDate.Date) + '''';
+  sql := sql +' ORDER BY BILL_ID';
+  loadQuery(sql);
+  if cDataSet.RecordCount = 0 then grdBilling.RowCount := 2
+                                    else grdBilling.RowCount := cDataSet.RecordCount + 1;
+  for i := 1 to cDataSet.RecordCount do begin
+    grdBilling.Cells[0,i] := cDataSet.Fields[0].AsString;
+    grdBilling.Cells[1,i] := cDataSet.Fields[1].AsString;
+    grdBilling.Cells[2,i] := cDataSet.Fields[2].AsString;
+    grdBilling.Cells[3,i] := cDataSet.Fields[3].AsString;
+    grdBilling.Cells[4,i] := cDataSet.Fields[4].AsString;
     amt := amt + StrToIntDef(grdBilling.Cells[3,i],0);
-    cdsBilling.Next;
+    cDataSet.Next;
   end;
   edtTotalCharge.Caption := 'Åè' + FormatFloat('#,##0', amt);
 end;
 
 procedure TBillingDialogframe.getCounselingInfo;
-var i:Integer;
+var sql: String;
+    i:Integer;
 begin
-  With SQLQuery1.SQL do begin
-    Clear;
-    Add('SELECT ');
-    Add('    SEQ,');
-    Add('    BILL_ID,');
-    Add('    COUNSELING_DATE,');
-    Add('    COUNSELING_TYPE,'); //To Do Ç†Ç∆Ç≈DECODEÇ≈à”ñ°Ç™ÇÌÇ©ÇÈÇÊÇ§Ç…Ç∑ÇÈ
-    Add('    HOURS,');
-    Add('    CONTENT_TYPE');
-    Add(' FROM');
-    Add('    COUNSELING');
-    Add(' WHERE CLIENT_ID = ' + IntToStr(g_ClientId));
-    if cmbPeriod.ItemIndex <> 0 then begin
-      SQLQuery1.SQL.Add(' AND COUNSELING_DATE BETWEEN ' + '''' + FormatDateTime('yyyy/mm/dd',edtFirstDate.Date) + '''' + ' AND ' + '''' + FormatDateTime('yyyy/mm/dd',edtLastDate.Date) + '''');
-    end;
-    Add(' ORDER BY SEQ');
-  end;
-  cdsBilling.Close;
-  cdsBilling.Open;
-  if cdsBilling.RecordCount = 0 then grdCounseling.RowCount := 2
-                                    else grdCounseling.RowCount := cdsBilling.RecordCount + 1;
-  for i := 1 to cdsBilling.RecordCount do begin
-    grdCounseling.Cells[0,i] := cdsBilling.Fields[0].AsString;
-    grdCounseling.Cells[1,i] := cdsBilling.Fields[1].AsString;
-    grdCounseling.Cells[2,i] := cdsBilling.Fields[2].AsString;
-    grdCounseling.Cells[3,i] := cdsBilling.Fields[3].AsString;
-    grdCounseling.Cells[4,i] := cdsBilling.Fields[4].AsString;
-    grdCounseling.Cells[5,i] := cdsBilling.Fields[5].AsString;
-    cdsBilling.Next;
+  sql := 'SELECT ' +
+         '    SEQ,' +
+         '    BILL_ID,' +
+         '    COUNSELING_DATE,' +
+         '    COUNSELING_TYPE,' + //To Do Ç†Ç∆Ç≈DECODEÇ≈à”ñ°Ç™ÇÌÇ©ÇÈÇÊÇ§Ç…Ç∑ÇÈ
+         '    HOURS,' +
+         '    CONTENT_TYPE' +
+         ' FROM' +
+         '    COUNSELING' +
+         ' WHERE CLIENT_ID = ' + IntToStr(g_ClientId);
+  if cmbPeriod.ItemIndex <> 0 then
+      sql := sql + ' AND COUNSELING_DATE BETWEEN ' + '''' + FormatDateTime('yyyy/mm/dd',edtFirstDate.Date) + '''' + ' AND ' + '''' + FormatDateTime('yyyy/mm/dd',edtLastDate.Date) + '''';
+  sql := sql +  ' ORDER BY SEQ';
+  loadQuery(sql);
+  if cDataSet.RecordCount = 0 then grdCounseling.RowCount := 2
+                                    else grdCounseling.RowCount := cDataSet.RecordCount + 1;
+  for i := 1 to cDataSet.RecordCount do begin
+    grdCounseling.Cells[0,i] := cDataSet.Fields[0].AsString;
+    grdCounseling.Cells[1,i] := cDataSet.Fields[1].AsString;
+    grdCounseling.Cells[2,i] := cDataSet.Fields[2].AsString;
+    grdCounseling.Cells[3,i] := cDataSet.Fields[3].AsString;
+    grdCounseling.Cells[4,i] := cDataSet.Fields[4].AsString;
+    grdCounseling.Cells[5,i] := cDataSet.Fields[5].AsString;
+    cDataSet.Next;
   end;
 end;
 
-procedure TBillingDialogframe.initialize(conn:TSQLConnection);
+procedure TBillingDialogframe.initialize;
 begin
-  SQLQuery1.SQLConnection := conn;
-  setupGrid;
   getBillingInfo;
   getCounselingInfo;
 end;

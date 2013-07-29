@@ -1,15 +1,11 @@
 inherited MailDlgframe: TMailDlgframe
   Caption = 'MailDlgframe'
   ClientHeight = 509
-  ExplicitWidth = 434
   ExplicitHeight = 547
   PixelsPerInch = 96
   TextHeight = 13
   inherited pnlBase: TPanel
     Height = 509
-    ExplicitLeft = 0
-    ExplicitTop = 0
-    ExplicitWidth = 418
     ExplicitHeight = 509
     object Splitter1: TSplitter [0]
       Left = 1

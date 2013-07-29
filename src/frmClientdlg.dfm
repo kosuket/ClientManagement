@@ -853,18 +853,6 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
     Left = 465
     Top = 65535
   end
-  object dspClientCarte: TDataSetProvider
-    DataSet = SQLQuery1
-    Left = 493
-    Top = 1
-  end
-  object cdsClientCarte: TClientDataSet
-    Aggregates = <>
-    Params = <>
-    ProviderName = 'dspClientCarte'
-    Left = 523
-    Top = 1
-  end
   object ApplicationEvents1: TApplicationEvents
     OnMessage = ApplicationEvents1Message
     Left = 441

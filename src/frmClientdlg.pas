@@ -7,14 +7,12 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, FWSQLBaseDlgfrm, Data.FMTBcd, Vcl.Grids,
   Vcl.StdCtrls, Data.DB, Data.SqlExpr, Vcl.ExtCtrls, Datasnap.DBClient,
   Datasnap.Provider, Vcl.ComCtrls, Vcl.ToolWin,Data.DBXCommon, Vcl.Buttons,
-  Vcl.AppEvnts;
+  Vcl.AppEvnts, MySQLAccessor;
 
 type
   TOpenMode = (omNew,omModify);
   TfrmClientCarteDlg = class(TFWSQLBaseDialogframe)
     ScrollBox1: TScrollBox;
-    dspClientCarte: TDataSetProvider;
-    cdsClientCarte: TClientDataSet;
     btnOK: TButton;
     pnlUpper: TPanel;
     Splitter1: TSplitter;
@@ -147,8 +145,8 @@ type
     g_ClientId: Int64;
     g_OpenMode: TOpenMode;
     g_DebugMode: Boolean;
-    constructor create(AOwner:TComponent);override;
-    procedure initialize(OpenMode:TOpenMode;conn:TSQLConnection);
+    constructor create(AOwner:TComponent; Accessor: TMySQLAccessor); reintroduce; overload; override;
+    procedure initialize(OpenMode:TOpenMode);
   end;
 
 var
@@ -396,7 +394,7 @@ begin
   end;
 end;
 
-constructor TfrmClientCarteDlg.create(AOwner: TComponent);
+constructor TfrmClientCarteDlg.create(AOwner: TComponent; Accessor: TMySQLAccessor);
 begin
   inherited;
   g_DebugMode := False;
@@ -719,52 +717,50 @@ begin
 end;
 
 procedure TfrmClientCarteDlg.getClientInfo;
+var sql: String;
 begin
-  With SQLQuery1.SQL do begin
-    Clear;
-    Add('SELECT ');
-    Add('CLIENT_ID,');
-    Add('LAST_NAME,');
-    Add('FIRST_NAME,');
-    Add('MIDDLE_NAME,');
-    Add('EMAIL_ADDRESS,');
-    Add('WORK_PLACE,');
-    Add('SPONSORED_FLG,');
-    Add('UNIVERSITY_NAME,');
-    Add('UNIVERSITY_MAJOR,');
-    Add('UNIVERSITY_DEGREE,');
-    Add('UNIVERSITY_GPA,');
-    Add('ACADEMIC_AWARDS_FLG,');
-    Add('PUBLICATION_FLG,');
-    Add('STUDIED_ABROAD_FLG,');
-    Add('STUDIED_ABROAD_PLACE,');
-    Add('USE_ENGLISH_AT_WORK_FLG,');
-    Add('FUTURE_GOAL,');
-    Add('CLIENT_MEMO,');
-    Add('COUNSELOR_MEMO');
-    Add(' FROM CLIENT ');
-    Add(' WHERE CLIENT_ID = ' + IntToStr(g_ClientId));
-  end;
-  cdsClientCarte.Open;
-  edtLastName.Text := cdsClientCarte.Fields[1].AsString;
-  edtFirstName.Text := cdsClientCarte.Fields[2].AsString;
+  sql := 'SELECT ' +
+         'CLIENT_ID,' +
+         'LAST_NAME,' +
+         'FIRST_NAME,' +
+         'MIDDLE_NAME,' +
+         'EMAIL_ADDRESS,' +
+         'WORK_PLACE,' +
+         'SPONSORED_FLG,' +
+         'UNIVERSITY_NAME,' +
+         'UNIVERSITY_MAJOR,' +
+         'UNIVERSITY_DEGREE,' +
+         'UNIVERSITY_GPA,' +
+         'ACADEMIC_AWARDS_FLG,' +
+         'PUBLICATION_FLG,' +
+         'STUDIED_ABROAD_FLG,' +
+         'STUDIED_ABROAD_PLACE,' +
+         'USE_ENGLISH_AT_WORK_FLG,' +
+         'FUTURE_GOAL,' +
+         'CLIENT_MEMO,' +
+         'COUNSELOR_MEMO' +
+         ' FROM CLIENT ' +
+         ' WHERE CLIENT_ID = ' + IntToStr(g_ClientId);
+  loadQuery(sql);
+  edtLastName.Text := cDataSet.Fields[1].AsString;
+  edtFirstName.Text := cDataSet.Fields[2].AsString;
   //MiddleName
-  edtEmail.Text := cdsClientCarte.Fields[4].AsString;
-  edtWorkPlace.Text := cdsClientCarte.Fields[5].AsSTring;
-  cmbSponsored.ItemIndex := getcmbIndex(cdsClientCarte.Fields[6].AsInteger);
-  edtUniversityName.Text := cdsClientCarte.Fields[7].AsString;
-  edtMajor.Text := cdsClientCarte.Fields[8].AsString;
-  edtDegree.Text := cdsClientCarte.Fields[9].AsString;
-  edtGPA.Text := cdsClientCarte.Fields[10].AsString;
-  cmbAcademicAward.ItemIndex := getcmbIndex(cdsClientCarte.Fields[11].AsInteger);
-  cmbPublication.ItemIndex := getcmbIndex(cdsClientCarte.Fields[12].AsInteger);
-  cmbStudyAbroad.ItemIndex := getcmbIndex(cdsClientCarte.Fields[13].AsInteger);
-  edtPlace.Text := cdsClientCarte.Fields[14].AsString;
-  cmbUseEnglish.ItemIndex := getcmbIndex(cdsClientCarte.Fields[15].AsInteger);
-  edtFutureGoal.Text := cdsClientCarte.Fields[16].AsString;
-  memoClientMemo.Text := cdsClientCarte.Fields[17].AsString;
-  memoCounselorMemo.Text := cdsClientCarte.Fields[18].AsString;
-  cdsClientCarte.Close;
+  edtEmail.Text := cDataSet.Fields[4].AsString;
+  edtWorkPlace.Text := cDataSet.Fields[5].AsSTring;
+  cmbSponsored.ItemIndex := getcmbIndex(cDataSet.Fields[6].AsInteger);
+  edtUniversityName.Text := cDataSet.Fields[7].AsString;
+  edtMajor.Text := cDataSet.Fields[8].AsString;
+  edtDegree.Text := cDataSet.Fields[9].AsString;
+  edtGPA.Text := cDataSet.Fields[10].AsString;
+  cmbAcademicAward.ItemIndex := getcmbIndex(cDataSet.Fields[11].AsInteger);
+  cmbPublication.ItemIndex := getcmbIndex(cDataSet.Fields[12].AsInteger);
+  cmbStudyAbroad.ItemIndex := getcmbIndex(cDataSet.Fields[13].AsInteger);
+  edtPlace.Text := cDataSet.Fields[14].AsString;
+  cmbUseEnglish.ItemIndex := getcmbIndex(cDataSet.Fields[15].AsInteger);
+  edtFutureGoal.Text := cDataSet.Fields[16].AsString;
+  memoClientMemo.Text := cDataSet.Fields[17].AsString;
+  memoCounselorMemo.Text := cDataSet.Fields[18].AsString;
+  cDataSet.Close;
 end;
 
 function TfrmClientCarteDlg.getcmbIndex(intDiv: Integer): Integer;
@@ -780,105 +776,97 @@ begin
 end;
 
 procedure TfrmClientCarteDlg.getGMATInfo;
-var i:Integer;
+var sql: String;
+    i:Integer;
 begin
-  With SQLQuery1.SQL do begin
-    Clear;
-    Add('SELECT ');
-    Add('    SCORE_NO,');
-    Add('    TEST_DATE,');
-    Add('    TOTAL,');
-    Add('    VERBAL,');
-    Add('    MATH,');
-    Add('    AWA,');
-    Add('    INTEGRATED_REASONING,');
-    Add('    MEMO');
-    Add(' FROM');
-    Add('    CLIENT_GMAT');
-    Add(' WHERE CLIENT_ID = ' + IntToStr(g_ClientId));
-    Add(' ORDER BY SCORE_NO DESC');
-  end;
-  cdsClientCarte.Close;
-  cdsClientCarte.Open;
-  if cdsClientCarte.RecordCount = 0 then grdGMAT.RowCount := 2
-                                    else grdGMAT.RowCount := cdsClientCarte.RecordCount + 1;
-  for i := 1 to cdsClientCarte.RecordCount do begin
-    grdGMAT.Cells[0,i] := cdsClientCarte.Fields[0].AsString;
-    grdGMAT.Cells[1,i] := cdsClientCarte.Fields[1].AsString;
-    grdGMAT.Cells[2,i] := cdsClientCarte.Fields[2].AsString;
-    grdGMAT.Cells[3,i] := cdsClientCarte.Fields[3].AsString;
-    grdGMAT.Cells[4,i] := cdsClientCarte.Fields[4].AsString;
-    grdGMAT.Cells[5,i] := cdsClientCarte.Fields[5].AsString;
-    grdGMAT.Cells[6,i] := cdsClientCarte.Fields[6].AsString;
-    grdGMAT.Cells[7,i] := cdsClientCarte.Fields[7].AsString;
-    cdsClientCarte.Next;
+  sql := 'SELECT ' +
+         '    SCORE_NO,' +
+         '    TEST_DATE,' +
+         '    TOTAL,' +
+         '    VERBAL,' +
+         '    MATH,' +
+         '    AWA,' +
+         '    INTEGRATED_REASONING,' +
+         '    MEMO' +
+         ' FROM' +
+         '    CLIENT_GMAT' +
+         ' WHERE CLIENT_ID = ' + IntToStr(g_ClientId) +
+         ' ORDER BY SCORE_NO DESC';
+  loadQuery(sql);
+  if cDataSet.RecordCount = 0 then grdGMAT.RowCount := 2
+                                    else grdGMAT.RowCount := cDataSet.RecordCount + 1;
+  for i := 1 to cDataSet.RecordCount do begin
+    grdGMAT.Cells[0,i] := cDataSet.Fields[0].AsString;
+    grdGMAT.Cells[1,i] := cDataSet.Fields[1].AsString;
+    grdGMAT.Cells[2,i] := cDataSet.Fields[2].AsString;
+    grdGMAT.Cells[3,i] := cDataSet.Fields[3].AsString;
+    grdGMAT.Cells[4,i] := cDataSet.Fields[4].AsString;
+    grdGMAT.Cells[5,i] := cDataSet.Fields[5].AsString;
+    grdGMAT.Cells[6,i] := cDataSet.Fields[6].AsString;
+    grdGMAT.Cells[7,i] := cDataSet.Fields[7].AsString;
+    cDataSet.Next;
   end;
 end;
 
 procedure TfrmClientCarteDlg.getSchoolInfo;
-var i:Integer;
+var sql: String;
+    i:Integer;
 begin
-  With SQLQuery1.SQL do begin
-    Clear;
-    Add('SELECT ');
-    Add('    C.SCHOOL_ID,');
-    Add('    C.PERSONAL_RANK,');
-    Add('    S.SCHOOL_NAME,');
-    Add('    C.ROUND,');
-    Add('    C.RESULT');
-    Add(' FROM');
-    Add('    CLIENT_SCHOOL_MAP C');
-    Add('        INNER JOIN');
-    Add('    SCHOOL S ON C.SCHOOL_ID = S.SCHOOL_ID');
-    Add(' WHERE C.CLIENT_ID = ' + IntToStr(g_ClientId));
-    Add(' ORDER BY C.PERSONAL_RANK');
-  end;
-  cdsClientCarte.Open;
-  if cdsClientCarte.RecordCount = 0 then grdSchool.RowCount := 2
-                                    else grdSchool.RowCount := cdsClientCarte.RecordCount + 1;
-  for i := 1 to cdsClientCarte.RecordCount do begin
-    grdSchool.Cells[0,i] := cdsClientCarte.Fields[0].AsString;
-    grdSchool.Cells[1,i] := cdsClientCarte.Fields[1].AsString;
-    grdSchool.Cells[2,i] := cdsClientCarte.Fields[2].AsString;
-    grdSchool.Cells[3,i] := cdsClientCarte.Fields[3].AsString;
-    cdsClientCarte.Next;
+  sql := 'SELECT ' +
+         '    C.SCHOOL_ID,' +
+         '    C.PERSONAL_RANK,' +
+         '    S.SCHOOL_NAME,' +
+         '    C.ROUND,' +
+         '    C.RESULT' +
+         ' FROM' +
+         '    CLIENT_SCHOOL_MAP C' +
+         '        INNER JOIN' +
+         '    SCHOOL S ON C.SCHOOL_ID = S.SCHOOL_ID' +
+         ' WHERE C.CLIENT_ID = ' + IntToStr(g_ClientId) +
+         ' ORDER BY C.PERSONAL_RANK';
+  loadQuery(sql);
+  if cDataSet.RecordCount = 0 then grdSchool.RowCount := 2
+                                    else grdSchool.RowCount := cDataSet.RecordCount + 1;
+  for i := 1 to cDataSet.RecordCount do begin
+    grdSchool.Cells[0,i] := cDataSet.Fields[0].AsString;
+    grdSchool.Cells[1,i] := cDataSet.Fields[1].AsString;
+    grdSchool.Cells[2,i] := cDataSet.Fields[2].AsString;
+    grdSchool.Cells[3,i] := cDataSet.Fields[3].AsString;
+    cDataSet.Next;
   end;
 end;
 
 procedure TfrmClientCarteDlg.getTOEFLInfo;
-var i:Integer;
+var sql: String;
+    i:Integer;
 begin
-  With SQLQuery1.SQL do begin
-    Clear;
-    Add('SELECT ');
-    Add('    SCORE_NO,');
-    Add('    TEST_DATE,');
-    Add('    TOTAL,');
-    Add('    READING,');
-    Add('    LISTENING,');
-    Add('    SPEAKING,');
-    Add('    WRITING,');
-    Add('    MEMO');
-    Add(' FROM');
-    Add('    CLIENT_TOEFL');
-    Add(' WHERE CLIENT_ID = ' + IntToStr(g_ClientId));
-    Add(' ORDER BY SCORE_NO DESC');
-  end;
-  cdsClientCarte.Close;
-  cdsClientCarte.Open;
+  sql := 'SELECT ' +
+         '    SCORE_NO,' +
+         '    TEST_DATE,' +
+         '    TOTAL,' +
+         '    READING,' +
+         '    LISTENING,' +
+         '    SPEAKING,' +
+         '    WRITING,' +
+         '    MEMO' +
+         ' FROM' +
+         '    CLIENT_TOEFL' +
+         ' WHERE CLIENT_ID = ' + IntToStr(g_ClientId) +
+         ' ORDER BY SCORE_NO DESC';
+  loadQuery(sql);
   With grdTOEFL do begin
-    if cdsClientCarte.RecordCount = 0 then RowCount := 2
-                                      else RowCount := cdsClientCarte.RecordCount + 1;
-    for i := 1 to cdsClientCarte.RecordCount do begin
-      Cells[0, i] := cdsClientCarte.Fields[0].AsString;
-      Cells[1, i] := cdsClientCarte.Fields[1].AsString;
-      Cells[2, i] := cdsClientCarte.Fields[2].AsString;
-      Cells[3, i] := cdsClientCarte.Fields[3].AsString;
-      Cells[4, i] := cdsClientCarte.Fields[4].AsString;
-      Cells[5, i] := cdsClientCarte.Fields[5].AsString;
-      Cells[6, i] := cdsClientCarte.Fields[6].AsString;
-      Cells[7, i] := cdsClientCarte.Fields[7].AsString;
-      cdsClientCarte.Next;
+    if cDataSet.RecordCount = 0 then RowCount := 2
+                                      else RowCount := cDataSet.RecordCount + 1;
+    for i := 1 to cDataSet.RecordCount do begin
+      Cells[0, i] := cDataSet.Fields[0].AsString;
+      Cells[1, i] := cDataSet.Fields[1].AsString;
+      Cells[2, i] := cDataSet.Fields[2].AsString;
+      Cells[3, i] := cDataSet.Fields[3].AsString;
+      Cells[4, i] := cDataSet.Fields[4].AsString;
+      Cells[5, i] := cDataSet.Fields[5].AsString;
+      Cells[6, i] := cDataSet.Fields[6].AsString;
+      Cells[7, i] := cDataSet.Fields[7].AsString;
+      cDataSet.Next;
     end;
   end;
 end;
@@ -1067,9 +1055,8 @@ begin
   edtDate.Visible := False;
 end;
 
-procedure TfrmClientCarteDlg.initialize(OpenMode: TOpenMode; conn:TSQLConnection);
+procedure TfrmClientCarteDlg.initialize(OpenMode: TOpenMode);
 begin
-  SQLQuery1.SQLConnection := conn;
   setupGrid;
   setupCombobox;
   case OpenMode of
@@ -1092,12 +1079,8 @@ procedure TfrmClientCarteDlg.initializeNew;
 begin
   btnOK.Caption := 'Register';
   //ClientIdç≈ëÂíléÊìæ
-  SQLQuery1.SQL.Clear;
-  SQLQuery1.SQL.Add('SELECT MAX(CLIENT_ID) + 1 FROM CLIENT');
-  cdsClientCarte.Open;
-  g_ClientId := StrToIntDef(cdsClientCarte.Fields[0].AsString,-1);
-  //ShowMessage(IntToStr(m_ClientId));
-
+  loadQuery('SELECT MAX(CLIENT_ID) + 1 FROM CLIENT');
+  g_ClientId := StrToIntDef(cDataSet.Fields[0].AsString,-1);
 end;
 
 function TfrmClientCarteDlg.isDynamicComp(Sender: TObject): Boolean;

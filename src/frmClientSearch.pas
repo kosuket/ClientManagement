@@ -8,7 +8,7 @@ uses
   Vcl.AppEvnts, Datasnap.Provider, Data.DB, Datasnap.DBClient, Data.SqlExpr,
   Vcl.StdCtrls, Vcl.Imaging.jpeg, Vcl.ExtCtrls, Vcl.Samples.Spin, Vcl.ComCtrls,
   Vcl.Grids, Vcl.DBGrids, FWGridBasefrm,frmClientdlg,frmMaildlg, Vcl.Buttons,
-  Vcl.Menus;
+  Vcl.Menus, MySQLAccessor;
 
 type
   TClientSearchframe = class(TFWGridBaseframe)
@@ -79,13 +79,13 @@ type
       function isMailable: Boolean;
   protected
     //SQL¶¬ŠÖŒW
-    procedure createSQLFix;  override;
-    procedure createWhere;  override;
+    function createSQLFix: String;  override;
+    function createWhere: String;  override;
   public
     { Public declarations }
     frmClientDialog: TfrmClientCarteDlg;
     frmMailDialog: TMailDlgframe;
-    constructor create(AOwner: TComponent); override;
+    constructor Create(AOwner: TComponent; Accessor: TMySQLAccessor); reintroduce; overload;
     procedure Initialize; override;
   end;
 
@@ -113,7 +113,7 @@ begin
     frmClientDialog.g_OpenMode := omNew;
     frmClientDialog.SchoolList := cmbSchoolName.Items;
     frmClientDialog.slSchoolId := slSchoolId;
-    frmClientDialog.initialize(omNew,SQLQuery1.SQLConnection);
+    frmClientDialog.initialize(omNew);
     frmClientDialog.ShowModal;
   finally
     frmClientDialog.Destroy;
@@ -142,7 +142,7 @@ begin
       slAddress.Add(DBGrid1.Fields[3].Text);
       DBGrid1.DataSource.DataSet.Next;
     end;
-    frmMailDialog := TMailDlgframe.Create(Self);
+    frmMailDialog := TMailDlgframe.Create(Self, Accessor);
     frmMailDialog.setRecepient(slRecepient,slAddress);
     frmMailDialog.ShowModal;
   finally
@@ -165,7 +165,7 @@ begin
   end;
 end;
 
-constructor TClientSearchframe.create(AOwner: TComponent);
+constructor TClientSearchframe.create(AOwner: TComponent; Accessor: TMySQLAccessor);
 begin
   inherited;
   slSchoolId := TStringList.Create;
@@ -173,43 +173,47 @@ begin
                  else Memo1.Visible := False;
 end;
 
-procedure TClientSearchframe.createSQLFix;
+function TClientSearchframe.createSQLFix: String;
+var sl: TstringList;
 begin
   inherited;
-  SQLQuery1.SQL.Add('SELECT ');
-  SQLQuery1.SQL.Add('    C.CLIENT_ID,C.FIRST_NAME, C.LAST_NAME, C.EMAIL_ADDRESS, C.TOEFL, C.GMAT');
-  SQLQuery1.SQL.Add('FROM');
-  SQLQuery1.SQL.Add('    (SELECT ');
-  SQLQuery1.SQL.Add('            CL.CLIENT_ID,');
-  SQLQuery1.SQL.Add('            CL.LAST_NAME,');
-  SQLQuery1.SQL.Add('            CL.FIRST_NAME,');
-  SQLQuery1.SQL.Add('            CL.MIDDLE_NAME,');
-  SQLQuery1.SQL.Add('            CL.EMAIL_ADDRESS,');
-  SQLQuery1.SQL.Add('            CL.WORK_PLACE,');
-  SQLQuery1.SQL.Add('            CL.SPONSORED_FLG,');
-  SQLQuery1.SQL.Add('            CL.UNIVERSITY_NAME,');
-  SQLQuery1.SQL.Add('            CL.UNIVERSITY_MAJOR,');
-  SQLQuery1.SQL.Add('            CL.UNIVERSITY_DEGREE,');
-  SQLQuery1.SQL.Add('            CL.UNIVERSITY_GPA,');
-  SQLQuery1.SQL.Add('            CL.ACADEMIC_AWARDS_FLG,');
-  SQLQuery1.SQL.Add('            CL.PUBLICATION_FLG,');
-  SQLQuery1.SQL.Add('            CL.STUDIED_ABROAD_FLG,');
-  SQLQuery1.SQL.Add('            CL.STUDIED_ABROAD_PLACE,');
-  SQLQuery1.SQL.Add('            CL.USE_ENGLISH_AT_WORK_FLG,');
-  SQLQuery1.SQL.Add('            CL.FUTURE_GOAL,');
-  SQLQuery1.SQL.Add('            CL.CLIENT_MEMO,');
-  SQLQuery1.SQL.Add('            CL.COUNSELOR_MEMO,');
-  SQLQuery1.SQL.Add('            MAX(T.TOTAL) TOEFL,');
-  SQLQuery1.SQL.Add('            MAX(G.TOTAL) GMAT');
-  SQLQuery1.SQL.Add('    FROM');
-  SQLQuery1.SQL.Add('        CLIENT CL');
-  SQLQuery1.SQL.Add('    LEFT JOIN CLIENT_TOEFL T ON CL.CLIENT_ID = T.CLIENT_ID');
-  SQLQuery1.SQL.Add('    LEFT JOIN CLIENT_GMAT G ON CL.CLIENT_ID = G.CLIENT_ID');
-  SQLQuery1.SQL.Add('    GROUP BY CL.CLIENT_ID) C');
+  sl := TStringList.Create;
+  sl.Add('SELECT ');
+  sl.Add('    C.CLIENT_ID,C.FIRST_NAME, C.LAST_NAME, C.EMAIL_ADDRESS, C.TOEFL, C.GMAT');
+  sl.Add('FROM');
+  sl.Add('    (SELECT ');
+  sl.Add('            CL.CLIENT_ID,');
+  sl.Add('            CL.LAST_NAME,');
+  sl.Add('            CL.FIRST_NAME,');
+  sl.Add('            CL.MIDDLE_NAME,');
+  sl.Add('            CL.EMAIL_ADDRESS,');
+  sl.Add('            CL.WORK_PLACE,');
+  sl.Add('            CL.SPONSORED_FLG,');
+  sl.Add('            CL.UNIVERSITY_NAME,');
+  sl.Add('            CL.UNIVERSITY_MAJOR,');
+  sl.Add('            CL.UNIVERSITY_DEGREE,');
+  sl.Add('            CL.UNIVERSITY_GPA,');
+  sl.Add('            CL.ACADEMIC_AWARDS_FLG,');
+  sl.Add('            CL.PUBLICATION_FLG,');
+  sl.Add('            CL.STUDIED_ABROAD_FLG,');
+  sl.Add('            CL.STUDIED_ABROAD_PLACE,');
+  sl.Add('            CL.USE_ENGLISH_AT_WORK_FLG,');
+  sl.Add('            CL.FUTURE_GOAL,');
+  sl.Add('            CL.CLIENT_MEMO,');
+  sl.Add('            CL.COUNSELOR_MEMO,');
+  sl.Add('            MAX(T.TOTAL) TOEFL,');
+  sl.Add('            MAX(G.TOTAL) GMAT');
+  sl.Add('    FROM');
+  sl.Add('        CLIENT CL');
+  sl.Add('    LEFT JOIN CLIENT_TOEFL T ON CL.CLIENT_ID = T.CLIENT_ID');
+  sl.Add('    LEFT JOIN CLIENT_GMAT G ON CL.CLIENT_ID = G.CLIENT_ID');
+  sl.Add('    GROUP BY CL.CLIENT_ID) C');
+  result := sl.Text;
+  sl.Free;
 end;
 
 
-procedure TClientSearchframe.createWhere;
+function TClientSearchframe.createWhere: String;
   procedure _checkforand(sl: TstringList);
   begin
     if sl.Count > 0 then sl.Add(' AND ');
@@ -309,14 +313,12 @@ begin
     end;
   end;
   if sl.Count > 0 then begin
-    SQLQuery1.SQL.Add(' WHERE ');
-    for i := 0 to sl.Count -1 do begin
-      SQLQuery1.SQL.Add(sl[i]);
-    end;
-  end;
+    sl.Insert(0,' WHERE ');
+    result := sl.Text;
+  end else result := '';
   if m_DebugMode then begin
     Memo1.Lines.Clear;
-    Memo1.Lines := SQLQuery1.SQL;
+    Memo1.Lines := sl;
   end;
   sl.Free;
 end;
@@ -326,12 +328,12 @@ begin
   inherited;
   try
     if not hasData then exit;
-    frmClientDialog := TfrmClientCarteDlg.Create(Self);
+    frmClientDialog := TfrmClientCarteDlg.Create(Self, Accessor);
     frmClientDialog.g_OpenMode := omModify;
     frmClientDialog.SchoolList := cmbSchoolName.Items;
     frmClientDialog.slSchoolId := slSchoolId;
     frmClientDialog.g_ClientId := StrToIntDef(DBGrid1.Fields[0].Text,-1);
-    frmClientDialog.initialize(omModify,SQLQuery1.SQLConnection);
+    frmClientDialog.initialize(omModify);
     frmClientDialog.g_DebugMode := m_DebugMode;
     if frmClientDialog.ShowModal = mrOk then btnLoadClick(self);
   finally
@@ -346,11 +348,11 @@ begin
   try
     slSchoolId.Add('-1');
     cmbSchoolName.Items.Add('All');
-    cdsSchoolName.Open;
-    for i := 0 to sqlqSchoolName.RecordCount  -1 do begin
-      slSchoolId.Add(cdsSchoolName.Fields[0].AsString);
-      cmbSchoolName.Items.Add(cdsSchoolName.Fields[1].AsString);
-      cdsSchoolName.Next;
+    loadQuery('SELECT SCHOOL_ID, SCHOOL_NAME FROM SCHOOL');
+    for i := 0 to cDataSet.RecordCount  -1 do begin
+      slSchoolId.Add(cDataSet.Fields[0].AsString);
+      cmbSchoolName.Items.Add(cDataSet.Fields[1].AsString);
+      cDataSet.Next;
     end;
     cmbSponsored.ItemIndex := 0;
     cmbAcademicAward.ItemIndex := 0;
@@ -407,7 +409,7 @@ begin
   try
     slRecepient.Add(DBGrid1.Fields[1].Text + ' ' + DBGrid1.Fields[2].Text);
     slAddress.Add(DBGrid1.Fields[3].Text);
-    frmMailDialog := TMailDlgframe.Create(Self);
+    frmMailDialog := TMailDlgframe.Create(Self, Accessor);
     frmMailDialog.setRecepient(slRecepient,slAddress);
     frmMailDialog.ShowModal;
   finally

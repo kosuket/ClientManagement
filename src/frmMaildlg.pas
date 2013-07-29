@@ -8,7 +8,7 @@ uses
   IdBaseComponent, IdComponent, IdTCPConnection, IdTCPClient,
   IdExplicitTLSClientServerBase, IdMessageClient, IdSMTPBase, IdSMTP,
   Vcl.StdCtrls, Vcl.ComCtrls, Vcl.ExtCtrls, Vcl.Grids, Vcl.Buttons, Data.DB,
-  Data.SqlExpr, IdMessage, IdSSLOpenSSL, IdAttachmentFile;
+  Data.SqlExpr, IdMessage, IdSSLOpenSSL, IdAttachmentFile, MySQLAccessor;
 
 type
   TMailDlgframe = class(TFWSQLBaseDialogframe)
@@ -40,7 +40,7 @@ type
   public
     { Public declarations }
     mailTo: String;
-    constructor create(AOwner: TComponent); override;
+    constructor create(AOwner:TComponent; Accessor: TMySQLAccessor); reintroduce; overload; override;
     destructor Destroy; override;
     procedure setRecepient(slR:TStringList;slA:TStringList);
     function checkConnection: Boolean;
@@ -163,7 +163,7 @@ begin
   end;
 end;
 
-constructor TMailDlgframe.create(AOwner: TComponent);
+constructor TMailDlgframe.create(AOwner: TComponent; Accessor: TMySQLAccessor);
 begin
   inherited;
   slAttachment := TStringList.Create;
