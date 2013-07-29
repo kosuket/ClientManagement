@@ -354,6 +354,7 @@ begin
       cmbSchoolName.Items.Add(cDataSet.Fields[1].AsString);
       cDataSet.Next;
     end;
+    cDataSet.Close;
     cmbSponsored.ItemIndex := 0;
     cmbAcademicAward.ItemIndex := 0;
     cmbPublication.ItemIndex := 0;

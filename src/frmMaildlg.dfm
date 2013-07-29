@@ -1,6 +1,7 @@
 inherited MailDlgframe: TMailDlgframe
   Caption = 'MailDlgframe'
   ClientHeight = 509
+  ExplicitWidth = 434
   ExplicitHeight = 547
   PixelsPerInch = 96
   TextHeight = 13
@@ -67,6 +68,8 @@ inherited MailDlgframe: TMailDlgframe
         Height = 22
         Align = alTop
         BevelOuter = bvNone
+        Color = clCream
+        ParentBackground = False
         TabOrder = 0
         object lblSubject: TLabel
           Left = 0
@@ -92,35 +95,41 @@ inherited MailDlgframe: TMailDlgframe
           Height = 22
           Align = alClient
           TabOrder = 0
-          ExplicitHeight = 21
+          ExplicitWidth = 367
         end
       end
       object memoContents: TRichEdit
         Left = 0
-        Top = 44
+        Top = 49
         Width = 416
-        Height = 388
+        Height = 383
         Align = alClient
         BevelInner = bvNone
         BorderStyle = bsNone
         ScrollBars = ssBoth
         TabOrder = 1
+        ExplicitTop = 44
+        ExplicitHeight = 388
       end
       object pnlAttachment: TPanel
         Left = 0
         Top = 22
         Width = 416
-        Height = 22
+        Height = 27
         Align = alTop
-        BevelInner = bvRaised
+        BevelOuter = bvNone
+        Color = clCream
+        ParentBackground = False
         TabOrder = 2
+        DesignSize = (
+          416
+          27)
         object btnAttach: TSpeedButton
-          Left = 2
-          Top = 2
+          Left = 50
+          Top = 5
           Width = 19
           Height = 18
           Hint = 'Attach File'
-          Align = alLeft
           Glyph.Data = {
             96060000424D9606000000000000360000002800000016000000180000000100
             18000000000060060000C40E0000C40E00000000000000000000FEFEFEFFFFFF
@@ -179,74 +188,47 @@ inherited MailDlgframe: TMailDlgframe
           ShowHint = True
           OnClick = btnAttachClick
         end
-        object btnDelete: TSpeedButton
-          Left = 21
-          Top = 2
-          Width = 19
-          Height = 18
+        object lblAttatch: TLabel
+          Left = 0
+          Top = 0
+          Width = 50
+          Height = 27
           Align = alLeft
-          Glyph.Data = {
-            0E060000424D0E06000000000000360000002800000016000000160000000100
-            180000000000D8050000C40E0000C40E00000000000000000000FFFFFFFFFFFF
-            FFFFFFFEFEFEFFFFFFFFFFFFFFFFFFFDFDFDFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFAC1C2E28283C84443ADF1F5FDFFFFFFFFFFFFFFFFFFFFFFFF0000FFFF
-            FFFFFFFFFFFFFFFEFEFEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD8DAE89192D34E
-            4EBD0606A30000950000960000940000922B32ADC9C9D2FFFFFFFDFDFDFFFFFF
-            0000FFFFFFFFFFFFFFFFFFFFFFFFFAFAF7B2B5E06D6DCF2728BA0000A90000AB
-            0000A80000AA0000AD0203B90103C40201D40000DF4147F000004CFFFFFFFFFF
-            FFFEFEFE0000F9F8F8898BD74948C90201B80000B30000B70000B70000B10C0E
-            AF0D12C31218C20D16CC1016D20208E20204DF0001DD0000DA2327E902046EF3
-            F4F4FFFFFFFEFEFE00000A09BF0000BF0000BB0000C30A0ECF0F19D91222E518
-            28E01729D81220D80D19D10B13CB1219CA1217D1070CDC0304DE0000DB0000DD
-            313AA3ADADC9FFFFFFFEFEFE00001A18C50000C81A32EF1E36F01933EE1831ED
-            172AED091CE50418D71E29CF4F59D5767ED90810D11016D90409E00408DD0002
-            D90000DE3E45C16C6BABFFFFFFFEFEFE00005A5AD30308D6213FF21B39EF1E37
-            EF1932EE2037EBB0B7E6F0F2FAFFFFF9D7D4E7E7E8F33440E30E16D7050DE103
-            0BDD0406DD0000DA454EDD26248AFFFFFFFEFEFE00009B99E20000CC2645F721
-            3FF3213EF21B37F0354EEAD1D4EFAAB2F1333FD4C3C5E14E59D6B4B6F0040FDA
-            070EE1040BDF0307DE0000DB3C44EC00007EFFFFFFFFFFFF0000D7D9EF0000C9
-            2748F42648F52344F4203FF2203EEBCED3F37482ED7782E8C6CBE62431D7FDFD
-            F70C16D7070FE30003DC0405DE0002DB0F12DB1B23A3DEDDE9FFFFFF0000FFFF
-            FF0000C81E38EC2951F6284BF52548F41336EFE6E8F64F62E6ACB4EB858EEA8C
-            93EA9A9FE5616AE70000DED7D8F1191CD90000DC0000DA3A45C09997CEFFFFFF
-            0000FFFFFF1F1CD41121E7315BFC2B51F9294CF71135F1F3F3F92B46E5FBFAFB
-            273BE4FFFFFA1625DDD9DAF00000D9E2E2F20000DD282CE44546EA5E6BDD5150
-            B7FFFFFF0000FFFFFF6160DE0000DD2F5EFE2852F8244AF70931F4E2E4F63048
-            E6FFFFFE929CE8FFFFFDFFFFFAEAEFF69094EAC7CDF05F64EF6268ED5B5DF081
-            8AF30A09A4FFFFFF0000FFFFFFC8CDF1424BE779A0FC7193FA6F8FF86382F7E6
-            E8F7FFFFFCDBE0F6B3BCF48590EF626FF14752F1EBF0F6FFFFFC5D5FEB5B60EE
-            595CF07980F30000ACFFFFFE0000FFFFFEF3F7F74550E87C9AF97E9FFD7B99FA
-            7891FC738BF7647CF56375F5DFE2F599A4F25A6AF4707BEDEBECF46670EB5C61
-            F05C60EE5B5EEF5F60EE3239CCD0CEEB0000FFFEFEFFFFFF505CE46C83F57B99
-            FD7893FA768EFA748BFA6B81F8A9B3F0FFFFFEFFFFF9636EF1C5CBF29DA3F056
-            60F05E63F05D61EE5A5DEF5A5BEF555EDB8E8DDD0000FEFEFEFFFFFF7F88E75D
-            6EEE7A96FB758EFA748CFA7087F8677CF87D8CF4FFFFFC8C95EE606CF19EA6F2
-            6068EF6167F05E63F05C61EE5B5DEE5857ED747FE9514ED20000FEFEFEFFFFFE
-            AFB3F04E5AE67A94FD748BFA7D92F4798CF593A3F3FFFFF9D1D6F35A68F36672
-            F45E69F25F6AEF6167F05D62EE595DEE5B5AEF5957EF9BAAF30C0CCD0000FEFE
-            FEFFFFFFDCDEF2434EE2748CF97288F77286F5A7B3F3BAC2F48997F15A6BF268
-            73F4636EF2606AF16369F66368F36C72F3818DF57078E55561D90E0FC60606C8
-            0000FEFEFEFFFFFEFFFFFD464CDC6A7AF37184F76E81F66778F76373F56775F8
-            6B78F96D7AF87F8BFC7786F05D68D63E49C1141AB00000A00000A0110FB55859
-            CDECECF10000FEFEFEFFFFFFFFFFFF6269DC606AED7386FD7384FC7B8BFF8191
-            FF6876E24855C5282DAA0000900000840000892826AB7474C6C1C3E0FFFFFFFF
-            FFFFFFFFFFFFFFFF0000FEFEFEFEFEFEFFFFFFCACCEB444BD0555FD3343BB10B
-            0D8F00007200007200007D3E3DA28A8CC6D6D6E8FFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFEFEFEFEFEFEFEFEFE0000FFFFFFFFFFFFFFFFFFFFFFFFB3B3CE000077
-            21218C6868B0ADAED1F1F2F3FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000}
-          ParentShowHint = False
-          ShowHint = True
-          OnClick = btnDeleteClick
+          Alignment = taCenter
+          AutoSize = False
+          Caption = 'Attatch'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Georgia'
+          Font.Style = []
+          ParentFont = False
+          Layout = tlCenter
+          ExplicitLeft = 8
         end
         object lbAttachment: TListBox
-          Left = 50
-          Top = 0
-          Width = 366
+          Left = 71
+          Top = 3
+          Width = 344
           Height = 22
+          Anchors = [akLeft, akTop, akRight, akBottom]
+          BevelInner = bvNone
+          BevelOuter = bvNone
+          BorderStyle = bsNone
+          Color = clCream
           ItemHeight = 13
+          PopupMenu = PopupMenu1
           TabOrder = 0
+          OnKeyDown = lbAttachmentKeyDown
         end
+      end
+      object ProgressBar1: TProgressBar
+        Left = 128
+        Top = 160
+        Width = 150
+        Height = 17
+        TabOrder = 3
+        Visible = False
       end
     end
   end
@@ -273,5 +255,14 @@ inherited MailDlgframe: TMailDlgframe
   object OpenDialog1: TOpenDialog
     Left = 280
     Top = 1
+  end
+  object PopupMenu1: TPopupMenu
+    Left = 305
+    Top = 114
+    object pmDeleteAttachment: TMenuItem
+      Caption = 'Detach'
+      Enabled = False
+      OnClick = pmDeleteAttachmentClick
+    end
   end
 end

@@ -24,8 +24,6 @@ type
     edtLastDate: TDateTimePicker;
     grdBilling: TStringGrid;
     grdCounseling: TStringGrid;
-    dspBilling: TDataSetProvider;
-    cdsBilling: TClientDataSet;
     pnlBillSummary: TPanel;
     lblTotalCharge: TLabel;
     edtTotalCharge: TStaticText;

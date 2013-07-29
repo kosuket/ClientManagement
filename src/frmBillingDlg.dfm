@@ -44,6 +44,8 @@ inherited BillingDialogframe: TBillingDialogframe
       Height = 546
       Align = alLeft
       BevelOuter = bvNone
+      Color = clCream
+      ParentBackground = False
       TabOrder = 1
     end
     object pnlGrid: TPanel
@@ -79,6 +81,7 @@ inherited BillingDialogframe: TBillingDialogframe
           Width = 485
           Height = 200
           Align = alClient
+          FixedColor = clCream
           FixedCols = 0
           TabOrder = 0
         end
@@ -89,6 +92,8 @@ inherited BillingDialogframe: TBillingDialogframe
           Height = 33
           Align = alBottom
           BevelOuter = bvNone
+          Color = clCream
+          ParentBackground = False
           TabOrder = 1
           object lblTotalCharge: TLabel
             Left = 9
@@ -143,6 +148,7 @@ inherited BillingDialogframe: TBillingDialogframe
           Height = 277
           Align = alClient
           ColCount = 6
+          FixedColor = clCream
           FixedCols = 0
           TabOrder = 0
           ColWidths = (
@@ -161,6 +167,8 @@ inherited BillingDialogframe: TBillingDialogframe
         Height = 33
         Align = alTop
         BevelOuter = bvNone
+        Color = clCream
+        ParentBackground = False
         TabOrder = 2
         object lblPeriod: TLabel
           Left = 8
@@ -256,15 +264,5 @@ inherited BillingDialogframe: TBillingDialogframe
         end
       end
     end
-  end
-  object dspBilling: TDataSetProvider
-    DataSet = SQLQuery1
-    Left = 418
-  end
-  object cdsBilling: TClientDataSet
-    Aggregates = <>
-    Params = <>
-    ProviderName = 'dspBilling'
-    Left = 448
   end
 end

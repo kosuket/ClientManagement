@@ -8,7 +8,8 @@ uses
   IdBaseComponent, IdComponent, IdTCPConnection, IdTCPClient,
   IdExplicitTLSClientServerBase, IdMessageClient, IdSMTPBase, IdSMTP,
   Vcl.StdCtrls, Vcl.ComCtrls, Vcl.ExtCtrls, Vcl.Grids, Vcl.Buttons, Data.DB,
-  Data.SqlExpr, IdMessage, IdSSLOpenSSL, IdAttachmentFile, MySQLAccessor;
+  Data.SqlExpr, IdMessage, IdSSLOpenSSL, IdAttachmentFile, MySQLAccessor,
+  Vcl.Menus;
 
 type
   TMailDlgframe = class(TFWSQLBaseDialogframe)
@@ -26,17 +27,23 @@ type
     OpenDialog1: TOpenDialog;
     pnlAttachment: TPanel;
     btnAttach: TSpeedButton;
-    btnDelete: TSpeedButton;
     lbAttachment: TListBox;
+    PopupMenu1: TPopupMenu;
+    pmDeleteAttachment: TMenuItem;
+    lblAttatch: TLabel;
+    ProgressBar1: TProgressBar;
     procedure btnSendClick(Sender: TObject);
     procedure sgRecepientSetEditText(Sender: TObject; ACol, ARow: Integer;
       const Value: string);
     procedure btnAttachClick(Sender: TObject);
-    procedure btnDeleteClick(Sender: TObject);
+    procedure lbAttachmentKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure pmDeleteAttachmentClick(Sender: TObject);
   private
     { Private declarations }
     slAttachment: TStringList;
     procedure cleanAttachFolder;
+    procedure deleteAttachment;
   public
     { Public declarations }
     mailTo: String;
@@ -54,19 +61,6 @@ uses frmMain;
 
 {$R *.dfm}
 
-procedure TMailDlgframe.btnDeleteClick(Sender: TObject);
-begin
-  inherited;
-  if lbAttachment.Items.Count > 0 then begin
-    if lbAttachment.ItemIndex = -1 then begin
-      ShowMessage('File Not Selected');
-      exit;
-    end;
-    DeleteFile('Attach\' + lbAttachment.Items[lbAttachment.ItemIndex]);
-    lbAttachment.Items.Delete(lbAttachment.ItemIndex);
-  end;
-end;
-
 procedure TMailDlgframe.btnSendClick(Sender: TObject);
 var
   subject, body: string;
@@ -77,40 +71,48 @@ var
 begin
   inherited;
   if MessageDlg('Send This Message?',mtConfirmation,[mbYes,mbNo],0,mbYes) <> mrYes then exit;
+  progressbar1.Visible := True;
   IdSMTP := TIdSMTP.Create(nil);
   IdSMTP.Port      := Mainframe.g_MailPort;  //OPB25
   IdSMTP.Host      := Mainframe.g_MailHost;
   IdSMTP.Username  := Mainframe.g_MailUserName;
   IdSMTP.Password  := Mainframe.g_MailPassword;
-
+  progressbar1.Position := 10;
   subject := edtSubject.Text;
   mailTo  := sgRecepient.Cols[1].CommaText;
-
+  progressbar1.Position := 20;
   body    := memoContents.Lines.Text;
 
   msg := TIdMessage.Create(IdSmtp);
   SSL := TIdSSLIOHandlerSocketOpenSSL.Create;
+  progressbar1.Position := 30;
   try
     SSL.Host := IdSMTP.Host;
     SSL.Port := IdSMTP.Port;
     SSL.Destination := SSL.Host + ':' + IntToStr(SSL.Port);
     IdSMTP.IOHandler := SSL;
     IdSMTP.UseTLS := utUseExplicitTLS;
+    progressbar1.Position := 40;
     IdSmtp.Connect;
+    progressbar1.Position := 50;
     msg.Subject := subject;
     msg.Recipients.EMailAddresses := mailto;
     msg.From.Text := Mainframe.g_MailFrom;
     msg.Body.Text := body;
     msg.ContentType := 'multipart/mixed';
     for i  := 0 to lbAttachment.Items.Count -1 do TIdAttachmentFile.Create(Msg.MessageParts, lbAttachment.Items[i]).FileIsTempFile := True;
+    progressbar1.Position := 60;
     IdSmtp.Send(msg);
+    progressbar1.Position := 80;
     IdSmtp.Disconnect ;
+    progressbar1.Position := 100;
     ShowMessage('Message Sent');
     ModalResult := mrOK;
   finally
     msg.Free;
     SSL.Free;
     IdSMTP.Free;
+    progressbar1.Visible := False;
   end;
 end;
 
@@ -170,10 +172,39 @@ begin
   cleanAttachFolder;
 end;
 
+procedure TMailDlgframe.deleteAttachment;
+begin
+  if lbAttachment.Items.Count > 0 then begin
+    if lbAttachment.ItemIndex = -1 then begin
+      ShowMessage('File Not Selected');
+      exit;
+    end;
+    if MessageDlg('Detach the file ' + '''' + lbAttachment.Items[lbAttachment.ItemIndex] + '''' + '?',mtConfirmation,[mbYes,mbNo],0,mbYes) <> mrYes then exit;
+    DeleteFile('Attach\' + lbAttachment.Items[lbAttachment.ItemIndex]);
+    lbAttachment.Items.Delete(lbAttachment.ItemIndex);
+  end;
+  if lbAttachment.Items.Count = 0 then pmDeleteAttachment.Enabled := False;
+end;
+
 destructor TMailDlgframe.Destroy;
 begin
   cleanAttachFolder;
   inherited;
+end;
+
+procedure TMailDlgframe.lbAttachmentKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  inherited;
+  if (Key = VK_BACK) OR (Key = VK_DELETE) then begin
+    deleteAttachment;
+  end;
+end;
+
+procedure TMailDlgframe.pmDeleteAttachmentClick(Sender: TObject);
+begin
+  inherited;
+  deleteAttachment;
 end;
 
 procedure TMailDlgframe.setRecepient(slR:TStringList;slA:TStringList);
@@ -208,6 +239,7 @@ begin
     end;
     CopyFile(PChar(OpenDialog1.FileName),PChar('Attach\' + ExtractFileName(OpenDialog1.FileName)),False);
     lbAttachment.Items.Add(ExtractFileName(OpenDialog1.FileName));
+    pmDeleteAttachment.Enabled := True;
   end;
 end;
 
