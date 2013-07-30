@@ -21,7 +21,8 @@ uses
   DBEditFrm in '..\External\DatabaseEditor\Src\DBEditFrm.pas' {FrmDBEdit},
   TableListFrm in '..\External\DatabaseEditor\Src\TableListFrm.pas' {FrmTableList},
   frmBillingDlg in 'frmBillingDlg.pas' {BillingDialogframe},
-  frmCounseling in 'frmCounseling.pas' {Counselingframe};
+  frmCounseling in 'frmCounseling.pas' {Counselingframe},
+  frmCounselingDlg in 'frmCounselingDlg.pas' {CounselingDialogframe};
 
 {$R *.res}
 

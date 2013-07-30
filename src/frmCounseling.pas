@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, FWGridBasefrm, Vcl.AppEvnts,
   Vcl.StdCtrls, Vcl.Imaging.jpeg, Vcl.ExtCtrls, Vcl.Grids, Vcl.DBGrids,
-  Vcl.ComCtrls, Vcl.Buttons;
+  Vcl.ComCtrls, Vcl.Buttons, frmCounselingDlg;
 
 type
   TCounselingframe = class(TFWGridBaseframe)
@@ -28,6 +28,7 @@ type
     btnAdd: TSpeedButton;
     procedure btnClearClick(Sender: TObject);
     procedure cmbPeriodChange(Sender: TObject);
+    procedure btnAddClick(Sender: TObject);
   private
     { Private declarations }
     procedure clearCond(ctrl:TWinControl);
@@ -37,6 +38,7 @@ type
     function createWhere: String;  override;
   public
     { Public declarations }
+    frmCounselingDialog: TCounselingDialogframe;
     procedure initialize; override;
   end;
 
@@ -54,6 +56,18 @@ implementation
 {$R *.dfm}
 
 { TCounselingframe }
+
+procedure TCounselingframe.btnAddClick(Sender: TObject);
+begin
+  inherited;
+  try
+    frmCounselingDialog := TCounselingDialogframe.Create(Self, Accessor);
+    frmCounselingDialog.initialize(omNew);
+    frmCounselingDialog.ShowModal;
+  finally
+    frmCounselingDialog.Destroy;
+  end;
+end;
 
 procedure TCounselingframe.btnClearClick(Sender: TObject);
 begin

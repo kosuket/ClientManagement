@@ -158,6 +158,7 @@ inherited Counselingframe: TCounselingframe
           Layout = blGlyphBottom
           ParentShowHint = False
           ShowHint = True
+          OnClick = btnAddClick
         end
       end
       object pnlCounseling: TPanel
