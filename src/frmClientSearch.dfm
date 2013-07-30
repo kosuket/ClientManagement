@@ -3,7 +3,6 @@ inherited ClientSearchframe: TClientSearchframe
   ClientHeight = 595
   ClientWidth = 1158
   Position = poScreenCenter
-  ExplicitLeft = -178
   ExplicitWidth = 1174
   ExplicitHeight = 633
   PixelsPerInch = 96
@@ -23,9 +22,9 @@ inherited ClientSearchframe: TClientSearchframe
       Top = 188
       Width = 1158
       Height = 407
-      ExplicitTop = 174
+      ExplicitTop = 188
       ExplicitWidth = 1158
-      ExplicitHeight = 421
+      ExplicitHeight = 407
       inherited DBGrid1: TDBGrid
         Width = 1158
         Height = 407
@@ -44,7 +43,7 @@ inherited ClientSearchframe: TClientSearchframe
       inherited pnlCondBar: TPanel
         Top = 150
         Width = 1158
-        ExplicitTop = 136
+        ExplicitTop = 150
         ExplicitWidth = 1158
         inherited Image1: TImage
           Width = 1158
@@ -237,12 +236,9 @@ inherited ClientSearchframe: TClientSearchframe
         ParentFont = False
         Style = tsFlatButtons
         TabOrder = 1
-        ExplicitTop = 35
-        ExplicitHeight = 101
         object tbSchoolScore: TTabSheet
           Caption = 'Schools and Scores'
           ImageIndex = 1
-          ExplicitHeight = 69
           object pnlSchoolScore: TPanel
             Left = 0
             Top = 0
@@ -253,7 +249,6 @@ inherited ClientSearchframe: TClientSearchframe
             Color = clCream
             ParentBackground = False
             TabOrder = 0
-            ExplicitHeight = 69
             object lblSchool: TLabel
               Left = 8
               Top = 13
@@ -399,7 +394,6 @@ inherited ClientSearchframe: TClientSearchframe
         end
         object tbBasic: TTabSheet
           Caption = 'Basic Info'
-          ExplicitHeight = 82
           object ScrollBox1: TScrollBox
             Left = 0
             Top = 0
@@ -418,7 +412,6 @@ inherited ClientSearchframe: TClientSearchframe
             BevelOuter = bvNone
             BorderStyle = bsNone
             TabOrder = 0
-            ExplicitHeight = 82
             object pnlBasic: TPanel
               Left = 0
               Top = 0

@@ -10,8 +10,8 @@ inherited Billingframe: TBillingframe
     inherited Panel2: TPanel
       Top = 159
       Height = 280
-      ExplicitTop = 140
-      ExplicitHeight = 299
+      ExplicitTop = 159
+      ExplicitHeight = 280
       inherited DBGrid1: TDBGrid
         Height = 280
         PopupMenu = pmGrid
@@ -23,7 +23,7 @@ inherited Billingframe: TBillingframe
       ExplicitHeight = 156
       inherited pnlCondBar: TPanel
         Top = 121
-        ExplicitTop = 102
+        ExplicitTop = 121
         inherited btnLoad: TButton
           Left = 8
           Anchors = [akLeft, akBottom]
@@ -112,8 +112,6 @@ inherited Billingframe: TBillingframe
         DockSite = True
         ParentBackground = False
         TabOrder = 1
-        ExplicitTop = 22
-        ExplicitHeight = 80
         object lblPeriod: TLabel
           Left = 8
           Top = 13
@@ -160,7 +158,7 @@ inherited Billingframe: TBillingframe
           Layout = tlBottom
         end
         object lblLastName: TLabel
-          Left = 294
+          Left = 221
           Top = 45
           Width = 95
           Height = 21
@@ -227,7 +225,7 @@ inherited Billingframe: TBillingframe
         object edtFirstName: TEdit
           Left = 95
           Top = 45
-          Width = 182
+          Width = 104
           Height = 22
           Font.Charset = ANSI_CHARSET
           Font.Color = clWindowText
@@ -238,9 +236,9 @@ inherited Billingframe: TBillingframe
           TabOrder = 3
         end
         object edtLastName: TEdit
-          Left = 389
+          Left = 316
           Top = 45
-          Width = 182
+          Width = 125
           Height = 22
           Font.Charset = ANSI_CHARSET
           Font.Color = clWindowText
