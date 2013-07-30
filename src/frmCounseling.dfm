@@ -7,10 +7,13 @@ inherited Counselingframe: TCounselingframe
   inherited pnlBase: TPanel
     inherited Splitter1: TSplitter
       Top = 185
+      ExplicitTop = 185
     end
     inherited Panel2: TPanel
       Top = 188
       Height = 251
+      ExplicitTop = 188
+      ExplicitHeight = 251
       inherited DBGrid1: TDBGrid
         Height = 251
       end
@@ -20,6 +23,7 @@ inherited Counselingframe: TCounselingframe
       ExplicitHeight = 185
       inherited pnlCondBar: TPanel
         Top = 150
+        ExplicitTop = 150
         inherited btnLoad: TButton
           Left = 10
           Anchors = [akLeft, akBottom]
@@ -167,7 +171,6 @@ inherited Counselingframe: TCounselingframe
         DockSite = True
         ParentBackground = False
         TabOrder = 2
-        ExplicitHeight = 97
         object lblPeriod: TLabel
           Left = 8
           Top = 45

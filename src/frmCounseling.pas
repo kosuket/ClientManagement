@@ -42,7 +42,13 @@ type
 
 var
   Counselingframe: TCounselingframe;
-
+const
+  cmbDivCounselingType : Array[0..4] of String =(
+  '-1',
+  '1',
+  '2',
+  '3',
+  '4');
 implementation
 
 {$R *.dfm}
@@ -110,8 +116,12 @@ begin
           + '    CO.COUNSELING_DATE,'
           + '    CO.START_TIME,'
           + '    CO.END_TIME,'
-          + '    CO.COUNSELING_TYPE,'
-          + '    CONTENT_TYPE'
+          + '    CASE CO.COUNSELING_TYPE '
+          + '      WHEN 1 THEN "Face To Face" '
+          + '      WHEN 2 THEN "Skype" '
+          + '      WHEN 3 THEN "Email" '
+          + '      WHEN 4 THEN "Seminar" END "TYPE",'
+          + '    CO.CONTENT_TYPE'
           + ' FROM'
           + '    COUNSELING CO'
           + '        INNER JOIN'
@@ -138,6 +148,10 @@ begin
   if cmbPeriod.ItemIndex <> 0 then begin
     _checkforand(sl);
     sl.Add(' CO.COUNSELING_DATE BETWEEN ' + '''' + FormatDateTime('yyyy/mm/dd',edtFirstDate.Date) + '''' + ' AND ' + '''' + FormatDateTime('yyyy/mm/dd',edtLastDate.Date) + '''');
+  end;
+  if cmbCounselingType.ItemIndex <> cmbIndexAll then begin
+    _checkforand(sl);
+    sl.Add('CO.COUNSELING_TYPE = '  + cmbDivCounselingType[cmbCounselingType.ItemIndex]);
   end;
   if Length(edtContentType.Text) > 0 then begin
     _checkforand(sl);
