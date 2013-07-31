@@ -21,6 +21,7 @@ inherited FrmDBEdit: TFrmDBEdit
     Left = 64
     Top = 104
     Width = 249
+    PopupMenu = MainGridPopup
     OnKeyPress = MainGridKeyPress
   end
   object pnlDataList: TPanel
@@ -143,6 +144,17 @@ inherited FrmDBEdit: TFrmDBEdit
     object actExport: TAction
       Caption = 'actExport'
       OnExecute = actExportExecute
+    end
+    object actDuplicateRow: TAction
+      Caption = 'Duplicate Row'
+      OnExecute = actDuplicateRowExecute
+    end
+  end
+  object MainGridPopup: TPopupMenu
+    Left = 336
+    Top = 200
+    object miDuplRow: TMenuItem
+      Action = actDuplicateRow
     end
   end
 end

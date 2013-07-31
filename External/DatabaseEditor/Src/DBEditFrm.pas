@@ -5,7 +5,8 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, DBGridBaseFrm, Vcl.Grids, Vcl.DBGrids,
-  Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.Buttons, System.Actions, Vcl.ActnList;
+  Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.Buttons, System.Actions, Vcl.ActnList,
+  Vcl.Menus;
 
 type
   TFrmDBEdit = class(TFrmDBGridBase)
@@ -26,6 +27,9 @@ type
     actExport: TAction;
     btnExport: TSpeedButton;
     btnImport: TSpeedButton;
+    actDuplicateRow: TAction;
+    MainGridPopup: TPopupMenu;
+    miDuplRow: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure actCommitExecute(Sender: TObject);
     procedure actLoadExecute(Sender: TObject);
@@ -34,6 +38,7 @@ type
     procedure actImportExecute(Sender: TObject);
     procedure actExportExecute(Sender: TObject);
     procedure MainGridKeyPress(Sender: TObject; var Key: Char);
+    procedure actDuplicateRowExecute(Sender: TObject);
   private
     { Private declarations }
     EditedFlg: Boolean;
@@ -78,6 +83,12 @@ end;
 procedure TFrmDBEdit.actDeleteRowExecute(Sender: TObject);
 begin
   DeleteRow;
+  Edited := True;
+end;
+
+procedure TFrmDBEdit.actDuplicateRowExecute(Sender: TObject);
+begin
+  DuplicateRow;
   Edited := True;
 end;
 

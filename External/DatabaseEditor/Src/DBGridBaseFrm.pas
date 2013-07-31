@@ -24,6 +24,7 @@ type
     CDataSet: TClientDataSet;
     procedure AddRow;
     procedure DeleteRow;
+    procedure DuplicateRow;
     procedure Commit;
     procedure LoadQuery(Sql: string);
     procedure LoadTable(Table: string);
@@ -53,7 +54,6 @@ end;
 procedure TFrmDBGridBase.Commit;
 begin
   CDataSet.ApplyUpdates(0);
-  CDataSet.Close;
 end;
 
 constructor TFrmDBGridBase.Create(AOwner: TComponent; Accessor: TMySQLAccessor);
@@ -85,6 +85,24 @@ begin
   Provider.Free;
   DataSource.Free;
   inherited;
+end;
+
+procedure TFrmDBGridBase.DuplicateRow;
+var
+  i: Integer;
+  Originals: array of Variant;
+begin
+  SetLength(Originals, CDataSet.FieldCount);
+  // Get the values from current row
+  for i := 0 to CDataSet.FieldCount - 1 do begin
+    Originals[i] := CDataSet.Fields[i].Value;
+  end;
+  // Insert
+  CDataSet.Insert;
+  // Put in the values;
+  for i := 0 to CDataSet.FieldCount - 1 do begin
+    CDataSet.Fields[i].Value := Originals[i];
+  end;
 end;
 
 procedure TFrmDBGridBase.DeleteRow;
