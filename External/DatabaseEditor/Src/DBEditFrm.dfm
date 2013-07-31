@@ -21,6 +21,7 @@ inherited FrmDBEdit: TFrmDBEdit
     Left = 64
     Top = 104
     Width = 249
+    OnKeyPress = MainGridKeyPress
   end
   object pnlDataList: TPanel
     Left = 64

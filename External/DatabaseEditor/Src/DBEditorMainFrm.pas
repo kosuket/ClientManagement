@@ -86,7 +86,7 @@ end;
 
 function TFrmDBEditorMain.HasUnsavedChange: Boolean;
 begin
-  Result := DBEdit.HasUnsavedChange;
+  Result := DBEdit.Edited;
 end;
 
 function TFrmDBEditorMain.OkToLeaveTable: Boolean;
