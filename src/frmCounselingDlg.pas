@@ -113,6 +113,7 @@ const
   crStandard = 25200;
   crPeak = 28350;
   crPanic = 31500;
+  crSeminar = 5000;
 implementation
 
 {$R *.dfm}
@@ -143,15 +144,15 @@ function TCounselingDialogframe.bookCounseling: Boolean;
     clientId := StrToInt64Def(ClientIdList[idx],-1);
     pkgBillId := StrToInt64Def(ClientPkgBillIdList[idx],-1);
     alphaFlg := StrToIntDef(ClientAlphaList[idx],0);
+    standardFlg := StrToIntDef(ClientStandardList[idx],0);
     if pkgBillId <> -1 then billId := pkgBillId
                        else billId := getCurrentBillId(clientId) + 1;
     //Check
     //Insert Counseling
-
     Accessor.ExecuteUpdate(createInsertCounselingSQL(clientId,billId));
     restHour := calcCounselingHour;
     //Update Billing Request
-    if (cmbCounselingType.ItemIndex <> 3) AND ((pkgBillId <> -1) OR (alphaFlg <> 0)) then begin
+    if (cmbCounselingType.ItemIndex <> ctSeminar) AND ((pkgBillId <> -1) OR (alphaFlg <> 0)) then begin
       loadQuery('SELECT BILL_ID, BILLING_TYPE, TOTAL_HOUR - CURRENT_HOUR FROM BILLING_REQUEST WHERE CLIENT_ID = ' + IntToStr(clientId)
        + ' AND ((BILLING_TYPE = 4 AND TOTAL_HOUR - CURRENT_HOUR >0) OR (BILLING_TYPE = 3))');
       for i := 0 to CDataSet.RecordCount - 1 do begin
@@ -248,6 +249,10 @@ var rate: Double;
     hour: Double;
 begin
   result := 0;
+  if cmbCounselingType.ItemIndex = ctSeminar then begin
+    result := crSeminar;
+    exit;
+  end;
   //Basic Rule
   if cbPanicFee.Checked then rate := crPanic
   else if ((MonthOf(edtCounselingDate.Date) >= 12) AND (DayOf(edtCounselingDate.Date) >= 15))
