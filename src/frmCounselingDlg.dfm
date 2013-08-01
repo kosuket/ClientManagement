@@ -260,17 +260,15 @@ inherited CounselingDialogframe: TCounselingDialogframe
         Font.Height = -11
         Font.Name = 'Georgia'
         Font.Style = []
-        ItemIndex = 0
         ParentFont = False
         TabOrder = 0
-        Text = 'Face To Face'
         Items.Strings = (
           'Face To Face'
           'Skype'
           'Email'
           'Seminar')
       end
-      object edtCounselingDateDate: TDateTimePicker
+      object edtCounselingDate: TDateTimePicker
         Left = 127
         Top = 46
         Width = 104
@@ -284,14 +282,15 @@ inherited CounselingDialogframe: TCounselingDialogframe
         Font.Style = []
         ParentFont = False
         TabOrder = 1
+        OnChange = edtCounselingDateChange
       end
       object edtStartTime: TDateTimePicker
         Left = 329
         Top = 46
         Width = 89
         Height = 22
-        Date = 41485.788311620370000000
-        Time = 41485.788311620370000000
+        Date = 41485.000000000000000000
+        Time = 41485.000000000000000000
         DateMode = dmUpDown
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
@@ -301,14 +300,15 @@ inherited CounselingDialogframe: TCounselingDialogframe
         Kind = dtkTime
         ParentFont = False
         TabOrder = 2
+        OnChange = edtStartTimeChange
       end
       object edtEndTime: TDateTimePicker
         Left = 516
         Top = 46
         Width = 89
         Height = 22
-        Date = 41485.788311620370000000
-        Time = 41485.788311620370000000
+        Date = 41485.000000000000000000
+        Time = 41485.000000000000000000
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
         Font.Height = -11
@@ -317,6 +317,7 @@ inherited CounselingDialogframe: TCounselingDialogframe
         Kind = dtkTime
         ParentFont = False
         TabOrder = 3
+        OnChange = edtEndTimeChange
       end
       object edtContentType: TEdit
         Left = 128
@@ -345,6 +346,7 @@ inherited CounselingDialogframe: TCounselingDialogframe
         Font.Style = []
         ParentFont = False
         TabOrder = 5
+        OnClick = cbPanicFeeClick
       end
       object memoNextAction: TRichEdit
         Left = 127
@@ -481,6 +483,7 @@ inherited CounselingDialogframe: TCounselingDialogframe
         Font.Style = []
         ParentFont = False
         TabOrder = 0
+        OnChange = cmbPackageTypeChange
         Items.Strings = (
           'Alpha'
           'Standard')
@@ -500,7 +503,7 @@ inherited CounselingDialogframe: TCounselingDialogframe
         ParentFont = False
         TabOrder = 1
       end
-      object edtAmount: TEdit
+      object edtPackageAmount: TEdit
         Left = 135
         Top = 84
         Width = 96

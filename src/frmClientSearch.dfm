@@ -7,10 +7,13 @@ inherited ClientSearchframe: TClientSearchframe
   inherited pnlBase: TPanel
     inherited Splitter1: TSplitter
       Top = 126
+      ExplicitTop = 126
     end
     inherited Panel2: TPanel
       Top = 129
       Height = 310
+      ExplicitTop = 129
+      ExplicitHeight = 310
       inherited DBGrid1: TDBGrid
         Height = 310
         OnDblClick = DBGrid1DblClick
@@ -21,6 +24,7 @@ inherited ClientSearchframe: TClientSearchframe
       ExplicitHeight = 126
       inherited pnlCondBar: TPanel
         Top = 91
+        ExplicitTop = 91
         inherited btnLoad: TButton
           Left = 8
           ExplicitLeft = 8
@@ -36,9 +40,6 @@ inherited ClientSearchframe: TClientSearchframe
         Color = clCream
         ParentBackground = False
         TabOrder = 2
-        ExplicitTop = 0
-        ExplicitWidth = 1133
-        ExplicitHeight = 256
         object lblFirstName: TLabel
           Left = 8
           Top = 13

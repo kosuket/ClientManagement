@@ -120,7 +120,9 @@ begin
          '    BOOK_DATE,' +
          '    BILLING_TYPE,' +//To Do ‚ ‚Æ‚ÅDECODE‚ÅˆÓ–¡‚ª‚í‚©‚é‚æ‚¤‚É‚·‚é
          '    BOOK_AMOUNT,' +
-         '    MEMO' +
+         '    MEMO,' +
+         '    TOTAL_HOUR,' +
+         '    CURRENT_HOUR ' +
          ' FROM' +
          '    BILLING_REQUEST' +
          ' WHERE CLIENT_ID = ' + IntToStr(g_ClientId);
@@ -136,6 +138,8 @@ begin
     grdBilling.Cells[2,i] := cDataSet.Fields[2].AsString;
     grdBilling.Cells[3,i] := cDataSet.Fields[3].AsString;
     grdBilling.Cells[4,i] := cDataSet.Fields[4].AsString;
+    grdBilling.Cells[5,i] := cDataSet.Fields[5].AsString;
+    grdBilling.Cells[6,i] := cDataSet.Fields[6].AsString;
     amt := amt + StrToIntDef(grdBilling.Cells[3,i],0);
     cDataSet.Next;
   end;
@@ -183,7 +187,7 @@ procedure TBillingDialogframe.setupGrid;
 begin
   With grdBilling do begin
   RowCount := 2;
-    ColCount := 5;
+    ColCount := 7;
     Cells[0, 0] := 'BILL_ID';
     Cells[1, 0] := 'BOOK DATE';
     ColWidths[1] := 100;
@@ -193,6 +197,10 @@ begin
     ColWidths[3] := 80;
     Cells[4, 0] := 'MEMO';
     ColWidths[4] := 200;
+    Cells[5, 0] := 'TOTAL HOUR';
+    ColWidths[5] := 80;
+    Cells[6, 0] := 'CURRENT HOUR';
+    ColWidths[6] := 100;
   end;
   With grdCounseling do begin
   RowCount := 2;

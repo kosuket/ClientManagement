@@ -30,6 +30,10 @@ type
     g_SelectedClientId: Int64;
     g_SelectedFirstName: String;
     g_SelectedLastName: String;
+    g_SelectedPkgBillId: Int64;
+    g_SelectedAlphaFlg: Integer;
+    g_SelectedStandardFlg: Integer;
+    g_SelectedRestHour: Double;
   end;
 
 var
@@ -47,7 +51,7 @@ begin
   inherited;
   sl := TStringList.Create;
   sl.Add('SELECT ');
-  sl.Add('    C.CLIENT_ID,C.FIRST_NAME, C.LAST_NAME, C.EMAIL_ADDRESS, C.WORK_PLACE, C.SPONSORED_FLG, C.TOEFL, C.GMAT, C.UNIVERSITY_NAME');
+  sl.Add('    C.CLIENT_ID,C.FIRST_NAME, C.LAST_NAME, C.EMAIL_ADDRESS, C.WORK_PLACE, C.SPONSORED_FLG, C.TOEFL, C.GMAT, C.UNIVERSITY_NAME, C.ALPHA_FLG, C.STANDARD_FLG, C.BILL_ID, C.REST_HOUR');
   sl.Add('FROM');
   sl.Add('    (SELECT ');
   sl.Add('            CL.CLIENT_ID,');
@@ -69,12 +73,17 @@ begin
   sl.Add('            CL.FUTURE_GOAL,');
   sl.Add('            CL.CLIENT_MEMO,');
   sl.Add('            CL.COUNSELOR_MEMO,');
+  sl.Add('            CL.ALPHA_FLG,');
+  sl.Add('            CL.STANDARD_FLG,');
   sl.Add('            MAX(T.TOTAL) TOEFL,');
-  sl.Add('            MAX(G.TOTAL) GMAT');
+  sl.Add('            MAX(G.TOTAL) GMAT,');
+  sl.Add('            MIN(B.BILL_ID) BILL_ID,');
+  sl.Add('            SUM(B.TOTAL_HOUR - B.CURRENT_HOUR) REST_HOUR');
   sl.Add('    FROM');
   sl.Add('        CLIENT CL');
   sl.Add('    LEFT JOIN CLIENT_TOEFL T ON CL.CLIENT_ID = T.CLIENT_ID');
   sl.Add('    LEFT JOIN CLIENT_GMAT G ON CL.CLIENT_ID = G.CLIENT_ID');
+  sl.Add('    LEFT JOIN BILLING_REQUEST B ON CL.CLIENT_ID = B.CLIENT_ID AND ((B.BILLING_TYPE = 4 AND B.TOTAL_HOUR > B.CURRENT_HOUR) OR (B.BILLING_TYPE = 3))');
   sl.Add('    GROUP BY CL.CLIENT_ID) C');
   result := sl.Text;
   sl.Free;
@@ -113,6 +122,10 @@ begin
   g_SelectedClientId  := StrToInt64Def(DBGrid1.Fields[0].Text,-1);
   g_SelectedFirstName := DBGrid1.Fields[1].Text;
   g_SelectedLastName  := DBGrid1.Fields[2].Text;
+  g_SelectedAlphaFlg  := StrToIntDef(DBGrid1.Fields[9].Text,0);
+  g_SelectedStandardFlg := StrToIntDef(DBGrid1.Fields[10].Text,0);
+  g_SelectedPkgBillId := StrToInt64Def(DBGrid1.Fields[11].Text,-1);
+  g_SelectedRestHour  := StrToFloatDef(DBGrid1.Fields[12].Text,0);
   ModalResult := mrOk;
 end;
 

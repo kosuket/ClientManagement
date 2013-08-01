@@ -185,9 +185,7 @@ begin
     if hasRecord(grdGMAT) then Accessor.ExecuteUpdate(createInsertGMATSQL);
     //Delete Insert TOEFL
     Accessor.ExecuteUpdate(createDeleteTOEFLSQL);
-    if hasRecord(grdTOEFL) then begin
-      Accessor.ExecuteUpdate(createInsertTOEFLSQL);
-    end;
+    if hasRecord(grdTOEFL) then Accessor.ExecuteUpdate(createInsertTOEFLSQL);
     Accessor.CommitFreeAndNil(tran);
     result := '';
   except
