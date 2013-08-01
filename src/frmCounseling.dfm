@@ -1,7 +1,5 @@
 inherited Counselingframe: TCounselingframe
   Caption = 'Counselingframe'
-  ExplicitWidth = 767
-  ExplicitHeight = 477
   PixelsPerInch = 96
   TextHeight = 13
   inherited pnlBase: TPanel

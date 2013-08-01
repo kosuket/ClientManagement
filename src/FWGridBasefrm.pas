@@ -40,6 +40,7 @@ type
     procedure loadQuery(sql: String); virtual;
     //グリッドメソッド
     function hasData: Boolean; virtual;
+    procedure afterLoadProc;virtual;
   public
     { Public declarations }
     //SQLQuery1: TSQLQuery;
@@ -123,6 +124,11 @@ begin
       DBGrid1.DataSource.DataSet.Next;
     end;
   end;
+end;
+
+procedure TFWGridBaseframe.afterLoadProc;
+begin
+  //継承先で
 end;
 
 procedure TFWGridBaseframe.btnLoadClick(Sender: TObject);

@@ -36,6 +36,8 @@ type
     //SQLê∂ê¨ä÷åW
     function createSQLFix: String;  override;
     function createWhere: String;  override;
+    //ÉOÉäÉbÉhä÷åW
+    procedure afterLoadProc; override;
   public
     { Public declarations }
     frmCounselingDialog: TCounselingDialogframe;
@@ -56,6 +58,12 @@ implementation
 {$R *.dfm}
 
 { TCounselingframe }
+
+procedure TCounselingframe.afterLoadProc;
+begin
+  inherited;
+  DBGrid1.Columns[0].Visible := false;
+end;
 
 procedure TCounselingframe.btnAddClick(Sender: TObject);
 begin

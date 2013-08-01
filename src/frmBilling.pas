@@ -37,6 +37,7 @@ type
     //SQLê∂ê¨ä÷åW
     function createSQLFix: String;  override;
     function createWhere: String;  override;
+    procedure afterLoadProc; override;
   public
     { Public declarations }
     frmBillingDlg: TBillingDialogframe;
@@ -51,6 +52,12 @@ implementation
 {$R *.dfm}
 
 { TAccountingframe }
+
+procedure TBillingframe.afterLoadProc;
+begin
+  inherited;
+  DBGrid1.Columns[0].Visible := false;
+end;
 
 procedure TBillingframe.btnClearClick(Sender: TObject);
 begin

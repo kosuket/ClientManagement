@@ -81,6 +81,7 @@ type
     //SQLê∂ê¨ä÷åW
     function createSQLFix: String;  override;
     function createWhere: String;  override;
+    procedure afterLoadProc; override;
   public
     { Public declarations }
     frmClientDialog: TfrmClientCarteDlg;
@@ -104,6 +105,12 @@ const
 implementation
 
 {$R *.dfm}
+
+procedure TClientframe.afterLoadProc;
+begin
+  inherited;
+  DBGrid1.Columns[0].Visible := false;
+end;
 
 procedure TClientframe.btnAddClick(Sender: TObject);
 begin

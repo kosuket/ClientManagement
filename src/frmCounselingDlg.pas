@@ -42,6 +42,7 @@ type
     memoBilling: TRichEdit;
     edtCounselingAmount: TEdit;
     lblCharge: TLabel;
+    lbClient: TListBox;
     procedure cmbItemTypeChange(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure btnClientClick(Sender: TObject);
@@ -168,7 +169,7 @@ function TCounselingDialogframe.bookCounseling: Boolean;
     end;
     //Insert Billing Request
     if ((cmbCounselingType.ItemIndex = ctSeminar) AND (alphaFlg <> 1))
-      OR (StrToInt64Def(edtCounselingAmount.Text,0) > 0)
+      AND (StrToInt64Def(edtCounselingAmount.Text,0) > 0)
       then Accessor.ExecuteUpdate(createInsertBRForCounselingSQL(clientId,billId,restHour,standardFlg));
     result := True;
   end;
@@ -215,13 +216,27 @@ begin
 end;
 
 procedure TCounselingDialogframe.btnClientClick(Sender: TObject);
+var i: Integer;
 begin
   inherited;
   frmSearchClient := TClientSearchframe.Create(Self,Accessor);
   try
+    if cmbItemType.ItemIndex <> itSeminar then frmSearchClient.MultiMode := mmSingle
+                                          else frmSearchClient.MultiMode := mmMulti;
+    if frmSearchClient.MultiMode = mmMulti then frmSearchClient.setUpSelectedGridForMullti(ClientIdList,lbClient.Items,ClientPkgBillIdList,ClientAlphaList,ClientStandardList,ClientRestHourList);
+
     if frmSearchClient.ShowModal = mrOk then begin
       clearClientLists;
-      addClientLists(frmSearchClient.g_SelectedClientId,frmSearchClient.g_SelectedPkgBillId,frmSearchClient.g_SelectedAlphaFlg, frmSearchClient.g_SelectedStandardFlg, frmSearchClient.g_SelectedRestHour);
+      if frmSearchClient.MultiMode = mmSingle then addClientLists(frmSearchClient.g_SelectedClientId,frmSearchClient.g_SelectedPkgBillId,frmSearchClient.g_SelectedAlphaFlg, frmSearchClient.g_SelectedStandardFlg, frmSearchClient.g_SelectedRestHour)
+      else if frmSearchClient.MultiMode = mmMulti then begin
+        lbClient.Clear;
+        for i := 1 to frmSearchClient.sgSelected.RowCount -1 do begin
+          with frmSearchClient.sgSelected do begin
+            addClientLists(StrToInt64Def(Cells[0,i],-1),StrToInt64Def(Cells[4,i],-1),StrToIntDef(Cells[2,i],0), StrToIntDef(Cells[3,i],0), StrToFloatDef(Cells[5,i],0));
+            lbClient.AddItem(Cells[1,i],nil);
+          end;
+        end;
+      end;
       lblClient.Caption := frmSearchClient.g_SelectedFirstName + ' ' + frmSearchClient.g_SelectedLastName;
       setCounselingAmount(StrToInt64Def(ClientIdList[0],-1));
     end;
@@ -304,18 +319,25 @@ begin
       gbCounseling.Visible := True;
       gbPackage.Visible := False;
       gbCounseling.Align := alClient;
+      lbClient.Visible := False;
+      lblClient.Visible := True;
       Self.Height := 364;
     end;
     1: begin
       gbCounseling.Visible := True;
       gbPackage.Visible := False;
       gbCounseling.Align := alClient;
+      cmbCounselingType.ItemIndex := ctSeminar;
+      lbClient.Visible := True;
+      lblClient.Visible := False;
       Self.Height := 364;
     end;
     2: begin
       gbCounseling.Visible := False;
       gbPackage.Visible := True;
       gbPackage.Align := alClient;
+      lbClient.Visible := False;
+      lblClient.Visible := True;
       Self.Height := 241;
     end;
   end;
@@ -383,7 +405,6 @@ begin
     Add(FloatToStr(hour));
     Add(')');
     result := Text;
-    memoNextAction.Text := Text;
   end;
   sl.Free;
 end;
@@ -456,8 +477,8 @@ begin
     Add('NEXT_ACTION,');
     Add('APP_STATUS)');
     Add('VALUES(');
-    Add(ClientIdList[0] + ',');
-    Add(IntToStr(getCurrentSEQ(StrToInt64def(ClientIdList[0],-1)) + 1) + ',');
+    Add(IntToStr(clientId) + ',');
+    Add(IntToStr(getCurrentSEQ(clientId) + 1) + ',');
     Add(IntToStr(billId) + ',');
     Add(cmbCounselingTypeVal[cmbCounselingType.ItemIndex] + ',');
     Add(FloatToStr(calcCounselingHour) + ',');

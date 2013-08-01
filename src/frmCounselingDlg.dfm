@@ -87,6 +87,20 @@ inherited CounselingDialogframe: TCounselingDialogframe
         TabOrder = 0
         OnClick = btnClientClick
       end
+      object lbClient: TListBox
+        Left = 128
+        Top = 3
+        Width = 477
+        Height = 41
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Georgia'
+        Font.Style = []
+        ItemHeight = 14
+        ParentFont = False
+        TabOrder = 1
+      end
     end
     object gbCounseling: TGroupBox
       Left = 1
