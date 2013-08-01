@@ -5,7 +5,7 @@ uses
   frmMain in 'frmMain.pas' {Mainframe},
   LogInFrm in 'LogInFrm.pas' {LogInFrame},
   frmMaster in 'frmMaster.pas' {MasterFrame},
-  frmClientSearch in 'frmClientSearch.pas' {ClientSearchframe},
+  frmClient in 'frmClient.pas' {Clientframe},
   FWGridBasefrm in 'FWGridBasefrm.pas' {FWGridBaseframe},
   frmBilling in 'frmBilling.pas' {Billingframe},
   frmClientdlg in 'frmClientdlg.pas' {frmClientCarteDlg},

@@ -10,11 +10,11 @@ inherited CounselingDialogframe: TCounselingDialogframe
   inherited pnlBase: TPanel
     Width = 637
     Height = 450
-    ExplicitWidth = 724
-    ExplicitHeight = 522
+    ExplicitWidth = 637
+    ExplicitHeight = 450
     inherited pnlTitle: TPanel
       Width = 635
-      ExplicitWidth = 722
+      ExplicitWidth = 635
       inherited Image1: TImage
         Width = 633
         ExplicitWidth = 720
@@ -54,7 +54,6 @@ inherited CounselingDialogframe: TCounselingDialogframe
       Color = clCream
       ParentBackground = False
       TabOrder = 1
-      ExplicitWidth = 722
       object lblClient: TLabel
         Left = 127
         Top = 11
@@ -392,10 +391,6 @@ inherited CounselingDialogframe: TCounselingDialogframe
       ParentColor = False
       ParentFont = False
       TabOrder = 3
-      ExplicitLeft = 136
-      ExplicitTop = 312
-      ExplicitWidth = 185
-      ExplicitHeight = 105
       object lblPackageType: TLabel
         Left = 16
         Top = 24
@@ -438,7 +433,7 @@ inherited CounselingDialogframe: TCounselingDialogframe
         Width = 105
         Height = 21
         AutoSize = False
-        Caption = 'Book Amount'
+        Caption = 'Charge'
         Color = clCream
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText

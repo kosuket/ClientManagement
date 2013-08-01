@@ -96,8 +96,8 @@
             <Form>MasterFrame</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="frmClientSearch.pas">
-            <Form>ClientSearchframe</Form>
+        <DCCReference Include="frmClient.pas">
+            <Form>Clientframe</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="FWGridBasefrm.pas">

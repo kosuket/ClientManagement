@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Data.DBXMySQL, Data.DB,
   Data.SqlExpr, Data.FMTBcd, Vcl.Grids, Vcl.DBGrids, Vcl.DBCGrids, Vcl.ExtCtrls,
   Vcl.DBCtrls, Datasnap.Provider, Datasnap.DBClient, LogInFrm, Vcl.Buttons,
-  Vcl.ComCtrls,frmClientSearch,frmBilling, frmMaster, Vcl.Menus, Vcl.ImgList,
+  Vcl.ComCtrls,frmClient,frmBilling, frmMaster, Vcl.Menus, Vcl.ImgList,
   Vcl.Imaging.jpeg, frmMailSetting, DBEditorMainFrm, DBGridBaseFrm,
   Vcl.Imaging.pngimage, MySQLAccessor, frmCounseling;
 
@@ -72,7 +72,7 @@ type
   private
     { Private declarations }
     Accessor: TMySQLAccessor;
-    frmClientSearch: TClientSearchframe;
+    frmClient: TClientframe;
     frmLogIn: TLogInFrame;
     frmCounselingSearch: TCounselingFrame;
     frmBillingSearch: TBillingFrame;
@@ -164,7 +164,7 @@ end;
 
 procedure TMainframe.cleanPnlMain;
 begin
-  frmClientSearch.pnlBase.Visible := False;
+  frmClient.pnlBase.Visible := False;
   frmCounselingSearch.pnlBase.Visible := False;
   frmBillingSearch.pnlBase.Visible := False;
   frmDBEditor.Visible := False;
@@ -187,12 +187,12 @@ begin
   end;
   Accessor := TMySQLAccessor.Create(g_HostName,g_UserName,g_Password,g_Database);
   mmDebugMode.Checked := g_DebugMode;
-  //ClientSearch
-  frmClientSearch := TClientSearchframe.Create(Self, Accessor);
-  frmClientSearch.pnlBase.Parent := pnlMain;
-  frmClientSearch.Initialize;
-  frmClientSearch.pnlBase.Visible := False;
-  frmClientSearch.m_DebugMode := g_DebugMode;
+  //Client
+  frmClient := TClientframe.Create(Self, Accessor);
+  frmClient.pnlBase.Parent := pnlMain;
+  frmClient.Initialize;
+  frmClient.pnlBase.Visible := False;
+  frmClient.m_DebugMode := g_DebugMode;
 
   //Counseling
   frmCounselingSearch := TCounselingframe.Create(Self,Accessor);
@@ -214,7 +214,7 @@ begin
   frmDBEditor.Visible := False;
 
   //LastProc
-  frmClientSearch.pnlBase.Visible := True;
+  frmClient.pnlBase.Visible := True;
   pnlClientMouseLeave(self);
   pnlCounselingMouseLeave(self);
   pnlBillingMouseLeave(self);
@@ -242,7 +242,7 @@ begin
   // Release child frames
   if Assigned(frmDBEditor) then frmDBEditor.Release;
   if Assigned(frmBillingSearch) then frmBillingSearch.Release;
-  if Assigned(frmClientSearch) then frmClientSearch.Release;
+  if Assigned(frmClient) then frmClient.Release;
   inherited;
 end;
 
@@ -307,7 +307,7 @@ end;
 procedure TMainframe.reflectDebugMode(b: Boolean);
 begin
   g_DebugMode := b;
-  frmClientSearch.m_DebugMode := b;
+  frmClient.m_DebugMode := b;
   frmBillingSearch.m_DebugMode := b;
 end;
 
@@ -343,7 +343,7 @@ end;
 procedure TMainframe.pnlClientClick(Sender: TObject);
 begin
   cleanPnlMain;
-  frmClientSearch.pnlBase.Visible := True;
+  frmClient.pnlBase.Visible := True;
   behavePLBClick(pnlClient,imgClient);
 end;
 
