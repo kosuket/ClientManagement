@@ -27,6 +27,7 @@ inherited CounselingDialogframe: TCounselingDialogframe
           Height = 24
           Caption = 'btnOK'
           TabOrder = 0
+          OnClick = btnOKClick
         end
       end
       object cmbItemType: TComboBox
@@ -84,6 +85,7 @@ inherited CounselingDialogframe: TCounselingDialogframe
         Font.Style = []
         ParentFont = False
         TabOrder = 0
+        OnClick = btnClientClick
       end
     end
     object gbCounseling: TGroupBox
@@ -365,13 +367,16 @@ inherited CounselingDialogframe: TCounselingDialogframe
         Top = 16
         Width = 173
         Height = 22
+        Alignment = taRightJustify
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
         Font.Height = -11
         Font.Name = 'Georgia'
         Font.Style = []
+        NumbersOnly = True
         ParentFont = False
         TabOrder = 8
+        Text = '0'
       end
     end
     object gbPackage: TGroupBox
@@ -500,8 +505,10 @@ inherited CounselingDialogframe: TCounselingDialogframe
         Top = 84
         Width = 96
         Height = 22
+        Alignment = taRightJustify
         NumbersOnly = True
         TabOrder = 2
+        Text = '0'
       end
       object memoBilling: TRichEdit
         Left = 329

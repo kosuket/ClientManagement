@@ -101,20 +101,21 @@ type
     procedure componentExit(Sender: TObject);
   private
     { Private declarations }
+    m_OpenMode: TOpenMode;
     procedure initializeNew;
     procedure initializeModify;
     procedure setupGrid;
     procedure setupCombobox;
     function AddNewRecord: String;
     function ModifyRecord: String;
-    procedure createInsertClientSQL;
-    procedure createUpdateClientSQL;
-    procedure createDeleteSchoolMapSQL;
-    procedure createInsertSchoolMapSQL;
-    procedure createDeleteGMATSQL;
-    procedure createInsertGMATSQL;
-    procedure createDeleteTOEFLSQL;
-    procedure createInsertTOEFLSQL;
+    function createInsertClientSQL: String;
+    function createUpdateClientSQL: String;
+    function createDeleteSchoolMapSQL: String;
+    function createInsertSchoolMapSQL: String;
+    function createDeleteGMATSQL: String;
+    function createInsertGMATSQL: String;
+    function createDeleteTOEFLSQL: String;
+    function createInsertTOEFLSQL: String;
     function getcmbIndex(intDiv: Integer): Integer;
     procedure fillScoreNoAuto(sg:TStringGrid);
     procedure addNewRow(sg:TStringGrid);
@@ -143,7 +144,6 @@ type
     SchoolList: TStrings;
     slSchoolId: TStringList;
     g_ClientId: Int64;
-    g_OpenMode: TOpenMode;
     g_DebugMode: Boolean;
     constructor create(AOwner:TComponent; Accessor: TMySQLAccessor); reintroduce; overload; override;
     procedure initialize(OpenMode:TOpenMode);
@@ -174,36 +174,25 @@ begin
       exit;
     end;
 
-    tran := SQLQuery1.SQLConnection.BeginTransaction;
+    tran := Accessor.BeginTransaction;
     //Insert Client
-    createInsertClientSQL;
-    SQLQuery1.ExecSQL();
+    Accessor.ExecuteUpdate(createInsertClientSQL);
     //Delete Insert School_Map
-    createDeleteSchoolMapSQL;
-    SQLQuery1.ExecSQL();
-    if hasRecord(grdSchool) then begin
-      createInsertSchoolMapSQL;
-      SQLQuery1.ExecSQL();
-    end;
+    Accessor.ExecuteUpdate(createDeleteSchoolMapSQL);
+    if hasRecord(grdSchool) then Accessor.ExecuteUpdate(createInsertSchoolMapSQL);
     //Delete Insert GMAT
-    createDeleteGMATSQL;
-    SQLQuery1.ExecSQL();
-    if hasRecord(grdGMAT) then begin
-      createInsertGMATSQL;
-      SQLQuery1.ExecSQL();
-    end;
+    Accessor.ExecuteUpdate(createDeleteGMATSQL);
+    if hasRecord(grdGMAT) then Accessor.ExecuteUpdate(createInsertGMATSQL);
     //Delete Insert TOEFL
-    createDeleteTOEFLSQL;
-    SQLQuery1.ExecSQL();
+    Accessor.ExecuteUpdate(createDeleteTOEFLSQL);
     if hasRecord(grdTOEFL) then begin
-      createInsertTOEFLSQL;
-      SQLQuery1.ExecSQL();
+      Accessor.ExecuteUpdate(createInsertTOEFLSQL);
     end;
-    SQLQuery1.SQLConnection.CommitFreeAndNil(tran);
+    Accessor.CommitFreeAndNil(tran);
     result := '';
   except
     on E: Exception do begin
-      SQLQuery1.SQLConnection.RollbackFreeAndNil(tran);
+      Accessor.RollbackFreeAndNil(tran);
       result := e.Message + ':' + e.StackTrace;
     end;
   end;
@@ -250,7 +239,7 @@ var errStr: String;
 begin
   inherited;
   if MessageDlg('You are about to ' + btnOK.Caption + '. Confirm?',mtConfirmation,[mbYes,mbNo],0,mbYes) <> mrYes then exit;
-  case g_OpenMode of
+  case m_OpenMode of
     omNew: errStr := AddNewRecord;
     omModify: errStr := ModifyRecord;
   end;
@@ -419,34 +408,40 @@ begin
   edtDate.Visible := False;}
 end;
 
-procedure TfrmClientCarteDlg.createDeleteGMATSQL;
+function TfrmClientCarteDlg.createDeleteGMATSQL: String;
+var sl: TStringList;
 begin
-  With SQLQuery1.SQL do begin
-    Clear;
+  sl := TStringList.Create;
+  With sl do begin
     Add('DELETE FROM CLIENT_GMAT');
     Add('WHERE CLIENT_ID =' + IntToStr(g_ClientId));
+    result := Text;
   end;
 end;
 
-procedure TfrmClientCarteDlg.createDeleteSchoolMapSQL;
+function TfrmClientCarteDlg.createDeleteSchoolMapSQL: String;
+var sl: TStringList;
 begin
-  With SQLQuery1.SQL do begin
-    Clear;
+  sl := TStringList.Create;
+  With sl do begin
     Add('DELETE FROM CLIENT_SCHOOL_MAP');
     Add('WHERE CLIENT_ID =' + IntToStr(g_ClientId));
+    result := Text;
   end;
 end;
 
-procedure TfrmClientCarteDlg.createDeleteTOEFLSQL;
+function TfrmClientCarteDlg.createDeleteTOEFLSQL: String;
+var sl: TStringList;
 begin
-  With SQLQuery1.SQL do begin
-    Clear;
+  sl := TStringList.Create;
+  With sl do begin
     Add('DELETE FROM CLIENT_TOEFL');
     Add('WHERE CLIENT_ID =' + IntToStr(g_ClientId));
+    result := Text;
   end;
 end;
 
-procedure TfrmClientCarteDlg.createInsertClientSQL;
+function TfrmClientCarteDlg.createInsertClientSQL: String;
   function _String(str: String; isLast: Boolean = False): String;
   var comma: String;
   begin
@@ -465,9 +460,10 @@ procedure TfrmClientCarteDlg.createInsertClientSQL;
     end;
     result := cmbDivAllYesNo[int] + comma;
   end;
+var sl: TStringList;
 begin
-  With SQLQuery1.SQL do begin
-    Clear;
+  sl := TStringList.Create;
+  With sl do begin
     Add('INSERT INTO CLIENT');
     Add('(CLIENT_ID,');
     Add('LAST_NAME,');
@@ -509,14 +505,16 @@ begin
     Add(_String(memoClientMemo.Lines.Text));
     Add(_String(memoCounselorMemo.Lines.Text,True));
     Add(')');
+    result := Text;
   end;
 end;
 
-procedure TfrmClientCarteDlg.createInsertSchoolMapSQL;
+function TfrmClientCarteDlg.createInsertSchoolMapSQL: String;
 var i: Integer;
+   sl: TStringList;
 begin
-  With SQLQuery1.SQL do begin
-    Clear;
+  sl := TStringList.Create;
+  With sl do begin
     Add('INSERT INTO CLIENT_SCHOOL_MAP');
     Add('(CLIENT_ID,');
     Add('SCHOOL_ID,');
@@ -532,10 +530,11 @@ begin
       Add('''' + '''' + ')');
       if i < grdSchool.RowCount -1 then Add(',');
     end;
+    result := Text;
   end;
 end;
 
-procedure TfrmClientCarteDlg.createInsertTOEFLSQL;
+function TfrmClientCarteDlg.createInsertTOEFLSQL: String;
   function _String(str: String; isLast: Boolean = False): String;
   var comma: String;
   begin
@@ -558,8 +557,10 @@ procedure TfrmClientCarteDlg.createInsertTOEFLSQL;
   end;
 var i: Integer;
     str: String;
+    sl: TStringList;
 begin
-  With SQLQuery1.SQL do begin
+  sl := TStringList.Create;
+  With sl do begin
     Clear;
     Add('INSERT INTO CLIENT_TOEFL');
     Add('(CLIENT_ID,');
@@ -584,10 +585,11 @@ begin
       Add(_String(grdTOEFL.Cells[7,i],True) + ')');
       if i < grdTOEFL.RowCount -1 then Add(',');
     end;
+    result := Text;
   end;
 end;
 
-procedure TfrmClientCarteDlg.createUpdateClientSQL;
+function TfrmClientCarteDlg.createUpdateClientSQL: String;
   function _String(str: String; isLast: Boolean = False): String;
   var comma: String;
   begin
@@ -606,9 +608,10 @@ procedure TfrmClientCarteDlg.createUpdateClientSQL;
     end;
     result := cmbDivAllYesNo[int] + comma;
   end;
+var sl: TStringList;
 begin
-  With SQLQuery1.SQL do begin
-    Clear;
+  sl := TStringList.Create;
+  With sl do begin
     Add('UPDATE CLIENT ');
     Add('  SET ');
     Add('LAST_NAME =' + _String(edtLastName.Text));
@@ -630,10 +633,11 @@ begin
     Add('CLIENT_MEMO =' + _String(memoClientMemo.Lines.Text));
     Add('COUNSELOR_MEMO =' + _String(memoCounselorMemo.Lines.Text,True));
     Add(' WHERE CLIENT_ID = ' + IntToStr(g_ClientId));
+    result := Text;
   end;
 end;
 
-procedure TfrmClientCarteDlg.createInsertGMATSQL;
+function TfrmClientCarteDlg.createInsertGMATSQL: String;
   function _String(str: String; isLast: Boolean = False): String;
   var comma: String;
   begin
@@ -657,9 +661,10 @@ procedure TfrmClientCarteDlg.createInsertGMATSQL;
   end;
 var i: Integer;
     str: String;
+    sl: TStringList;
 begin
-  With SQLQuery1.SQL do begin
-    Clear;
+  sl := TStringList.Create;
+  With sl do begin
     Add('INSERT INTO CLIENT_GMAT');
     Add('(CLIENT_ID,');
     Add('SCORE_NO,');
@@ -683,6 +688,7 @@ begin
       Add(_String(grdGMAT.Cells[7,i],True) + ')');
       if i < grdGMAT.RowCount -1 then Add(',');
     end;
+    result := Text;
   end;
 end;
 
@@ -1059,7 +1065,8 @@ procedure TfrmClientCarteDlg.initialize(OpenMode: TOpenMode);
 begin
   setupGrid;
   setupCombobox;
-  case OpenMode of
+  m_OpenMode := OpenMode;
+  case m_OpenMode of
     omNew: initializeNew;//V‹Kì¬
     omModify: initializeModify;//•ÏX
   end;
@@ -1133,40 +1140,25 @@ begin
       exit;
     end;
 
-    tran := SQLQuery1.SQLConnection.BeginTransaction;
-    //Update Client
-    createUpdateClientSQL;
-    SQLQuery1.ExecSQL();
-    //Delete Insert School_Map
-    createDeleteSchoolMapSQL;
-    SQLQuery1.ExecSQL();
-    if hasRecord(grdSchool) then begin
-      createInsertSchoolMapSQL;
-      SQLQuery1.ExecSQL();
-    end;
-    if g_DebugMode then ShowMessage(SQLQuery1.SQL.Text);
-    //Delete Insert GMAT
-    createDeleteGMATSQL;
-    SQLQuery1.ExecSQL();
-    if hasRecord(grdGMAT) then begin
-      createInsertGMATSQL;
-      SQLQuery1.ExecSQL();
-    end;
-    if g_DebugMode then ShowMessage(SQLQuery1.SQL.Text);
-    //Delete Insert TOEFL
-    createDeleteTOEFLSQL;
-    SQLQuery1.ExecSQL();
-    if hasRecord(grdTOEFL) then begin
-      createInsertTOEFLSQL;
-      SQLQuery1.ExecSQL();
-    end;
-    if g_DebugMode then ShowMessage(SQLQuery1.SQL.Text);
+    tran := Accessor.BeginTransaction;
 
-    SQLQuery1.SQLConnection.CommitFreeAndNil(tran);
+    //Update Client
+    Accessor.ExecuteUpdate(createUpdateClientSQL);
+    //Delete Insert School_Map
+    Accessor.ExecuteUpdate(createDeleteSchoolMapSQL);
+    if hasRecord(grdSchool) then Accessor.ExecuteUpdate(createInsertSchoolMapSQL);
+    //Delete Insert GMAT
+    Accessor.ExecuteUpdate(createDeleteGMATSQL);
+    if hasRecord(grdGMAT) then Accessor.ExecuteUpdate(createInsertGMATSQL);
+    //Delete Insert TOEFL
+    Accessor.ExecuteUpdate(createDeleteTOEFLSQL);
+    if hasRecord(grdTOEFL) then Accessor.ExecuteUpdate(createInsertTOEFLSQL);
+
+    Accessor.CommitFreeAndNil(tran);
     result := '';
   except
     on E: Exception do begin
-      SQLQuery1.SQLConnection.RollbackFreeAndNil(tran);
+      Accessor.RollbackFreeAndNil(tran);
       result := e.Message + ':' + e.StackTrace;
     end;
   end;

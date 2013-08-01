@@ -110,7 +110,6 @@ begin
   inherited;
   try
     frmClientDialog := TfrmClientCarteDlg.Create(Self, Accessor);
-    frmClientDialog.g_OpenMode := omNew;
     frmClientDialog.SchoolList := cmbSchoolName.Items;
     frmClientDialog.slSchoolId := slSchoolId;
     frmClientDialog.initialize(omNew);
@@ -329,7 +328,6 @@ begin
   try
     if not hasData then exit;
     frmClientDialog := TfrmClientCarteDlg.Create(Self, Accessor);
-    frmClientDialog.g_OpenMode := omModify;
     frmClientDialog.SchoolList := cmbSchoolName.Items;
     frmClientDialog.slSchoolId := slSchoolId;
     frmClientDialog.g_ClientId := StrToIntDef(DBGrid1.Fields[0].Text,-1);

@@ -2,7 +2,7 @@ unit MySQLAccessor;
 
 interface
 uses
-  Data.SqlExpr, Data.DB;
+  Data.SqlExpr, Data.DB, Data.DBXCommon;
 
 type TMySQLAccessor = class
   private
@@ -20,6 +20,9 @@ type TMySQLAccessor = class
     destructor Destroy; override;
     function ExecuteUpdate(Sql: String): Integer;
     function ExecuteQuery(Sql: String): TDataSet;
+    function BeginTransaction: TDBXTransaction;
+    procedure CommitFreeAndNil(tran:TDBXTransaction);
+    procedure RollBackFreeAndNil(tran:TDBXTransaction);
 end;
 
 implementation
@@ -84,4 +87,20 @@ begin
     if Assigned(Query) then Query.Free;
   end;
 end;
+
+function TMySQLAccessor.BeginTransaction: TDBXTransaction;
+begin
+  result := Conn.BeginTransaction;
+end;
+
+procedure TMySQLAccessor.CommitFreeAndNil(tran: TDBXTransaction);
+begin
+  Conn.CommitFreeAndNil(tran);
+end;
+
+procedure TMySQLAccessor.RollBackFreeAndNil(tran: TDBXTransaction);
+begin
+  Conn.RollbackFreeAndNil(tran);
+end;
+
 end.

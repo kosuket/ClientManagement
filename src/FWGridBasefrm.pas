@@ -129,7 +129,6 @@ procedure TFWGridBaseframe.btnLoadClick(Sender: TObject);
 var sql:String;
 begin
   sql := createSQL;
-  if m_DebugMode then ShowMessage(sql);
   loadQuery(sql);
   adjustGridWidth;
 end;
@@ -140,6 +139,7 @@ begin
 end;
 procedure TFWGridBaseframe.loadQuery(sql: String);
 begin
+  if m_DebugMode then ShowMessage(sql);
   CDataSet.Close;
   Provider.DataSet := Accessor.ExecuteQuery(sql);
   CDataSet.Open;
