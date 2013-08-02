@@ -2,7 +2,6 @@ inherited CounselingDialogframe: TCounselingDialogframe
   Caption = 'CounselingDialogframe'
   ClientHeight = 450
   ClientWidth = 637
-  OnShow = FormShow
   ExplicitWidth = 653
   ExplicitHeight = 488
   PixelsPerInch = 96
