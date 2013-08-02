@@ -43,6 +43,7 @@ type
     edtCounselingAmount: TEdit;
     lblCharge: TLabel;
     lbClient: TListBox;
+    btnCancel: TButton;
     procedure cmbItemTypeChange(Sender: TObject);
     procedure btnClientClick(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
@@ -51,6 +52,7 @@ type
     procedure edtEndTimeChange(Sender: TObject);
     procedure cbPanicFeeClick(Sender: TObject);
     procedure edtCounselingDateChange(Sender: TObject);
+    procedure btnCancelClick(Sender: TObject);
   private
     { Private declarations }
     m_OpenMode: TOpenMode;
@@ -257,6 +259,32 @@ begin
   end;
 end;
 
+procedure TCounselingDialogframe.btnCancelClick(Sender: TObject);
+var b: Boolean;
+    tran: TDBXTransaction;
+begin
+  inherited;
+  if m_OpenMode = omNew then exit;
+  if MessageDlg('You are about to ' + btnCancel.Caption + '. Confirm?',mtConfirmation,[mbYes,mbNo],0,mbYes) <> mrYes then exit;
+  tran := Accessor.BeginTransaction;
+  try
+    b := cancelData;
+    if b then begin
+      ShowMessage('Succeeded');
+      Accessor.CommitFreeAndNil(tran);
+      ModalResult := mrOk;
+    end else begin
+      Accessor.RollbackFreeAndNil(tran);
+      ShowMessage('Cancel Failed');
+    end;
+  except
+    on E: Exception do begin
+      Accessor.RollbackFreeAndNil(tran);
+      ShowMessage('Cancel Failed: ' + e.Message);
+    end;
+  end;
+end;
+
 procedure TCounselingDialogframe.btnClientClick(Sender: TObject);
 var i: Integer;
 begin
@@ -305,12 +333,12 @@ begin
       ModalResult := mrOk;
     end else begin
       Accessor.RollbackFreeAndNil(tran);
-      ShowMessage('Booking Failed');
+      ShowMessage(btnOK.Caption + ' Failed');
     end;
   except
     on E: Exception do begin
       Accessor.RollbackFreeAndNil(tran);
-      ShowMessage('Booking Failed: ' + e.Message);
+      ShowMessage(btnOK.Caption + ' Failed: ' + e.Message);
     end;
   end;
 end;
@@ -745,6 +773,8 @@ end;
 procedure TCounselingDialogframe.initializeModify;
 begin
   cmbItemType.Enabled := False;
+  btnOK.Caption := 'Update';
+  btnCancel.Visible := True;
   getCounselingInfo;
 end;
 
@@ -752,6 +782,7 @@ procedure TCounselingDialogframe.initializeNew;
 begin
   cmbItemType.Enabled := True;
   btnOK.Caption := 'Book';
+  btnCancel.Visible := False;
   cmbItemTypeChange(Self);
 end;
 

@@ -28,6 +28,15 @@ inherited CounselingDialogframe: TCounselingDialogframe
           TabOrder = 0
           OnClick = btnOKClick
         end
+        object btnCancel: TButton
+          Left = 193
+          Top = 0
+          Width = 75
+          Height = 25
+          Caption = 'Cancel'
+          TabOrder = 1
+          OnClick = btnCancelClick
+        end
       end
       object cmbItemType: TComboBox
         Left = 8
