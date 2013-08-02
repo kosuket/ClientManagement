@@ -55,32 +55,39 @@ type
   private
     { Private declarations }
     m_OpenMode: TOpenMode;
+    ClientIdList: TStringList;
+    ClientPkgBillIdList: TStringList;
+    ClientAlphaList: TStringList;
+    ClientStandardList: TStringList;
+    ClientRestHourList: TStringList;
     procedure initializeNew;
     procedure initializeModify;
     function insertNew: Boolean;
     function updateExisting: Boolean;
     procedure clearClientLists;
     procedure addClientLists(clientId: Int64; pkgBillId: Int64; alphaFlg: Integer; standardFlg: Integer; restHour: Double);
+    function checkClientLists: Boolean;
+    function checkClientIds: Boolean;
     function bookCounseling: Boolean;
     function bookPackage: Boolean;
     function createInsertBRForPackageSQL: String;
     function createUpdateClForPackageSQL(clientId: Int64; ptDiv: Integer): String;
-    function createInsertCounselingSQL(clientId: Int64;billId: Int64): String;
-    function createInsertBRForCounselingSQL(clientId: Int64;billId: Int64; hour: Double; packageFlg: Integer): String;
+    function createInsertCounselingSQL(clientId: Int64; seq: Int64; billId: Int64): String;
+    function createInsertBRForCounselingSQL(clientId: Int64;billId: Int64; hour: Double; packageFlg: Integer; seq: Int64): String;
     function createUpdateBRForCounselingSQL(clientId: Int64;billId: Int64; hour: Double; alphaFlg: Integer): String;
     function getCurrentBillId(clientId: Int64): Int64;
     function getCurrentSEQ(clientId: Int64): Int64;
     function calcCounselingHour: Double;
     function calcCounselingFee:Int64;
     procedure setCounselingAmount(clientId: Int64);
+    procedure getCounselingInfo;
   public
     { Public declarations }
     frmSearchClient: TClientSearchframe;
-    ClientIdList: TStringList;
-    ClientPkgBillIdList: TStringList;
-    ClientAlphaList: TStringList;
-    ClientStandardList: TStringList;
-    ClientRestHourList: TStringList;
+    g_ClientId: Int64;
+    g_SEQ: Int64;
+    g_FirstName: String;
+    g_LastName: String;
     constructor Create(AOwner: TComponent; Accessor: TMySQLAccessor); reintroduce; overload; override;
     procedure initialize(OpenMode:TOpenMode);
   end;
@@ -137,6 +144,7 @@ function TCounselingDialogframe.bookCounseling: Boolean;
       pkgBillId: Int64;
       alphaFlg: Integer;
       standardFlg: Integer;
+      seq: Int64;
       billId: Int64;
       i: Integer;
       restHour,execHour: Double;
@@ -146,11 +154,12 @@ function TCounselingDialogframe.bookCounseling: Boolean;
     pkgBillId := StrToInt64Def(ClientPkgBillIdList[idx],-1);
     alphaFlg := StrToIntDef(ClientAlphaList[idx],0);
     standardFlg := StrToIntDef(ClientStandardList[idx],0);
+    seq := getCurrentSEQ(clientId) + 1;
     if pkgBillId <> -1 then billId := pkgBillId
                        else billId := getCurrentBillId(clientId) + 1;
-    //Check
     //Insert Counseling
-    Accessor.ExecuteUpdate(createInsertCounselingSQL(clientId,billId));
+    Accessor.ExecuteUpdate(createInsertCounselingSQL(clientId,seq,billId));
+
     restHour := calcCounselingHour;
     //Update Billing Request
     if (cmbCounselingType.ItemIndex <> ctSeminar) AND ((pkgBillId <> -1) OR (alphaFlg <> 0)) then begin
@@ -168,9 +177,21 @@ function TCounselingDialogframe.bookCounseling: Boolean;
       billId := getCurrentBillId(clientId) + 1;
     end;
     //Insert Billing Request
+    if (cmbCounselingType.ItemIndex = ctSeminar) AND (pkgBillId <> -1) then billId := getCurrentBillId(clientId) + 1;
+
     if ((cmbCounselingType.ItemIndex = ctSeminar) AND (alphaFlg <> 1))
-      AND (StrToInt64Def(edtCounselingAmount.Text,0) > 0)
-      then Accessor.ExecuteUpdate(createInsertBRForCounselingSQL(clientId,billId,restHour,standardFlg));
+      OR ((cmbCounselingType.ItemIndex <> ctSeminar) AND (StrToInt64Def(edtCounselingAmount.Text,0) > 0))
+      then Accessor.ExecuteUpdate(createInsertBRForCounselingSQL(clientId,billId,restHour,standardFlg,seq));
+    result := True;
+  end;
+  function _checkData: Boolean;
+  begin
+    result := False;
+    if not ClientIdList.Count > 0 then exit;
+    if not checkClientIds then exit;
+    if not checkClientLists then exit;
+    if not cmbCounselingType.ItemIndex >= 0 then exit;
+    if not StrToIntDef(edtCounselingAmount.Text,-1) >= 0 then exit;
     result := True;
   end;
 var i: Integer;
@@ -178,6 +199,12 @@ var i: Integer;
     tran: TDBXTransaction;
 begin
   b := True;
+  //check
+  if not _checkData then begin
+    ShowMessage('Data Not Sufficient');
+    result := False;
+    exit;
+  end;
   tran := Accessor.BeginTransaction;
   try
     for i := 0 to ClientIdList.Count -1 do if not _bookIndividual(i) then b := False;
@@ -194,10 +221,25 @@ begin
 end;
 
 function TCounselingDialogframe.bookPackage: Boolean;
+  function _checkData: Boolean;
+  begin
+    result := False;
+    if not ClientIdList.Count >0 then exit;
+    if not checkClientIds then exit;
+    if not checkClientLists then exit;
+    if not cmbPackageType.ItemIndex >= 0 then exit;
+    if not StrToIntDef(edtPackageAmount.Text,-1) >= 0 then exit;
+    result := True;
+  end;
 var tran: TDBXTransaction;
 begin
   result := False;
   //Check
+  if not _checkData then begin
+    ShowMessage('Data Not Sufficient');
+    result := False;
+    exit;
+  end;
   tran := Accessor.BeginTransaction;
   try
     //Insert Billing Request
@@ -249,6 +291,7 @@ procedure TCounselingDialogframe.btnOKClick(Sender: TObject);
 var b: Boolean;
 begin
   inherited;
+  if MessageDlg('You are about to ' + btnOK.Caption + '. Confirm?',mtConfirmation,[mbYes,mbNo],0,mbYes) <> mrYes then exit;
   case m_OpenMode of
     omNew: b := insertNew;
     omModify: b := updateExisting;
@@ -302,6 +345,25 @@ begin
   setCounselingAmount(StrToInt64Def(ClientIdList[0],-1));
 end;
 
+function TCounselingDialogframe.checkClientIds: Boolean;
+var i: Integer;
+begin
+  result := False;
+  for i := 0 to ClientIdList.Count -1 do begin
+    if not StrToInt64Def(ClientIdList[i],-1) > 0 then exit;
+  end;
+  result := True;
+end;
+
+function TCounselingDialogframe.checkClientLists: Boolean;
+begin
+  result := False;
+  if (ClientIdList.Count = ClientPkgBillIdList.Count)
+  AND (ClientIdList.Count = ClientAlphaList.Count)
+  AND (ClientIdList.Count = ClientStandardList.Count)
+  AND (ClientIdList.Count = ClientRestHourList.Count) then result := True;
+end;
+
 procedure TCounselingDialogframe.clearClientLists;
 begin
   ClientIdList.Clear;
@@ -314,6 +376,7 @@ end;
 procedure TCounselingDialogframe.cmbItemTypeChange(Sender: TObject);
 begin
   inherited;
+  clearClientLists;
   case cmbItemType.ItemIndex of
     0: begin
       gbCounseling.Visible := True;
@@ -363,7 +426,7 @@ begin
   ClientRestHourList := TStringList.Create;
 end;
 
-function TCounselingDialogframe.createInsertBRForCounselingSQL(clientId: Int64;billId: Int64; hour: Double; packageFlg: Integer): String;
+function TCounselingDialogframe.createInsertBRForCounselingSQL(clientId: Int64;billId: Int64; hour: Double; packageFlg: Integer; seq: Int64): String;
   function _String(str: String; isLast: Boolean = False): String;
   var comma: String;
   begin
@@ -387,7 +450,8 @@ begin
     Add('MEMO,');
     Add('INPUT_DATETIME,');
     Add('TOTAL_HOUR,');
-    Add('CURRENT_HOUR)');
+    Add('CURRENT_HOUR,');
+    Add('COUNSELING_SEQ)');
     Add('VALUES(');
     Add(IntToStr(clientId) + ',');
     Add(IntToStr(billId) + ',');
@@ -402,7 +466,8 @@ begin
     Add(_String(memoCounseling.Lines.Text));
     Add('SYSDATE(),');
     Add(FloatToStr(hour) + ',');
-    Add(FloatToStr(hour));
+    Add(FloatToStr(hour) + ',');
+    Add(IntToStr(seq));
     Add(')');
     result := Text;
   end;
@@ -449,7 +514,7 @@ begin
   sl.Free;
 end;
 
-function TCounselingDialogframe.createInsertCounselingSQL(clientId: Int64;billId: Int64): String;
+function TCounselingDialogframe.createInsertCounselingSQL(clientId: Int64; seq: Int64; billId: Int64): String;
   function _String(str: String; isLast: Boolean = False): String;
   var comma: String;
   begin
@@ -478,7 +543,7 @@ begin
     Add('APP_STATUS)');
     Add('VALUES(');
     Add(IntToStr(clientId) + ',');
-    Add(IntToStr(getCurrentSEQ(clientId) + 1) + ',');
+    Add(IntToStr(seq) + ',');
     Add(IntToStr(billId) + ',');
     Add(cmbCounselingTypeVal[cmbCounselingType.ItemIndex] + ',');
     Add(FloatToStr(calcCounselingHour) + ',');
@@ -539,6 +604,67 @@ begin
   cmbItemTypeChange(Self);
 end;
 
+procedure TCounselingDialogframe.getCounselingInfo;
+var sql: String;
+    i,idx: Integer;
+    alpha,standard: Integer;
+    pkgBillId:Int64;
+    restHour: Double;
+begin
+  sql := 'SELECT ' +
+         '    C.CLIENT_ID,' +
+         '    C.SEQ,' +
+         '    C.BILL_ID,' +
+         '    C.COUNSELING_TYPE,' +
+         '    C.COUNSELING_DATE,' +
+         '    C.START_TIME,' +
+         '    C.END_TIME,' +
+         '    C.CONTENT_TYPE,' +
+         '    C.HOURS,' +
+         '    C.MEMO,' +
+         '    C.NEXT_ACTION,' +
+         '    B.BOOK_AMOUNT' +
+         ' FROM' +
+         '    COUNSELING C' +
+         '        LEFT JOIN' +
+         '    BILLING_REQUEST B ON C.CLIENT_ID = B.CLIENT_ID' +
+         '        AND C.SEQ = B.COUNSELING_SEQ' +
+         ' WHERE C.CLIENT_ID = ' + IntToStr(g_ClientId) +
+         '   AND C.SEQ = ' + IntToStr(g_SEQ);
+
+  loadQuery(sql);
+  idx := CDataSet.Fields[3].AsInteger;
+  for i := 0 to 3 do begin
+    if idx = StrToInt(cmbCounselingTypeVal[i]) then cmbCounselingType.ItemIndex := i;
+  end;
+  edtCounselingDate.DateTime  := CDataSet.Fields[4].AsDateTime;
+  edtStartTime.Time           := StrToTime(CDataSet.Fields[5].AsString);
+  edtEndTime.Time             := StrToTime(CDataSet.Fields[6].AsString);
+  edtContentType.Text         := CDataSet.Fields[7].AsString;
+  restHour                    := StrToFloatDef(CDataSet.Fields[8].AsString,0);
+  memoCounseling.Text         := CDataSet.Fields[9].AsString;
+  memoNextAction.Text         := CDataSet.Fields[10].AsString;
+  if StrToInt64Def(CDataSet.Fields[11].AsString, -1) <> -1 then edtCounselingAmount.Text := CDataSet.Fields[11].AsString
+                                                           else edtCounselingAmount.Text := '0';
+  if cmbCounselingType.ItemIndex = ctSeminar then cmbItemType.ItemIndex := itSeminar
+                                             else cmbItemType.ItemIndex := itCounseling;
+  cmbItemTypeChange(Self);
+  cmbItemType.Enabled := False;
+  if cmbCounselingType.ItemIndex = ctSeminar then lbClient.AddItem(g_FirstName + ' ' + g_LastName, nil)
+                                             else lblClient.Caption := g_FirstName + ' ' + g_LastName;
+  sql := 'SELECT ALPHA_FLG,STANDARD_FLG FROM CLIENT WHERE CLIENT_ID = ' + IntToStr(g_ClientId);
+  loadQuery(sql);
+  alpha := CDataSet.Fields[0].AsInteger;
+  standard := CDataSet.Fields[1].AsInteger;
+  sql := 'SELECT BILL_ID FROM BILLING_REQUEST WHERE CLIENT_ID = ' + IntToStr(g_ClientId) +  ' AND BILLING_TYPE IN(3,4)';
+  loadQuery(sql);
+  pkgBillId := StrToInt64Def(CDataSet.Fields[0].AsString,-1);
+  sql := 'SELECT SUM(TOTAL_HOUR - CURRENT_HOUR) FROM BILLING_REQUEST WHERE CLIENT_ID = ' + IntToStr(g_ClientId) + ' AND ((BILLING_TYPE = 4 AND TOTAL_HOUR > CURRENT_HOUR) OR (BILLING_TYPE = 3))';
+  loadQuery(sql);
+  restHour := restHour + StrToFloatDef(CDataSet.Fields[0].AsString,0);
+  addClientLists(g_ClientId,pkgBillId,alpha,standard,restHour);
+end;
+
 function TCounselingDialogframe.getCurrentBillId(clientId: Int64): Int64;
 begin
   result := 0;
@@ -575,6 +701,7 @@ end;
 procedure TCounselingDialogframe.initializeModify;
 begin
   cmbItemType.Enabled := False;
+  getCounselingInfo;
 end;
 
 procedure TCounselingDialogframe.initializeNew;

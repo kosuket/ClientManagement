@@ -1,5 +1,7 @@
 inherited Counselingframe: TCounselingframe
   Caption = 'Counselingframe'
+  ExplicitWidth = 767
+  ExplicitHeight = 477
   PixelsPerInch = 96
   TextHeight = 13
   inherited pnlBase: TPanel
@@ -14,6 +16,7 @@ inherited Counselingframe: TCounselingframe
       ExplicitHeight = 251
       inherited DBGrid1: TDBGrid
         Height = 251
+        OnDblClick = DBGrid1DblClick
       end
     end
     inherited pnlCondition: TPanel

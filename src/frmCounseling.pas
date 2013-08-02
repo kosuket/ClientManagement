@@ -29,6 +29,7 @@ type
     procedure btnClearClick(Sender: TObject);
     procedure cmbPeriodChange(Sender: TObject);
     procedure btnAddClick(Sender: TObject);
+    procedure DBGrid1DblClick(Sender: TObject);
   private
     { Private declarations }
     procedure clearCond(ctrl:TWinControl);
@@ -133,6 +134,7 @@ function TCounselingframe.createSQLFix: String;
 begin
   result := 'SELECT '
           + '    CL.CLIENT_ID,'
+          + '    CO.SEQ,'
           + '    CL.FIRST_NAME,'
           + '    CL.LAST_NAME,'
           + '    CO.COUNSELING_DATE,'
@@ -182,6 +184,22 @@ begin
   if sl.Count > 0 then sl.Insert(0,' WHERE ');
   sl.Add(' ORDER BY CO.COUNSELING_DATE DESC');
   result := sl.Text;
+end;
+
+procedure TCounselingframe.DBGrid1DblClick(Sender: TObject);
+begin
+  inherited;
+  try
+    frmCounselingDialog := TCounselingDialogframe.Create(Self, Accessor);
+    frmCounselingDialog.g_ClientId := DBGrid1.Fields[0].AsInteger;
+    frmCounselingDialog.g_SEQ      := DBGrid1.Fields[1].AsInteger;
+    frmCounselingDialog.g_FirstName:= DBGrid1.Fields[2].AsString;
+    frmCounselingDialog.g_LastName := DBGrid1.Fields[3].AsString;
+    frmCounselingDialog.initialize(omModify);
+    frmCounselingDialog.ShowModal;
+  finally
+    frmCounselingDialog.Destroy;
+  end;
 end;
 
 procedure TCounselingframe.initialize;
