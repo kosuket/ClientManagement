@@ -128,15 +128,17 @@ begin
   sl.Add('    CLIENT C');
   sl.Add('        LEFT JOIN');
   sl.Add('    BILLING_REQUEST B ON C.CLIENT_ID = B.CLIENT_ID');
+  sl.Add('                     AND B.INVOICE_ID = 0');
   result := sl.Text;
 end;
 
 function TBillingframe.createWhere: String;
-  procedure _checkforand(sl: TStrings);
+  procedure _checkforand(sl: TStrings; cnt:Integer);
   begin
-    if sl.Count > 0 then sl.Add(' AND ');
+    if sl.Count > cnt then sl.Add(' AND ');
   end;
 var sl: TstringList;
+   cnt: Integer;
 begin
   inherited;
   sl := TStringList.Create;
@@ -144,16 +146,17 @@ begin
     sl.Add(' AND B.BOOK_DATE BETWEEN ' + '''' + FormatDateTime('yyyy/mm/dd',edtFirstDate.Date) + '''' + ' AND ' + '''' + FormatDateTime('yyyy/mm/dd',edtLastDate.Date) + '''');
   end;
   sl.Add('GROUP BY C.CLIENT_ID) A');
+  cnt := sl.Count;
   if Length(edtFirstName.Text) > 0 then begin
-    _checkforand(sl);
+    _checkforand(sl,cnt);
     sl.Add(' A.FIRST_NAME = ' + '''' + edtFirstName.Text + '''');
   end;
   if Length(edtLastName.Text) > 0 then begin
-    _checkforand(sl);
+    _checkforand(sl,cnt);
     sl.Add(' A.LAST_NAME = ' + '''' + edtLastName.Text + '''');
   end;
   if chkExcludeZero.Checked then begin
-    _checkforand(sl);
+    _checkforand(sl,cnt);
     sl.Add(' A.CHARGE > 0 ');
   end;
   if sl.Count > 2 then begin

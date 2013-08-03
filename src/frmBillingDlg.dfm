@@ -32,8 +32,22 @@ inherited BillingDialogframe: TBillingDialogframe
           Top = 2
           Width = 67
           Height = 22
+          Hint = 'Send Email and register Invoice Info'
           Caption = 'SEND'
+          ParentShowHint = False
+          ShowHint = True
           OnClick = btnSendClick
+        end
+        object btnInvoice: TSpeedButton
+          Left = 80
+          Top = 2
+          Width = 67
+          Height = 22
+          Hint = 'Register Invoice Info without sending email'
+          Caption = 'INVOICE'
+          ParentShowHint = False
+          ShowHint = True
+          OnClick = btnInvoiceClick
         end
       end
     end

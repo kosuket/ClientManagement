@@ -51,6 +51,7 @@ type
     destructor Destroy; override;
     procedure setRecepient(slR:TStringList;slA:TStringList);
     function checkConnection: Boolean;
+    function sendMail: Boolean;
   end;
 
 var
@@ -71,49 +72,10 @@ var
 begin
   inherited;
   if MessageDlg('Send This Message?',mtConfirmation,[mbYes,mbNo],0,mbYes) <> mrYes then exit;
-  progressbar1.Visible := True;
-  IdSMTP := TIdSMTP.Create(nil);
-  IdSMTP.Port      := Mainframe.g_MailPort;  //OPB25
-  IdSMTP.Host      := Mainframe.g_MailHost;
-  IdSMTP.Username  := Mainframe.g_MailUserName;
-  IdSMTP.Password  := Mainframe.g_MailPassword;
-  progressbar1.Position := 10;
-  subject := edtSubject.Text;
-  mailTo  := sgRecepient.Cols[1].CommaText;
-  progressbar1.Position := 20;
-  body    := memoContents.Lines.Text;
-
-  msg := TIdMessage.Create(IdSmtp);
-  SSL := TIdSSLIOHandlerSocketOpenSSL.Create;
-  progressbar1.Position := 30;
-  try
-    SSL.Host := IdSMTP.Host;
-    SSL.Port := IdSMTP.Port;
-    SSL.Destination := SSL.Host + ':' + IntToStr(SSL.Port);
-    IdSMTP.IOHandler := SSL;
-    IdSMTP.UseTLS := utUseExplicitTLS;
-    progressbar1.Position := 40;
-    IdSmtp.Connect;
-    progressbar1.Position := 50;
-    msg.Subject := subject;
-    msg.Recipients.EMailAddresses := mailto;
-    msg.From.Text := Mainframe.g_MailFrom;
-    msg.Body.Text := body;
-    msg.ContentType := 'multipart/mixed';
-    for i  := 0 to lbAttachment.Items.Count -1 do TIdAttachmentFile.Create(Msg.MessageParts, lbAttachment.Items[i]).FileIsTempFile := True;
-    progressbar1.Position := 60;
-    IdSmtp.Send(msg);
-    progressbar1.Position := 80;
-    IdSmtp.Disconnect ;
-    progressbar1.Position := 100;
-    ShowMessage('Message Sent');
-    ModalResult := mrOK;
-  finally
-    msg.Free;
-    SSL.Free;
-    IdSMTP.Free;
-    progressbar1.Visible := False;
-  end;
+   if sendMail then begin
+     ShowMessage('Message Sent');
+     ModalResult := mrOK;
+   end;
 end;
 
 function TMailDlgframe.checkConnection: Boolean;
@@ -205,6 +167,59 @@ procedure TMailDlgframe.pmDeleteAttachmentClick(Sender: TObject);
 begin
   inherited;
   deleteAttachment;
+end;
+
+function TMailDlgframe.sendMail: Boolean;
+var
+  subject, body: string;
+  msg: TIdMessage;
+  IdSMTP: TIdSMTP;
+  SSL: TIdSSLIOHandlerSocketOpenSSL;
+  i: Integer;
+begin
+  result := False;
+  progressbar1.Visible := True;
+  IdSMTP := TIdSMTP.Create(nil);
+  IdSMTP.Port      := Mainframe.g_MailPort;  //OPB25
+  IdSMTP.Host      := Mainframe.g_MailHost;
+  IdSMTP.Username  := Mainframe.g_MailUserName;
+  IdSMTP.Password  := Mainframe.g_MailPassword;
+  progressbar1.Position := 10;
+  subject := edtSubject.Text;
+  mailTo  := sgRecepient.Cols[1].CommaText;
+  progressbar1.Position := 20;
+  body    := memoContents.Lines.Text;
+
+  msg := TIdMessage.Create(IdSmtp);
+  SSL := TIdSSLIOHandlerSocketOpenSSL.Create;
+  progressbar1.Position := 30;
+  try
+    SSL.Host := IdSMTP.Host;
+    SSL.Port := IdSMTP.Port;
+    SSL.Destination := SSL.Host + ':' + IntToStr(SSL.Port);
+    IdSMTP.IOHandler := SSL;
+    IdSMTP.UseTLS := utUseExplicitTLS;
+    progressbar1.Position := 40;
+    IdSmtp.Connect;
+    progressbar1.Position := 50;
+    msg.Subject := subject;
+    msg.Recipients.EMailAddresses := mailto;
+    msg.From.Text := Mainframe.g_MailFrom;
+    msg.Body.Text := body;
+    msg.ContentType := 'multipart/mixed';
+    for i  := 0 to lbAttachment.Items.Count -1 do TIdAttachmentFile.Create(Msg.MessageParts, lbAttachment.Items[i]).FileIsTempFile := True;
+    progressbar1.Position := 60;
+    IdSmtp.Send(msg);
+    progressbar1.Position := 80;
+    IdSmtp.Disconnect ;
+    progressbar1.Position := 100;
+    result := True;
+  finally
+    msg.Free;
+    SSL.Free;
+    IdSMTP.Free;
+    progressbar1.Visible := False;
+  end;
 end;
 
 procedure TMailDlgframe.setRecepient(slR:TStringList;slA:TStringList);

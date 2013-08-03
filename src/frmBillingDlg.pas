@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, FWSQLBaseDlgfrm, Data.FMTBcd, Data.DB,
   Data.SqlExpr, Vcl.ExtCtrls,frmMaildlg, Vcl.Grids, Vcl.ComCtrls, Vcl.StdCtrls,
-  Datasnap.DBClient, Datasnap.Provider, Vcl.Buttons, MySQLAccessor;
+  Datasnap.DBClient, Datasnap.Provider, Vcl.Buttons, MySQLAccessor,Data.DBXCommon,System.AnsiStrings;
 
 type
   TBillingDialogframe = class(TFWSQLBaseDialogframe)
@@ -29,13 +29,20 @@ type
     edtTotalCharge: TStaticText;
     btnSend: TSpeedButton;
     btnReload: TSpeedButton;
+    btnInvoice: TSpeedButton;
     procedure cmbPeriodChange(Sender: TObject);
     procedure btnSendClick(Sender: TObject);
     procedure btnReloadClick(Sender: TObject);
+    procedure btnInvoiceClick(Sender: TObject);
   private
     { Private declarations }
     procedure getCounselingInfo;
     procedure getBillingInfo;
+    function executeInvoice(clientId:Int64): Boolean;
+    function createInsertInvoiceSQL(clientId:Int64; invoiceId: Int64): String;
+    function createUpdateBRForInvoiceSQL(clientId:Int64; invoiceId: Int64): String;
+    function getInvoiceId(clientId: Int64):Int64;
+    function checkUninvoiced(clientId:Int64): Boolean;
     procedure setupGrid;
   public
     { Public declarations }
@@ -54,6 +61,17 @@ implementation
 
 { TBillingDialogframe }
 
+procedure TBillingDialogframe.btnInvoiceClick(Sender: TObject);
+begin
+  inherited;
+if MessageDlg('Register Invoice Info Without Sending Email?',mtConfirmation,[mbYes,mbNo],0,mbYes) <> mrYes then exit;
+  if not checkUninvoiced(g_ClientId) then begin
+    if MessageDlg('The Bill(s) already invoiced exist on Billing Grid. Invoice?',mtConfirmation,[mbYes,mbNo],0,mbYes) <> mrYes then exit;
+  end;
+  if executeInvoice(g_ClientId) then ModalResult := mrOK
+                      else ShowMessage('Failed to register Invoice Info on Database');
+end;
+
 procedure TBillingDialogframe.btnReloadClick(Sender: TObject);
 begin
   inherited;
@@ -64,8 +82,32 @@ end;
 procedure TBillingDialogframe.btnSendClick(Sender: TObject);
 begin
   inherited;
-  frmMailDialog.btnSendClick(Self);
-  if frmMailDialog.ModalResult = mrOk then ModalResult := mrOK;
+  if MessageDlg('Send This Message And Register Invoice Info?',mtConfirmation,[mbYes,mbNo],0,mbYes) <> mrYes then exit;
+  if not checkUninvoiced(g_ClientId) then begin
+    if MessageDlg('The Bill(s) already invoiced exist on Billing Grid. Send Invoice?',mtConfirmation,[mbYes,mbNo],0,mbYes) <> mrYes then exit;
+  end;
+  if frmMailDialog.sendMail then begin
+    if executeInvoice(g_ClientId) then begin
+      ShowMessage('Message Sent and Invoice Info Registered');
+      ModalResult := mrOK;
+    end else ShowMessage('Failed to register Invoice Info on Database');
+  end else ShowMessage('Failed to Send Mail');
+end;
+
+function TBillingDialogframe.checkUninvoiced(clientId: Int64): Boolean;
+var str: String;
+    i:Integer;
+begin
+  result := False;
+  str := '';
+  for i := 1 to grdBilling.RowCount - 1 do begin
+    if StrToInt64Def(grdBilling.Cells[0,i],-1) > 0 then begin
+      if Length(str) > 0 then str := str + ',';
+      str := str + grdBilling.Cells[0,i];
+    end;
+  end;
+  loadQuery('SELECT BILL_ID FROM BILLING_REQUEST WHERE CLIENT_ID = ' + IntToStr(clientId) + ' AND BILL_ID IN (' + str + ') AND INVOICE_ID > 0');
+  if CDataSet.RecordCount = 0 then result := True;
 end;
 
 procedure TBillingDialogframe.cmbPeriodChange(Sender: TObject);
@@ -110,6 +152,72 @@ begin
   setupGrid;
 end;
 
+function TBillingDialogframe.createInsertInvoiceSQL(clientId: Int64; invoiceId: Int64): String;
+  function _String(str: String; isLast: Boolean = False): String;
+  var comma: String;
+  begin
+    case isLast of
+      True: comma := '';
+      False: comma := ',';
+    end;
+    result := '''' + AnsiReplaceText(str,',','C') + '''' + comma;
+  end;
+begin
+  result := 'INSERT INTO INVOICE' +
+            '(CLIENT_ID,' +
+            'INVOICE_ID,' +
+            'SUBJECT,' +
+            'BODY,' +
+            'RECEIPT_FLG,' +
+            'INPUT_DATETIME)' +
+            'VALUES' +
+            '(' +
+            IntToStr(clientId) + ',' +
+            IntToStr(invoiceId) + ',' +
+            _String(frmMailDialog.edtSubject.Text) +
+            _String(frmMailDialog.memoContents.Text) +
+            '0,' +
+            'SYSDATE()' +
+            ')';
+end;
+
+function TBillingDialogframe.createUpdateBRForInvoiceSQL(clientId,
+  invoiceId: Int64): String;
+var sql,str: String;
+    i: Integer;
+begin
+  result := '';
+  str := '';
+  for i := 1 to grdBilling.RowCount - 1 do begin
+    if StrToInt64Def(grdBilling.Cells[0,i],-1) > 0 then begin
+      if Length(str) > 0 then str := str + ',';
+      str := str + grdBilling.Cells[0,i];
+    end;
+  end;
+  result := 'UPDATE BILLING_REQUEST SET INVOICE_ID = ' + IntToStr(invoiceId) + ' WHERE CLIENT_ID = ' + IntToStr(clientId) + ' AND BILL_ID IN (' + str + ')';
+end;
+
+function TBillingDialogframe.executeInvoice(clientId:Int64): Boolean;
+var invoiceId: Int64;
+    tran: TDBXTransaction;
+begin
+  result := False;
+  tran := Accessor.BeginTransaction;
+  try
+    invoiceId := getInvoiceId(clientId) + 1;
+    Accessor.ExecuteUpdate(createInsertInvoiceSQL(clientId,invoiceId));
+    Accessor.ExecuteUpdate(createUpdateBRForInvoiceSQL(clientId,invoiceId));
+    Accessor.CommitFreeAndNil(tran);
+    result := True;
+  except
+    on E: Exception do begin
+      Accessor.RollbackFreeAndNil(tran);
+      result := False;
+      ShowMessage(e.Message);
+    end;
+  end;
+end;
+
 procedure TBillingDialogframe.getBillingInfo;
 var sql: String;
     i,amt:Integer;
@@ -118,7 +226,11 @@ begin
   sql := 'SELECT ' +
          '    BILL_ID,' +
          '    BOOK_DATE,' +
-         '    BILLING_TYPE,' +//To Do ‚ ‚Æ‚ÅDECODE‚ÅˆÓ–¡‚ª‚í‚©‚é‚æ‚¤‚É‚·‚é
+         '    CASE BILLING_TYPE ' +
+         '      WHEN 1 THEN "Counseling" '  +
+         '      WHEN 2 THEN "Seminar" ' +
+         '      WHEN 3 THEN "Alpha Package" ' +
+         '      WHEN 4 THEN "Standard Package" END "BILLING TYPE",' +
          '    BOOK_AMOUNT,' +
          '    MEMO,' +
          '    TOTAL_HOUR,' +
@@ -128,6 +240,7 @@ begin
          ' WHERE CLIENT_ID = ' + IntToStr(g_ClientId);
   if cmbPeriod.ItemIndex <> 0 then
     sql := sql + ' AND BOOK_DATE BETWEEN ' + '''' + FormatDateTime('yyyy/mm/dd',edtFirstDate.Date) + '''' + ' AND ' + '''' + FormatDateTime('yyyy/mm/dd',edtLastDate.Date) + '''';
+    sql := sql + ' AND INVOICE_ID = 0';
   sql := sql +' ORDER BY BILL_ID';
   loadQuery(sql);
   if cDataSet.RecordCount = 0 then grdBilling.RowCount := 2
@@ -154,7 +267,11 @@ begin
          '    SEQ,' +
          '    BILL_ID,' +
          '    COUNSELING_DATE,' +
-         '    COUNSELING_TYPE,' + //To Do ‚ ‚Æ‚ÅDECODE‚ÅˆÓ–¡‚ª‚í‚©‚é‚æ‚¤‚É‚·‚é
+         '    CASE COUNSELING_TYPE ' +
+         '      WHEN 1 THEN "Face To Face" ' +
+         '      WHEN 2 THEN "Skype" ' +
+         '      WHEN 3 THEN "Email" ' +
+         '      WHEN 4 THEN "Seminar" END "COUNSELING TYPE",' +
          '    HOURS,' +
          '    CONTENT_TYPE' +
          ' FROM' +
@@ -175,6 +292,13 @@ begin
     grdCounseling.Cells[5,i] := cDataSet.Fields[5].AsString;
     cDataSet.Next;
   end;
+end;
+
+function TBillingDialogframe.getInvoiceId(clientId: Int64): Int64;
+begin
+  loadQuery('SELECT MAX(INVOICE_ID) FROM INVOICE WHERE CLIENT_ID = ' + IntToStr(clientId));
+  if CDataSet.Fields[0].AsInteger > 0 then result := CDataSet.Fields[0].AsInteger
+                                      else result := 0;
 end;
 
 procedure TBillingDialogframe.initialize;

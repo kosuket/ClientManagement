@@ -108,8 +108,6 @@ inherited MailDlgframe: TMailDlgframe
         BorderStyle = bsNone
         ScrollBars = ssBoth
         TabOrder = 1
-        ExplicitTop = 44
-        ExplicitHeight = 388
       end
       object pnlAttachment: TPanel
         Left = 0

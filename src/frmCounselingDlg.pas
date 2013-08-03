@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, FWSQLBaseDlgfrm, Data.FMTBcd, Data.DB,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, FWSQLBaseDlgfrm, Data.FMTBcd, Data.DB,System.AnsiStrings,
   Data.SqlExpr, Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.ComCtrls, MySQLAccessor, frmClientSearch,Data.DBXCommon, System.DateUtils;
 
 type
@@ -44,6 +44,9 @@ type
     lblCharge: TLabel;
     lbClient: TListBox;
     btnCancel: TButton;
+    lblExplanation: TLabel;
+    cbCounselingPaid: TCheckBox;
+    cbPackagePaid: TCheckBox;
     procedure cmbItemTypeChange(Sender: TObject);
     procedure btnClientClick(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
@@ -107,6 +110,11 @@ const
   itPackage = 2;
   ptAlpha = 0;
   ptStandard = 1;
+  cmbCounselingBillType : Array[0..3] of String =(
+  '1',
+  '1',
+  '1',
+  '2');
   cmbPackageBillType : Array[0..1] of String =(
   '3',
   '4');
@@ -348,6 +356,7 @@ var rate: Double;
     hour: Double;
 begin
   result := 0;
+  lblExplanation.Visible := False;
   if cmbCounselingType.ItemIndex = ctSeminar then begin
     result := crSeminar;
     exit;
@@ -363,7 +372,16 @@ begin
   hour := calcCounselingHour - StrToFloatDef(ClientRestHourList[0],0);
   if hour > 0 then result := Trunc(rate * hour)
               else result := 0;
-  if ClientAlphaList[0] = '1' then result := 0;
+  if hour < calcCounselingHour then begin
+    lblExplanation.Caption := 'Standard Package: ' + ClientRestHourList[0] + ' Hour(s)';
+    lblExplanation.Visible := True;
+  end;
+
+  if ClientAlphaList[0] = '1' then begin
+    lblExplanation.Caption := 'Alpha Package';
+    lblExplanation.Visible := True;
+    result := 0;
+  end;
 end;
 
 function TCounselingDialogframe.calcCounselingHour: Double;
@@ -439,7 +457,7 @@ begin
       gbCounseling.Align := alClient;
       lbClient.Visible := False;
       lblClient.Visible := True;
-      Self.Height := 364;
+      Self.Height := 394;
     end;
     1: begin
       gbCounseling.Visible := True;
@@ -448,7 +466,7 @@ begin
       cmbCounselingType.ItemIndex := ctSeminar;
       lbClient.Visible := True;
       lblClient.Visible := False;
-      Self.Height := 364;
+      Self.Height := 394;
     end;
     2: begin
       gbCounseling.Visible := False;
@@ -456,7 +474,7 @@ begin
       gbPackage.Align := alClient;
       lbClient.Visible := False;
       lblClient.Visible := True;
-      Self.Height := 241;
+      Self.Height := 271;
     end;
   end;
 end;
@@ -501,10 +519,11 @@ function TCounselingDialogframe.createInsertBRForCounselingSQL(clientId: Int64;b
       True: comma := '';
       False: comma := ',';
     end;
-    result := '''' + str + '''' + comma;
+    result := '''' + AnsiReplaceText(str,',','') + '''' + comma;
   end;
 var sl: TStringList;
    amt: Int64;
+   invoiceId,receiptFlg: Integer;
 begin
   sl := TStringList.Create;
   With sl do begin
@@ -518,7 +537,9 @@ begin
     Add('INPUT_DATETIME,');
     Add('TOTAL_HOUR,');
     Add('CURRENT_HOUR,');
-    Add('COUNSELING_SEQ)');
+    Add('COUNSELING_SEQ,');
+    Add('INVOICE_ID,');
+    Add('RECEIPT_FLG)');
     Add('VALUES(');
     Add(IntToStr(clientId) + ',');
     Add(IntToStr(billId) + ',');
@@ -529,12 +550,21 @@ begin
     else if packageFlg = 1 then amt := Trunc(StrToInt64Def(edtCounselingAmount.Text,0)/2)
                            else amt := StrToInt64Def(edtCounselingAmount.Text,0);
     Add(_String(IntToStr(amt)));
-    Add('1,');
+    Add(cmbCounselingTypeVal[cmbCounselingType.ItemIndex] + ',');
     Add(_String(memoCounseling.Lines.Text));
     Add('SYSDATE(),');
     Add(FloatToStr(hour) + ',');
     Add(FloatToStr(hour) + ',');
-    Add(IntToStr(seq));
+    Add(IntToStr(seq) + ',');
+    if cbCounselingPaid.Checked then begin
+      invoiceId := -1;
+      receiptFlg := 1;
+    end else begin
+      invoiceId := 0;
+      receiptFlg:= 0;
+    end;
+    Add(IntToStr(invoiceId) + ',');
+    Add(IntToStr(receiptFlg));
     Add(')');
     result := Text;
   end;
@@ -549,9 +579,10 @@ function TCounselingDialogframe.createInsertBRForPackageSQL: String;
       True: comma := '';
       False: comma := ',';
     end;
-    result := '''' + str + '''' + comma;
+    result := '''' + AnsiReplaceText(str,',','') + '''' + comma;
   end;
 var sl: TStringList;
+   invoiceId,receiptFlg: Integer;
 begin
   sl := TStringList.Create;
   With sl do begin
@@ -564,7 +595,9 @@ begin
     Add('MEMO,');
     Add('INPUT_DATETIME,');
     Add('TOTAL_HOUR,');
-    Add('CURRENT_HOUR)');
+    Add('CURRENT_HOUR,');
+    Add('INVOICE_ID,');
+    Add('RECEIPT_FLG)');
     Add('VALUES(');
     Add(ClientIdList[0] + ',');
     Add(IntToStr(getCurrentBillId(StrToInt64def(ClientIdList[0],-1)) + 1) + ',');
@@ -574,7 +607,16 @@ begin
     Add(_String(memoBilling.Lines.Text));
     Add('SYSDATE(),');
     Add(cmbPackageTotalHour[cmbPackageType.ItemIndex] + ',');
-    Add('0');
+    Add('0,');
+    if cbPackagePaid.Checked then begin
+      invoiceId := -1;
+      receiptFlg := 1;
+    end else begin
+      invoiceId := 0;
+      receiptFlg:= 0;
+    end;
+    Add(IntToStr(invoiceId) + ',');
+    Add(IntToStr(receiptFlg));
     Add(')');
     result := Text;
   end;
@@ -589,7 +631,7 @@ function TCounselingDialogframe.createInsertCounselingSQL(clientId: Int64; seq: 
       True: comma := '';
       False: comma := ',';
     end;
-    result := '''' + str + '''' + comma;
+    result := '''' + AnsiReplaceText(str,',','') + '''' + comma;
   end;
 var sl: TStringList;
 begin
@@ -639,8 +681,8 @@ function TCounselingDialogframe.createUpdateBRForCounselingSQL(clientId,
   billId: Int64; hour: Double; alphaFlg: Integer): String;
 var i: Integer;
 begin
-  if alphaFlg = 1 then   result := 'UPDATE BILLING_REQUEST SET TOTAL_HOUR = TOTAL_HOUR + ' + FloatToStr(hour) +', CURRENT_HOUR = CURRENT_HOUR + ' + FloatToStr(hour) + ' WHERE CLIENT_ID = ' + IntToStr(clientId) + ' AND BILL_ID = ' + IntToStr(billId);
-  result := 'UPDATE BILLING_REQUEST SET CURRENT_HOUR = CURRENT_HOUR + ' + FloatToStr(hour) + ' WHERE CLIENT_ID = ' + IntToStr(clientId) + ' AND BILL_ID = ' + IntToStr(billId);
+  if alphaFlg = 1 then result := 'UPDATE BILLING_REQUEST SET TOTAL_HOUR = TOTAL_HOUR + ' + FloatToStr(hour) +', CURRENT_HOUR = CURRENT_HOUR + ' + FloatToStr(hour) + ' WHERE CLIENT_ID = ' + IntToStr(clientId) + ' AND BILL_ID = ' + IntToStr(billId)
+                  else result := 'UPDATE BILLING_REQUEST SET CURRENT_HOUR = CURRENT_HOUR + ' + FloatToStr(hour) + ' WHERE CLIENT_ID = ' + IntToStr(clientId) + ' AND BILL_ID = ' + IntToStr(billId);
 end;
 
 function TCounselingDialogframe.createUpdateClForPackageSQL(clientId: Int64; ptDiv: Integer): String;

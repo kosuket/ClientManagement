@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, FWSQLBaseDlgfrm, Data.FMTBcd, Vcl.Grids,
   Vcl.StdCtrls, Data.DB, Data.SqlExpr, Vcl.ExtCtrls, Datasnap.DBClient,
   Datasnap.Provider, Vcl.ComCtrls, Vcl.ToolWin,Data.DBXCommon, Vcl.Buttons,
-  Vcl.AppEvnts, MySQLAccessor;
+  Vcl.AppEvnts, MySQLAccessor,System.AnsiStrings;
 
 type
   TOpenMode = (omNew,omModify);
@@ -447,7 +447,7 @@ function TfrmClientCarteDlg.createInsertClientSQL: String;
       True: comma := '';
       False: comma := ',';
     end;
-    result := '''' + str + '''' + comma;
+    result := '''' + AnsiReplaceText(str,',','，') + '''' + comma;
   end;
   function _Div(int: Integer; isLast: Boolean=False): String;
   var comma: String;
@@ -540,7 +540,7 @@ function TfrmClientCarteDlg.createInsertTOEFLSQL: String;
       True: comma := '';
       False: comma := ',';
     end;
-    result := '''' + str + '''' + comma;
+    result := '''' + AnsiReplaceText(str,',','，') + '''' + comma;
   end;
   function _Integer(str: String; isLast: Boolean = False): String;
   var comma: String;
@@ -595,7 +595,7 @@ function TfrmClientCarteDlg.createUpdateClientSQL: String;
       True: comma := '';
       False: comma := ',';
     end;
-    result := '''' + str + '''' + comma;
+    result := '''' + AnsiReplaceText(str,',','，') + '''' + comma;
   end;
   function _Div(int: Integer; isLast: Boolean=False): String;
   var comma: String;
@@ -644,7 +644,7 @@ function TfrmClientCarteDlg.createInsertGMATSQL: String;
       False: comma := ',';
     end;
     if Length(Trim(str)) = 0 then result := 'null' + comma
-                             else result := '''' + str + '''' + comma;
+      else result := '''' + AnsiReplaceText(str,',','，') + '''' + comma;
   end;
   function _Integer(str: String; isLast: Boolean = False): String;
   var comma: String;

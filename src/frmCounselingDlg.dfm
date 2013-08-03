@@ -1,14 +1,15 @@
 inherited CounselingDialogframe: TCounselingDialogframe
   Caption = 'CounselingDialogframe'
-  ClientHeight = 450
+  ClientHeight = 510
   ClientWidth = 637
+  Position = poScreenCenter
   ExplicitWidth = 653
-  ExplicitHeight = 488
+  ExplicitHeight = 548
   PixelsPerInch = 96
   TextHeight = 13
   inherited pnlBase: TPanel
     Width = 637
-    Height = 450
+    Height = 510
     ExplicitWidth = 637
     ExplicitHeight = 450
     inherited pnlTitle: TPanel
@@ -40,9 +41,10 @@ inherited CounselingDialogframe: TCounselingDialogframe
       end
       object cmbItemType: TComboBox
         Left = 8
-        Top = 4
+        Top = 2
         Width = 105
-        Height = 21
+        Height = 22
+        Style = csOwnerDrawFixed
         ItemIndex = 0
         TabOrder = 1
         Text = 'Counseling'
@@ -64,7 +66,7 @@ inherited CounselingDialogframe: TCounselingDialogframe
       ParentBackground = False
       TabOrder = 1
       object lblClient: TLabel
-        Left = 127
+        Left = 128
         Top = 11
         Width = 478
         Height = 25
@@ -114,7 +116,7 @@ inherited CounselingDialogframe: TCounselingDialogframe
       Left = 1
       Top = 73
       Width = 635
-      Height = 252
+      Height = 282
       Align = alTop
       Caption = 'Counseling'
       Color = clCream
@@ -254,8 +256,8 @@ inherited CounselingDialogframe: TCounselingDialogframe
         Layout = tlBottom
       end
       object lblCharge: TLabel
-        Left = 372
-        Top = 16
+        Left = 128
+        Top = 248
         Width = 46
         Height = 21
         AutoSize = False
@@ -271,8 +273,27 @@ inherited CounselingDialogframe: TCounselingDialogframe
         Transparent = False
         Layout = tlBottom
       end
+      object lblExplanation: TLabel
+        Left = 374
+        Top = 248
+        Width = 232
+        Height = 21
+        AutoSize = False
+        Caption = 'Charge'
+        Color = clCream
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clRed
+        Font.Height = -13
+        Font.Name = 'Georgia'
+        Font.Style = []
+        ParentColor = False
+        ParentFont = False
+        Transparent = False
+        Layout = tlBottom
+        Visible = False
+      end
       object cmbCounselingType: TComboBox
-        Left = 127
+        Left = 128
         Top = 16
         Width = 104
         Height = 22
@@ -291,7 +312,7 @@ inherited CounselingDialogframe: TCounselingDialogframe
           'Seminar')
       end
       object edtCounselingDate: TDateTimePicker
-        Left = 127
+        Left = 128
         Top = 46
         Width = 104
         Height = 22
@@ -355,8 +376,8 @@ inherited CounselingDialogframe: TCounselingDialogframe
         TabOrder = 4
       end
       object cbPanicFee: TCheckBox
-        Left = 245
-        Top = 17
+        Left = 8
+        Top = 250
         Width = 82
         Height = 22
         Alignment = taLeftJustify
@@ -371,7 +392,7 @@ inherited CounselingDialogframe: TCounselingDialogframe
         OnClick = cbPanicFeeClick
       end
       object memoNextAction: TRichEdit
-        Left = 127
+        Left = 128
         Top = 106
         Width = 478
         Height = 64
@@ -387,8 +408,8 @@ inherited CounselingDialogframe: TCounselingDialogframe
         TabOrder = 7
       end
       object edtCounselingAmount: TEdit
-        Left = 432
-        Top = 16
+        Left = 195
+        Top = 248
         Width = 173
         Height = 22
         Alignment = taRightJustify
@@ -402,12 +423,27 @@ inherited CounselingDialogframe: TCounselingDialogframe
         TabOrder = 8
         Text = '0'
       end
+      object cbCounselingPaid: TCheckBox
+        Left = 245
+        Top = 18
+        Width = 81
+        Height = 22
+        Alignment = taLeftJustify
+        Caption = 'Fee Paid'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Georgia'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 9
+      end
     end
     object gbPackage: TGroupBox
       Left = 1
-      Top = 325
+      Top = 355
       Width = 635
-      Height = 124
+      Height = 154
       Align = alClient
       Caption = 'Package'
       Color = clCream
@@ -420,6 +456,8 @@ inherited CounselingDialogframe: TCounselingDialogframe
       ParentColor = False
       ParentFont = False
       TabOrder = 3
+      ExplicitTop = 325
+      ExplicitHeight = 124
       object lblPackageType: TLabel
         Left = 16
         Top = 24
@@ -439,9 +477,9 @@ inherited CounselingDialogframe: TCounselingDialogframe
         Layout = tlBottom
       end
       object lblBookDate: TLabel
-        Left = 16
-        Top = 54
-        Width = 105
+        Left = 245
+        Top = 24
+        Width = 81
         Height = 21
         AutoSize = False
         Caption = 'Book Date'
@@ -457,9 +495,9 @@ inherited CounselingDialogframe: TCounselingDialogframe
         Layout = tlBottom
       end
       object lblBookAmount: TLabel
-        Left = 16
-        Top = 84
-        Width = 105
+        Left = 245
+        Top = 54
+        Width = 81
         Height = 21
         AutoSize = False
         Caption = 'Charge'
@@ -475,8 +513,8 @@ inherited CounselingDialogframe: TCounselingDialogframe
         Layout = tlBottom
       end
       object Label1: TLabel
-        Left = 245
-        Top = 24
+        Left = 16
+        Top = 84
         Width = 70
         Height = 21
         AutoSize = False
@@ -493,7 +531,7 @@ inherited CounselingDialogframe: TCounselingDialogframe
         Layout = tlBottom
       end
       object cmbPackageType: TComboBox
-        Left = 135
+        Left = 128
         Top = 24
         Width = 96
         Height = 22
@@ -511,8 +549,8 @@ inherited CounselingDialogframe: TCounselingDialogframe
           'Standard')
       end
       object edtBookDate: TDateTimePicker
-        Left = 135
-        Top = 54
+        Left = 329
+        Top = 24
         Width = 96
         Height = 22
         Date = 41455.633558726860000000
@@ -526,8 +564,8 @@ inherited CounselingDialogframe: TCounselingDialogframe
         TabOrder = 1
       end
       object edtPackageAmount: TEdit
-        Left = 135
-        Top = 84
+        Left = 329
+        Top = 54
         Width = 96
         Height = 22
         Alignment = taRightJustify
@@ -536,12 +574,27 @@ inherited CounselingDialogframe: TCounselingDialogframe
         Text = '0'
       end
       object memoBilling: TRichEdit
-        Left = 329
-        Top = 24
-        Width = 277
-        Height = 82
+        Left = 128
+        Top = 84
+        Width = 471
+        Height = 62
         ScrollBars = ssBoth
         TabOrder = 3
+      end
+      object cbPackagePaid: TCheckBox
+        Left = 16
+        Top = 56
+        Width = 84
+        Height = 22
+        Alignment = taLeftJustify
+        Caption = 'Fee Paid'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Georgia'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 4
       end
     end
   end
