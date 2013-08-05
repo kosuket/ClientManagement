@@ -2,7 +2,7 @@ unit MySQLAccessor;
 
 interface
 uses
-  Data.SqlExpr, Data.DB, Data.DBXCommon;
+  Data.SqlExpr, Data.DB, Data.DBXCommon, Data.DBXMySQL;
 
 type TMySQLAccessor = class
   private
@@ -23,7 +23,7 @@ type TMySQLAccessor = class
     function BeginTransaction: TDBXTransaction;
     procedure CommitFreeAndNil(tran:TDBXTransaction);
     procedure RollBackFreeAndNil(tran:TDBXTransaction);
-end;
+  end;
 
 implementation
 
