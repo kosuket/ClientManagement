@@ -121,6 +121,8 @@ begin
     0: begin
       edtFirstDate.Enabled := False;
       edtLastDate.Enabled := False;
+      edtFirstDate.Date := StrToDate('1900/01/01');
+      edtLastDate.Date  := StrToDate('2382/12/31');
     end;
     1: begin
       edtFirstDate.Enabled := True;
@@ -168,6 +170,8 @@ begin
             'INVOICE_ID,' +
             'SUBJECT,' +
             'BODY,' +
+            'START_DATE' +
+            'END_DATE' +
             'RECEIPT_FLG,' +
             'INPUT_DATETIME)' +
             'VALUES' +
@@ -176,6 +180,8 @@ begin
             IntToStr(invoiceId) + ',' +
             _String(frmMailDialog.edtSubject.Text) +
             _String(frmMailDialog.memoContents.Text) +
+            _String(FormatDateTime('yyyy/mm/dd',edtFirstDate.Date)) +
+            _String(FormatDateTime('yyyy/mm/dd',edtLastDate.Date)) +
             '0,' +
             'SYSDATE()' +
             ')';

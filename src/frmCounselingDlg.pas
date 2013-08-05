@@ -523,7 +523,7 @@ function TCounselingDialogframe.createInsertBRForCounselingSQL(clientId: Int64;b
   end;
 var sl: TStringList;
    amt: Int64;
-   invoiceId,receiptFlg: Integer;
+   invoiceId,receiptFlg,panicFlg: Integer;
 begin
   sl := TStringList.Create;
   With sl do begin
@@ -537,6 +537,7 @@ begin
     Add('INPUT_DATETIME,');
     Add('TOTAL_HOUR,');
     Add('CURRENT_HOUR,');
+    Add('PANIC_FLG,');
     Add('COUNSELING_SEQ,');
     Add('INVOICE_ID,');
     Add('RECEIPT_FLG)');
@@ -555,6 +556,9 @@ begin
     Add('SYSDATE(),');
     Add(FloatToStr(hour) + ',');
     Add(FloatToStr(hour) + ',');
+    if cbPanicFee.Checked then panicFlg := 1
+                          else panicFlg := 0;
+    Add(IntToStr(panicFlg) + ',');
     Add(IntToStr(seq) + ',');
     if cbCounselingPaid.Checked then begin
       invoiceId := -1;
@@ -721,6 +725,7 @@ var sql: String;
     alpha,standard: Integer;
     pkgBillId:Int64;
     restHour: Double;
+    panicFlg,receiptFlg: Boolean;
 begin
   sql := 'SELECT ' +
          '    C.CLIENT_ID,' +
@@ -735,7 +740,9 @@ begin
          '    C.MEMO,' +
          '    C.NEXT_ACTION,' +
          '    C.PACKAGE_HOURS,' +
-         '    B.BOOK_AMOUNT' +
+         '    B.BOOK_AMOUNT,' +
+         '    B.PANIC_FLG,' +
+         '    B.RECEIPT_FLG' +
          ' FROM' +
          '    COUNSELING C' +
          '        LEFT JOIN' +
@@ -753,7 +760,7 @@ begin
   edtStartTime.Time           := StrToTime(CDataSet.Fields[5].AsString);
   edtEndTime.Time             := StrToTime(CDataSet.Fields[6].AsString);
   edtContentType.Text         := CDataSet.Fields[7].AsString;
-  restHour                    := StrToFloatDef(CDataSet.Fields[8].AsString,0);
+  restHour                    := StrToFloatDef(CDataSet.Fields[11].AsString,0);
   memoCounseling.Text         := CDataSet.Fields[9].AsString;
   memoNextAction.Text         := CDataSet.Fields[10].AsString;
   g_PackageHours              := CDataSet.Fields[11].AsFloat;
@@ -766,6 +773,10 @@ begin
   if cmbCounselingType.ItemIndex = ctSeminar then edtCounselingAmount.Text := '5000'
   else if StrToInt64Def(CDataSet.Fields[12].AsString, -1) <> -1 then edtCounselingAmount.Text := CDataSet.Fields[12].AsString
                                                                 else edtCounselingAmount.Text := '0';
+  if CDataSet.Fields[13].AsInteger = 1 then panicFlg := True
+                                       else panicFlg := False;
+  if CDataSet.Fields[14].AsInteger = 1 then receiptFlg := True
+                                       else receiptFlg := False;
   sql := 'SELECT ALPHA_FLG,STANDARD_FLG FROM CLIENT WHERE CLIENT_ID = ' + IntToStr(g_ClientId);
   loadQuery(sql);
   alpha := CDataSet.Fields[0].AsInteger;
@@ -777,6 +788,7 @@ begin
   loadQuery(sql);
   restHour := restHour + StrToFloatDef(CDataSet.Fields[0].AsString,0);
   addClientLists(g_ClientId,pkgBillId,alpha,standard,restHour);
+  cbPanicFee.Checked := panicFlg;
 end;
 
 function TCounselingDialogframe.getCurrentBillId(clientId: Int64): Int64;
@@ -816,6 +828,7 @@ procedure TCounselingDialogframe.initializeModify;
 begin
   cmbItemType.Enabled := False;
   btnOK.Caption := 'Update';
+  btnOK.Hint := 'Modify This Counseling Data And Save';
   btnCancel.Visible := True;
   getCounselingInfo;
 end;
@@ -824,6 +837,7 @@ procedure TCounselingDialogframe.initializeNew;
 begin
   cmbItemType.Enabled := True;
   btnOK.Caption := 'Book';
+  btnOK.Hint := 'Register This Counseling Data with Billing Request';
   btnCancel.Visible := False;
   cmbItemTypeChange(Self);
 end;

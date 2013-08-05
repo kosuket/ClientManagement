@@ -9,7 +9,7 @@ uses
   Vcl.DBCtrls, Datasnap.Provider, Datasnap.DBClient, LogInFrm, Vcl.Buttons,
   Vcl.ComCtrls,frmClient,frmBilling, frmMaster, Vcl.Menus, Vcl.ImgList,
   Vcl.Imaging.jpeg, frmMailSetting, DBEditorMainFrm, DBGridBaseFrm,
-  Vcl.Imaging.pngimage, MySQLAccessor, frmCounseling;
+  Vcl.Imaging.pngimage, MySQLAccessor, frmCounseling, frmReceipt;
 
 type
   TMainframe = class(TForm)
@@ -37,6 +37,8 @@ type
     mmDebugMode: TMenuItem;
     pnlCounseling: TPanel;
     imgCounseling: TImage;
+    pnlReceipt: TPanel;
+    Image1: TImage;
     procedure SQLConnection1Login(Database: TSQLConnection;
       LoginParams: TStrings);
     procedure pnlBillingMouseDown(Sender: TObject; Button: TMouseButton;
@@ -69,6 +71,13 @@ type
     procedure pnlCounselingMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure pnlCounselingClick(Sender: TObject);
+    procedure pnlReceiptClick(Sender: TObject);
+    procedure pnlReceiptMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure pnlReceiptMouseEnter(Sender: TObject);
+    procedure pnlReceiptMouseLeave(Sender: TObject);
+    procedure pnlReceiptMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
   private
     { Private declarations }
     Accessor: TMySQLAccessor;
@@ -76,6 +85,7 @@ type
     frmLogIn: TLogInFrame;
     frmCounselingSearch: TCounselingFrame;
     frmBillingSearch: TBillingFrame;
+    frmReceiptSearch: TReceiptframe;
     frmMailSetting: TMailSettingFrame;
     frmDBEditor: TFrmDBEditorMain;
     procedure cleanPnlMain;
@@ -120,12 +130,14 @@ begin
   pnlCounseling.Color := clWindow;
   pnlBilling.Color := clWindow;
   pnlCustom.Color := clWindow;
+  pnlReceipt.Color := clWindow;
   pnl.Color := $00FFE2C4;
 
   //Set Font Style
   pnlClient.Font.Style := [];
   pnlCounseling.Font.Style := [];
   pnlBilling.Font.Style := [];
+  pnlReceipt.Font.Style := [];
   pnlCustom.Font.Style := [];
   pnl.Font.Style := [fsBold,fsItalic];
   pnl.Font.Color := clBlack;
@@ -167,6 +179,7 @@ begin
   frmClient.pnlBase.Visible := False;
   frmCounselingSearch.pnlBase.Visible := False;
   frmBillingSearch.pnlBase.Visible := False;
+  frmReceiptSearch.pnlBase.Visible := False;
   frmDBEditor.Visible := False;
 end;
 
@@ -207,6 +220,13 @@ begin
   frmBillingSearch.Initialize;
   frmBillingSearch.pnlBase.Visible := False;
   frmBillingSearch.m_DebugMode := g_DebugMode;
+
+  //Receipt
+  frmReceiptSearch := TReceiptframe.Create(Self, Accessor);
+  frmReceiptSearch.pnlBase.Parent := pnlMain;
+  frmReceiptSearch.Initialize;
+  frmReceiptSearch.pnlBase.Visible := False;
+  frmReceiptSearch.m_DebugMode := g_DebugMode;
 
   //MasterSetting
   frmDBEditor := TFrmDBEditorMain.Create(Self, Accessor);
@@ -302,6 +322,35 @@ procedure TMainframe.pnlCustomMouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
   behavePLBMouseUp(pnlCustom);
+end;
+
+procedure TMainframe.pnlReceiptClick(Sender: TObject);
+begin
+  cleanPnlMain;
+  frmReceiptSearch.pnlBase.Visible := True;
+  behavePLBClick(pnlReceipt,imgAccounting);
+end;
+
+procedure TMainframe.pnlReceiptMouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  behavePLBMouseDown(pnlReceipt);
+end;
+
+procedure TMainframe.pnlReceiptMouseEnter(Sender: TObject);
+begin
+  behavePLBMouseEnter(pnlReceipt,imgAccounting);
+end;
+
+procedure TMainframe.pnlReceiptMouseLeave(Sender: TObject);
+begin
+  behavePLBMouseLeave(pnlReceipt,imgAccounting);
+end;
+
+procedure TMainframe.pnlReceiptMouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  behavePLBMouseUp(pnlReceipt);
 end;
 
 procedure TMainframe.reflectDebugMode(b: Boolean);

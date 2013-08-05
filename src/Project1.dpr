@@ -22,7 +22,8 @@ uses
   TableListFrm in '..\External\DatabaseEditor\Src\TableListFrm.pas' {FrmTableList},
   frmBillingDlg in 'frmBillingDlg.pas' {BillingDialogframe},
   frmCounseling in 'frmCounseling.pas' {Counselingframe},
-  frmCounselingDlg in 'frmCounselingDlg.pas' {CounselingDialogframe};
+  frmCounselingDlg in 'frmCounselingDlg.pas' {CounselingDialogframe},
+  frmReceipt in 'frmReceipt.pas' {Receiptframe};
 
 {$R *.res}
 
@@ -30,5 +31,6 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TMainframe, Mainframe);
+  Application.CreateForm(TReceiptframe, Receiptframe);
   Application.Run;
 end.

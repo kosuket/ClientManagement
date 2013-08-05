@@ -3,6 +3,7 @@ inherited ClientSearchframe: TClientSearchframe
   ClientWidth = 858
   OnShow = FormShow
   ExplicitWidth = 874
+  ExplicitHeight = 477
   PixelsPerInch = 96
   TextHeight = 13
   object Splitter2: TSplitter [0]
@@ -21,12 +22,14 @@ inherited ClientSearchframe: TClientSearchframe
       Top = 126
       Width = 593
       ExplicitTop = 126
+      ExplicitWidth = 593
     end
     inherited Panel2: TPanel
       Top = 129
       Width = 593
       Height = 310
       ExplicitTop = 129
+      ExplicitWidth = 593
       ExplicitHeight = 310
       inherited DBGrid1: TDBGrid
         Width = 593
@@ -37,16 +40,20 @@ inherited ClientSearchframe: TClientSearchframe
     inherited pnlCondition: TPanel
       Width = 593
       Height = 126
+      ExplicitWidth = 593
       ExplicitHeight = 126
       inherited pnlCondBar: TPanel
         Top = 91
         Width = 593
         ExplicitTop = 91
+        ExplicitWidth = 593
         inherited Image1: TImage
           Width = 593
+          ExplicitWidth = 593
         end
         inherited btnLoad: TButton
           Left = 10
+          Anchors = [akLeft, akBottom]
           ExplicitLeft = 10
         end
         object btnOK: TButton
@@ -67,8 +74,10 @@ inherited ClientSearchframe: TClientSearchframe
       end
       inherited Panel1: TPanel
         Width = 593
+        ExplicitWidth = 593
         inherited Image2: TImage
           Width = 593
+          ExplicitWidth = 593
         end
       end
       object pnlBasic: TPanel
@@ -81,7 +90,6 @@ inherited ClientSearchframe: TClientSearchframe
         Color = clCream
         ParentBackground = False
         TabOrder = 2
-        ExplicitWidth = 737
         object lblFirstName: TLabel
           Left = 8
           Top = 13
@@ -181,10 +189,6 @@ inherited ClientSearchframe: TClientSearchframe
     Align = alRight
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitLeft = 624
-    ExplicitTop = 64
-    ExplicitWidth = 185
-    ExplicitHeight = 41
     object Panel3: TPanel
       Left = 0
       Top = 0

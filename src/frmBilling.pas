@@ -68,7 +68,7 @@ end;
 procedure TBillingframe.clearCond(ctrl: TWinControl);
 var i :Integer;
 begin
-  cmbPeriod.ItemIndex := 1;
+  cmbPeriod.ItemIndex := 2;
   cmbPeriod.OnChange(Self);
   for i := 0 to ctrl.ControlCount -1 do begin
     if ctrl.Controls[i].ClassType = TEdit then TEdit(ctrl.Controls[i]).Text := '';
@@ -193,8 +193,7 @@ end;
 procedure TBillingframe.Initialize;
 begin
   inherited;
-  cmbPeriod.ItemIndex := 1;
-  cmbPeriod.OnChange(Self);
+  clearCond(pnlAccounting);
 end;
 
 function TBillingframe.isMailable: Boolean;

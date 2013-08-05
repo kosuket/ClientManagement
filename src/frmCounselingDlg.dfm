@@ -11,7 +11,7 @@ inherited CounselingDialogframe: TCounselingDialogframe
     Width = 637
     Height = 510
     ExplicitWidth = 637
-    ExplicitHeight = 450
+    ExplicitHeight = 510
     inherited pnlTitle: TPanel
       Width = 635
       ExplicitWidth = 635
@@ -26,6 +26,8 @@ inherited CounselingDialogframe: TCounselingDialogframe
           Width = 75
           Height = 24
           Caption = 'btnOK'
+          ParentShowHint = False
+          ShowHint = True
           TabOrder = 0
           OnClick = btnOKClick
         end
@@ -34,7 +36,10 @@ inherited CounselingDialogframe: TCounselingDialogframe
           Top = 0
           Width = 75
           Height = 25
-          Caption = 'Cancel'
+          Hint = 'Delete This Counseling Data and Cancel Billing Request'
+          Caption = 'Delete'
+          ParentShowHint = False
+          ShowHint = True
           TabOrder = 1
           OnClick = btnCancelClick
         end
@@ -456,8 +461,6 @@ inherited CounselingDialogframe: TCounselingDialogframe
       ParentColor = False
       ParentFont = False
       TabOrder = 3
-      ExplicitTop = 325
-      ExplicitHeight = 124
       object lblPackageType: TLabel
         Left = 16
         Top = 24

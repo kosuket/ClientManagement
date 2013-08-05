@@ -1,41 +1,30 @@
-inherited Billingframe: TBillingframe
-  Caption = 'Billingframe'
+inherited Receiptframe: TReceiptframe
+  Caption = 'Receiptframe'
+  ExplicitLeft = -30
   PixelsPerInch = 96
   TextHeight = 13
   inherited pnlBase: TPanel
     inherited Splitter1: TSplitter
-      Top = 156
-      ExplicitTop = 116
+      Top = 169
+      ExplicitTop = 169
     end
     inherited Panel2: TPanel
-      Top = 159
-      Height = 280
-      ExplicitTop = 159
-      ExplicitHeight = 280
+      Top = 172
+      Height = 267
+      ExplicitTop = 172
+      ExplicitHeight = 267
       inherited DBGrid1: TDBGrid
-        Height = 280
-        PopupMenu = pmGrid
-        OnDblClick = DBGrid1DblClick
+        Height = 267
       end
     end
     inherited pnlCondition: TPanel
-      Height = 156
-      ExplicitHeight = 156
+      Height = 169
+      ExplicitHeight = 169
       inherited pnlCondBar: TPanel
-        Top = 121
-        ExplicitTop = 121
-        DesignSize = (
-          751
-          35)
-        inherited btnLoad: TButton
-          Anchors = [akLeft, akBottom]
-        end
+        Top = 134
+        ExplicitTop = 134
       end
       inherited Panel1: TPanel
-        TabOrder = 2
-        DesignSize = (
-          751
-          24)
         object btnClear: TSpeedButton
           Left = 714
           Top = 0
@@ -106,20 +95,20 @@ inherited Billingframe: TBillingframe
         Left = 0
         Top = 24
         Width = 751
-        Height = 97
+        Height = 110
         Align = alClient
         BevelOuter = bvNone
         Color = clCream
         DockSite = True
         ParentBackground = False
-        TabOrder = 1
-        object lblPeriod: TLabel
+        TabOrder = 2
+        object lblStartDate: TLabel
           Left = 8
           Top = 13
           Width = 89
           Height = 21
           AutoSize = False
-          Caption = 'Period'
+          Caption = 'START DATE'
           Font.Charset = ANSI_CHARSET
           Font.Color = clWindowText
           Font.Height = -13
@@ -145,7 +134,7 @@ inherited Billingframe: TBillingframe
         end
         object lblFirstName: TLabel
           Left = 8
-          Top = 45
+          Top = 77
           Width = 95
           Height = 21
           AutoSize = False
@@ -160,7 +149,7 @@ inherited Billingframe: TBillingframe
         end
         object lblLastName: TLabel
           Left = 221
-          Top = 45
+          Top = 77
           Width = 95
           Height = 21
           AutoSize = False
@@ -173,7 +162,37 @@ inherited Billingframe: TBillingframe
           ParentFont = False
           Layout = tlBottom
         end
-        object cmbPeriod: TComboBox
+        object lblEndDate: TLabel
+          Left = 8
+          Top = 45
+          Width = 89
+          Height = 21
+          AutoSize = False
+          Caption = 'END DATE'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Georgia'
+          Font.Style = []
+          ParentFont = False
+          Layout = tlBottom
+        end
+        object Label2: TLabel
+          Left = 323
+          Top = 44
+          Width = 17
+          Height = 21
+          AutoSize = False
+          Caption = #65374
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Georgia'
+          Font.Style = []
+          ParentFont = False
+          Layout = tlCenter
+        end
+        object cmbStartDate: TComboBox
           Left = 95
           Top = 12
           Width = 104
@@ -184,16 +203,18 @@ inherited Billingframe: TBillingframe
           Font.Height = -11
           Font.Name = 'Georgia'
           Font.Style = []
+          ItemIndex = 1
           ParentFont = False
           TabOrder = 0
-          OnChange = cmbPeriodChange
+          Text = 'This Month'
+          OnChange = cmbStartDateChange
           Items.Strings = (
             'All'
             'This Month'
             'Last Month'
             '2 Months Ago')
         end
-        object edtFirstDate: TDateTimePicker
+        object edtFirstStartDate: TDateTimePicker
           Left = 221
           Top = 13
           Width = 95
@@ -208,7 +229,7 @@ inherited Billingframe: TBillingframe
           ParentFont = False
           TabOrder = 1
         end
-        object edtLastDate: TDateTimePicker
+        object edtLastStartDate: TDateTimePicker
           Left = 346
           Top = 13
           Width = 95
@@ -225,7 +246,7 @@ inherited Billingframe: TBillingframe
         end
         object edtFirstName: TEdit
           Left = 95
-          Top = 45
+          Top = 77
           Width = 104
           Height = 22
           Font.Charset = ANSI_CHARSET
@@ -238,7 +259,7 @@ inherited Billingframe: TBillingframe
         end
         object edtLastName: TEdit
           Left = 316
-          Top = 45
+          Top = 77
           Width = 125
           Height = 22
           Font.Charset = ANSI_CHARSET
@@ -249,33 +270,59 @@ inherited Billingframe: TBillingframe
           ParentFont = False
           TabOrder = 4
         end
-        object chkExcludeZero: TCheckBox
-          Left = 8
-          Top = 77
-          Width = 213
-          Height = 17
-          Caption = 'Exclude Clients with No Charge'
+        object cmbEndDate: TComboBox
+          Left = 95
+          Top = 44
+          Width = 104
+          Height = 22
+          Style = csOwnerDrawFixed
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Georgia'
+          Font.Style = []
+          ItemIndex = 1
+          ParentFont = False
+          TabOrder = 5
+          Text = 'This Month'
+          OnChange = cmbEndDateChange
+          Items.Strings = (
+            'All'
+            'This Month'
+            'Last Month'
+            '2 Months Ago')
+        end
+        object edtFirstEndDate: TDateTimePicker
+          Left = 221
+          Top = 45
+          Width = 95
+          Height = 22
+          Date = 41455.633558726860000000
+          Time = 41455.633558726860000000
           Font.Charset = ANSI_CHARSET
           Font.Color = clWindowText
           Font.Height = -11
           Font.Name = 'Georgia'
           Font.Style = []
           ParentFont = False
-          TabOrder = 5
+          TabOrder = 6
+        end
+        object edtLastEndDate: TDateTimePicker
+          Left = 346
+          Top = 45
+          Width = 95
+          Height = 22
+          Date = 41455.633558726860000000
+          Time = 41455.633558726860000000
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Georgia'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 7
         end
       end
-    end
-  end
-  object pmGrid: TPopupMenu
-    Left = 392
-    Top = 270
-    object pmDetail: TMenuItem
-      Caption = 'View Detail'
-      Enabled = False
-      Visible = False
-    end
-    object pmMail: TMenuItem
-      Caption = 'Send Mail'
     end
   end
 end

@@ -84,9 +84,6 @@ object FWGridBaseframe: TFWGridBaseframe
         Color = clWindow
         ParentBackground = False
         TabOrder = 0
-        DesignSize = (
-          751
-          35)
         object Image1: TImage
           Left = 0
           Top = 0
@@ -351,11 +348,10 @@ object FWGridBaseframe: TFWGridBaseframe
           ExplicitHeight = 105
         end
         object btnLoad: TButton
-          Left = 682
+          Left = 8
           Top = 7
           Width = 63
           Height = 24
-          Anchors = [akRight, akBottom]
           Caption = 'Load'
           Font.Charset = ANSI_CHARSET
           Font.Color = clWindowText
