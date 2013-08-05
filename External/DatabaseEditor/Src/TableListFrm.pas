@@ -13,7 +13,6 @@ type
   TFuncBool = function: Boolean of object;
 
   TFrmTableList = class(TFrmDBGridBase)
-    procedure btnLoadTablesClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure MainGridCellClick(Column: TColumn);
     procedure MainGridKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -28,6 +27,7 @@ type
     OkToLeaveTable: TFuncBool;
     HasUnsavedChange: TFuncBool;
     constructor Create(AOwner: TComponent; Accessor: TMySQLAccessor);
+    procedure Refresh;
   end;
 
 var
@@ -38,10 +38,6 @@ implementation
 {$R *.dfm}
 
 { TFrmTableList }
-procedure TFrmTableList.btnLoadTablesClick(Sender: TObject);
-begin
-  LoadTableList;
-end;
 
 constructor TFrmTableList.Create(AOwner: TComponent; Accessor: TMySQLAccessor);
 begin
@@ -53,8 +49,7 @@ begin
   inherited;
   MainGrid.Align := alClient;
   MainGrid.ReadOnly := True;
-  LoadTableList;
-  OnSelectTableName(MainGrid.SelectedField.Text);
+  Refresh;
 end;
 
 procedure TFrmTableList.LoadTableList;
@@ -94,6 +89,12 @@ begin
   if (Key = VK_UP) or (Key = VK_DOWN) or (Key = VK_TAB) then begin
     OnSelectTableName(MainGrid.SelectedField.Text);
   end;
+end;
+
+procedure TFrmTableList.Refresh;
+begin
+  LoadTableList;
+  OnSelectTableName(MainGrid.SelectedField.Text);
 end;
 
 end.

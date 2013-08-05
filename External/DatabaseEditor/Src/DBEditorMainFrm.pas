@@ -21,6 +21,7 @@ type
     TableList: TFrmTableList;
     DBEdit: TFrmDBEdit;
     procedure OnSelectTable(TableName: string);
+    procedure Refresh;
     function OkToLeaveTable: Boolean;
     function HasUnsavedChange: Boolean;
   public
@@ -49,6 +50,11 @@ end;
 procedure TFrmDBEditorMain.OnSelectTable(TableName: string);
 begin
   DBEdit.SetTable(TableName);
+end;
+
+procedure TFrmDBEditorMain.Refresh;
+begin
+  TableList.Refresh;
 end;
 
 constructor TFrmDBEditorMain.Create(AOwner: TComponent; HostName, UserName,
@@ -80,6 +86,7 @@ begin
   TableList.OkToLeaveTable := OkToLeaveTable;
   TableList.Embed(pnlTableList);
   TableList.Show;
+  DBEdit.RefreshAction := Refresh;
   DBEdit.Embed(pnlTableDisplay);
   DBEdit.Show;
 end;

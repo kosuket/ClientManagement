@@ -69,7 +69,7 @@ inherited FrmDBEdit: TFrmDBEdit
         ShowHint = True
       end
       object btnLoad: TSpeedButton
-        Left = 254
+        Left = 366
         Top = 13
         Width = 41
         Height = 36
@@ -80,7 +80,7 @@ inherited FrmDBEdit: TFrmDBEdit
         ShowHint = True
       end
       object btnCommit: TSpeedButton
-        Left = 304
+        Left = 416
         Top = 13
         Width = 41
         Height = 36
@@ -109,6 +109,26 @@ inherited FrmDBEdit: TFrmDBEdit
         Hint = 'Import csv file to table.'
         Action = actImport
         Caption = 'Import'
+        ParentShowHint = False
+        ShowHint = True
+      end
+      object btnExecFile: TSpeedButton
+        Left = 251
+        Top = 13
+        Width = 41
+        Height = 36
+        Action = actExecuteFile
+        Caption = 'File'
+        ParentShowHint = False
+        ShowHint = True
+      end
+      object btnExecDir: TSpeedButton
+        Left = 298
+        Top = 13
+        Width = 41
+        Height = 36
+        Action = actExecuteDir
+        Caption = 'Dir'
         ParentShowHint = False
         ShowHint = True
       end
@@ -148,6 +168,14 @@ inherited FrmDBEdit: TFrmDBEdit
     object actDuplicateRow: TAction
       Caption = 'Duplicate Row'
       OnExecute = actDuplicateRowExecute
+    end
+    object actExecuteFile: TAction
+      Caption = 'actExecuteFile'
+      OnExecute = actExecuteFileExecute
+    end
+    object actExecuteDir: TAction
+      Caption = 'actExecuteDir'
+      OnExecute = actExecuteDirExecute
     end
   end
   object MainGridPopup: TPopupMenu

@@ -9,6 +9,7 @@ uses
   Vcl.Menus;
 
 type
+  TProc = procedure of object;
   TFrmDBEdit = class(TFrmDBGridBase)
     pnlDataList: TPanel;
     pnlHeader: TPanel;
@@ -30,6 +31,10 @@ type
     actDuplicateRow: TAction;
     MainGridPopup: TPopupMenu;
     miDuplRow: TMenuItem;
+    actExecuteFile: TAction;
+    btnExecFile: TSpeedButton;
+    actExecuteDir: TAction;
+    btnExecDir: TSpeedButton;
     procedure FormCreate(Sender: TObject);
     procedure actCommitExecute(Sender: TObject);
     procedure actLoadExecute(Sender: TObject);
@@ -39,6 +44,8 @@ type
     procedure actExportExecute(Sender: TObject);
     procedure MainGridKeyPress(Sender: TObject; var Key: Char);
     procedure actDuplicateRowExecute(Sender: TObject);
+    procedure actExecuteFileExecute(Sender: TObject);
+    procedure actExecuteDirExecute(Sender: TObject);
   private
     { Private declarations }
     EditedFlg: Boolean;
@@ -50,6 +57,7 @@ type
     const MsgConfirmCommit = 'Save the changes? This operation cannot be undone.';
   public
     { Public declarations }
+    RefreshAction: TProc;
     procedure SetTable(TableName: string);
     function OkToLeaveTable: Boolean;
     property Edited: Boolean read EditedFlg write SetEdited;
@@ -61,7 +69,7 @@ var
 
 implementation
 uses
-  UITypes;
+  UITypes, Vcl.FileCtrl;
 
 {$R *.dfm}
 
@@ -90,6 +98,32 @@ procedure TFrmDBEdit.actDuplicateRowExecute(Sender: TObject);
 begin
   DuplicateRow;
   Edited := True;
+end;
+
+procedure TFrmDBEdit.actExecuteDirExecute(Sender: TObject);
+var
+  Dir: string;
+begin
+  if SelectDirectory('Execute SQL Script Folder', 'C:', Dir, [sdNewFolder], Self) then begin
+    ExecuteSqlDirectory(Dir);
+  end;
+end;
+
+procedure TFrmDBEdit.actExecuteFileExecute(Sender: TObject);
+var
+  Dlg: TOpenDialog;
+begin
+  Dlg := TOpenDialog.Create(Self);
+  try
+    Dlg.Title := 'Execute SQL File';
+    Dlg.Filter := 'SQL file (*.sql)|*.SQL|All files (*.*)|*.*';
+    if Dlg.Execute then begin
+      ExecuteSqlFile(Dlg.FileName);
+      RefreshAction;
+    end;
+  finally
+    Dlg.Free();
+  end;
 end;
 
 procedure TFrmDBEdit.actExportExecute(Sender: TObject);

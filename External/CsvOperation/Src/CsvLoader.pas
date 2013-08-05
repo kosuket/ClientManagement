@@ -105,16 +105,15 @@ end;
 
 procedure TCsvLoader.PutInputColumns(FilePath: string; Cols: TStringList);
 var
-  Line: string;
   Reader: TStreamReader;
 begin
   Reader := TStreamReader.Create(FilePath, TEncoding.Default);
   try
     if not Reader.EndOfStream then begin
-      Line := Reader.ReadLine;
+      Cols.Delimiter := ',';
+      Cols.StrictDelimiter := True;
+      Cols.DelimitedText := Reader.ReadLine;
     end;
-    Cols.DelimitedText := Line;
-    Cols.Delimiter := ',';
   finally
     Reader.Free;
   end;

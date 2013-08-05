@@ -19,6 +19,15 @@ type
     Provider: TDataSetProvider;
     CsvOutput: TCsvOutput;
     CsvLoader: TCsvLoader;
+    procedure GetSqlCommandsFromFile(FilePath: string; var Commands: TStrings);
+    procedure GetDropFiles(DirPath: string; var FilePaths: TStrings);
+    procedure GetCreateFiles(DirPath: string; var FilePaths: TStrings);
+    procedure GetDeleteFiles(DirPath: string; var FilePaths: TStrings);
+    procedure GetUpdateFiles(DirPath: string; var FilePaths: TStrings);
+    procedure GetInsertFiles(DirPath: string; var FilePaths: TStrings);
+    procedure GetImportFiles(DirPath: string; var FilePaths: TStrings);
+    procedure ExecuteSqlFiles(FilePaths: TStrings);
+    procedure ImportFiles(FilePaths: TStrings);
   protected
     Accessor: TMySQLAccessor;
     CDataSet: TClientDataSet;
@@ -29,7 +38,10 @@ type
     procedure LoadQuery(Sql: string);
     procedure LoadTable(Table: string);
     procedure ExportData(DestFile, Table: string);
-    procedure ImportData(DestFile, Table: string);
+    procedure ImportData(DestFile: string); overload;
+    procedure ImportData(DestFile, Table: string); overload;
+    procedure ExecuteSqlFile(FilePath: string);
+    procedure ExecuteSqlDirectory(DirPath: string);
   public
     { Public declarations }
     constructor Create(AOwner: TComponent; Accessor: TMySQLAccessor); reintroduce;
@@ -119,14 +131,141 @@ begin
   BorderStyle := bsNone;
 end;
 
+procedure TFrmDBGridBase.ExecuteSqlDirectory(DirPath: string);
+var
+  FilePaths: TStrings;
+begin
+  FilePaths := TStringList.Create;
+  try
+    // Drop
+    GetDropFiles(DirPath, FilePaths);
+    ExecuteSqlFiles(FilePaths);
+    // Create
+    FilePaths.Clear;
+    GetCreateFiles(DirPath, FilePaths);
+    ExecuteSqlFiles(FilePaths);
+    // Delete
+    FilePaths.Clear;
+    GetDeleteFiles(DirPath, FilePaths);
+    ExecuteSqlFiles(FilePaths);
+    // Update
+    FilePaths.Clear;
+    GetUpdateFiles(DirPath, FilePaths);
+    ExecuteSqlFiles(FilePaths);
+    // Insert
+    FilePaths.Clear;
+    GetInsertFiles(DirPath, FilePaths);
+    ExecuteSqlFiles(FilePaths);
+    // Import(.dat/.csv)
+    FilePaths.Clear;
+    GetImportFiles(DirPath, FilePaths);
+    ImportFiles(FilePaths);
+  finally
+    FilePaths.Free;
+  end;
+end;
+
+procedure TFrmDBGridBase.ExecuteSqlFile(FilePath: string);
+var
+  Commands: TStrings;
+  i: Integer;
+begin
+  Commands := TStringList.Create;
+  try
+    GetSqlCommandsFromFile(FilePath, Commands);
+    for i := 0 to Commands.Count - 1 do begin
+      if Length(Commands[i]) > 0 then begin
+        Accessor.ExecuteUpdate(Commands[i]);
+      end;
+    end;
+  finally
+    Commands.Free;
+  end;
+end;
+
+procedure TFrmDBGridBase.ExecuteSqlFiles(FilePaths: TStrings);
+var
+  i: Integer;
+begin
+  for i := 0 to FilePaths.Count - 1 do begin
+    ExecuteSqlFile(FilePaths[i]);
+  end;
+end;
+
 procedure TFrmDBGridBase.ExportData(DestFile, Table: string);
 begin
   CsvOutput.ExecuteOverWrite(DestFile, Table);
 end;
 
+procedure TFrmDBGridBase.GetCreateFiles(DirPath: string;
+  var FilePaths: TStrings);
+begin
+  { TODO : implement }
+end;
+
+procedure TFrmDBGridBase.GetDeleteFiles(DirPath: string;
+  var FilePaths: TStrings);
+begin
+  { TODO : implement }
+end;
+
+procedure TFrmDBGridBase.GetDropFiles(DirPath: string; var FilePaths: TStrings);
+begin
+  { TODO : implement }
+end;
+
+procedure TFrmDBGridBase.GetImportFiles(DirPath: string;
+  var FilePaths: TStrings);
+begin
+  { TODO : implement }
+end;
+
+procedure TFrmDBGridBase.GetInsertFiles(DirPath: string;
+  var FilePaths: TStrings);
+begin
+  { TODO : implement }
+end;
+
+procedure TFrmDBGridBase.GetSqlCommandsFromFile(FilePath: string;
+  var Commands: TStrings);
+var
+  Reader: TStreamReader;
+begin
+  Reader := TStreamReader.Create(FilePath, TEncoding.Default);
+  try
+    if not Reader.EndOfStream then begin
+      Commands.Delimiter := ';';
+      Commands.StrictDelimiter := True;
+      Commands.DelimitedText := Reader.ReadToEnd;
+    end;
+  finally
+    Reader.Free;
+  end;
+end;
+
+procedure TFrmDBGridBase.GetUpdateFiles(DirPath: string;
+  var FilePaths: TStrings);
+begin
+  { TODO : implement }
+end;
+
+procedure TFrmDBGridBase.ImportData(DestFile: string);
+begin
+  CsvLoader.Execute(DestFile);
+end;
+
 procedure TFrmDBGridBase.ImportData(DestFile, Table: string);
 begin
   CsvLoader.Execute(DestFile, Table, ',');
+end;
+
+procedure TFrmDBGridBase.ImportFiles(FilePaths: TStrings);
+var
+  i: Integer;
+begin
+  for i := 0 to FilePaths.Count - 1 do begin
+    ImportData(FilePaths[i]);
+  end;
 end;
 
 procedure TFrmDBGridBase.LoadQuery(Sql: string);
