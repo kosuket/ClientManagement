@@ -23,4 +23,13 @@ object FrmMain: TFrmMain
     TabOrder = 0
     OnClick = Button1Click
   end
+  object Button2: TButton
+    Left = 32
+    Top = 80
+    Width = 201
+    Height = 25
+    Caption = 'Create Template File...'
+    TabOrder = 1
+    OnClick = Button2Click
+  end
 end

@@ -7,6 +7,7 @@ uses
 type ILoadOperator = interface
   procedure SetColumnHeader(Columns: TStrings);
   procedure AddValueRow(Values: TStrings);
+  procedure MakeTemplateTsv(FilePath: string);
 end;
 implementation
 end.

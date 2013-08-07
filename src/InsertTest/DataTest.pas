@@ -10,8 +10,10 @@ uses
 type
   TFrmMain = class(TForm)
     Button1: TButton;
+    Button2: TButton;
     procedure FormShow(Sender: TObject);
     procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
   private
     { Private declarations }
     Accessor: TMySQLAccessor;
@@ -38,8 +40,27 @@ begin
   try
     Dlg.Title := 'Generate Client Masters From File';
     Dlg.Filter := 'TSV file (*.tsv)|*.TSV|CSV file (*.csv)|*.CSV|All files (*.*)|*.*';
-    if Dlg.Execute() then begin
+    if Dlg.Execute then begin
       Loader.LoadFile(TLoadKind.Client, Dlg.FileName);
+    end;
+  finally
+    Loader.Free;
+    Dlg.Free;
+  end;
+end;
+
+procedure TFrmMain.Button2Click(Sender: TObject);
+var
+  Dlg: TSaveDialog;
+  Loader: TMasterLoader;
+begin
+  Dlg := TSaveDialog.Create(Self);
+  Loader := TMasterLoader.Create(Accessor);
+  try
+    Dlg.Title := 'Create Empty File with Header';
+    Dlg.Filter := 'TSV file (*.tsv)|*.TSV';
+    if Dlg.Execute then begin
+      Loader.MakeTemplate(TLoadKind.Client, Dlg.FileName);
     end;
   finally
     Loader.Free;

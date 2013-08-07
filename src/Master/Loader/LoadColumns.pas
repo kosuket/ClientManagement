@@ -2,12 +2,13 @@ unit LoadColumns;
 
 interface
 uses
-  LoadColumn;
+  LoadColumn, System.Classes;
 type TLoadColumns = class
   protected
     procedure SetUpLoadColumns; virtual; abstract;
   public
     constructor Create;
+    procedure GetHeader(var Header: TStrings);
     function GetLoadColumn(HeaderName: string): TLoadColumn;
 end;
 
@@ -20,6 +21,26 @@ uses
 constructor TLoadColumns.Create;
 begin
   SetUpLoadColumns;
+end;
+
+procedure TLoadColumns.GetHeader(var Header: TStrings);
+var
+  Cxt: TRttiContext;
+  Tp: TRttiType;
+  Prp: TRttiProperty;
+  LoadColumn: TLoadColumn;
+begin
+  Header.Clear;
+  Cxt := TRttiContext.Create;
+  try
+    Tp := Cxt.GetType(Self.ClassType);
+    for Prp in Tp.GetProperties do begin
+      LoadColumn := Prp.GetValue(Self).AsType<TLoadColumn>;
+      Header.Add(LoadColumn.HeaderName);
+    end;
+  finally
+    Cxt.Free;
+  end;
 end;
 
 function TLoadColumns.GetLoadColumn(HeaderName: string): TLoadColumn;

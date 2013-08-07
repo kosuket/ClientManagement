@@ -18,6 +18,7 @@ type TClientLoadOperator = class(TInterfacedObject, ILoadOperator)
     destructor Destroy; override;
     procedure SetColumnHeader(Columns: TStrings);
     procedure AddValueRow(Values: TStrings);
+    procedure MakeTemplateTsv(FilePath: string);
 end;
 
 implementation
@@ -116,6 +117,24 @@ begin
     for TargetPrp in LoadColumn.TargetPropertyList do begin
       DistributeValue(Client, CGmat, CToefl, TargetPrp, Value);
     end;
+  end;
+end;
+
+procedure TClientLoadOperator.MakeTemplateTsv(FilePath: string);
+var
+  Header: TStrings;
+  Writer: TStreamWriter;
+begin
+  Header := TStringList.Create;
+  Writer := TStreamWriter.Create(FilePath);
+  try
+    Header.Delimiter := Char(9);
+    Header.StrictDelimiter := True;
+    ClientColumns.GetHeader(Header);
+    Writer.WriteLine(Header.DelimitedText);
+  finally
+    Writer.Free;
+    Header.Free;
   end;
 end;
 

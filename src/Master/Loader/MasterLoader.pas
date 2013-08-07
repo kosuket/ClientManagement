@@ -9,14 +9,13 @@ type TLoadKind = (Client);
 type TMasterLoader = class
   private
     FAccessor: TMySQLAccessor;
-    FLoadOperator: ILoadOperator;
-    procedure SetLoadOperator(LoadKind: TLoadKind);
+    function getLoadOperator(LoadKind: TLoadKind): ILoadOperator;
     procedure LoadCsvFile(LoadKind: TLoadKind; FilePath: string);
     procedure LoadTsvFile(LoadKind: TLoadKind; FilePath: string);
     procedure LoadDelimitedFile(LoadKind: TLoadKind; FilePath: string; Delim: Char);
   public
     constructor Create(Accessor: TMySQLAccessor);
-    procedure MakeTemplate(FilePath: string);
+    procedure MakeTemplate(LoadKind: TLoadKind; FilePath: string);
     procedure LoadFile(LoadKind: TLoadKind; FilePath: string);
 end;
 
@@ -54,8 +53,9 @@ procedure TMasterLoader.LoadDelimitedFile(LoadKind: TLoadKind; FilePath: string;
 var
   Cols, Vals: TStrings;
   Reader: TStreamReader;
+  LoadOperator: ILoadOperator;
 begin
-  SetLoadOperator(LoadKind);
+  LoadOperator := GetLoadOperator(LoadKind);
   if not FileExists(FilePath) then begin
     raise Exception.Create('File does not exist:' + FilePath);
   end;
@@ -70,14 +70,14 @@ begin
       Cols.StrictDelimiter := True;
       Cols.DelimitedText := Reader.ReadLine;
     end;
-    FLoadOperator.SetColumnHeader(Cols);
+    LoadOperator.SetColumnHeader(Cols);
 
     // Value rows
     Vals.Delimiter := Delim;
     Vals.StrictDelimiter := True;
     while not Reader.EndOfStream do begin
       Vals.DelimitedText := Reader.ReadLine;
-      FLoadOperator.AddValueRow(Vals);
+      LoadOperator.AddValueRow(Vals);
     end;
   finally
     Reader.Free;
@@ -94,15 +94,17 @@ begin
   LoadDelimitedFile(LoadKind, FilePath, Tab);
 end;
 
-procedure TMasterLoader.MakeTemplate(FilePath: string);
+procedure TMasterLoader.MakeTemplate(LoadKind: TLoadKind; FilePath: string);
 begin
-{ TODO : implement }
+  GetLoadOperator(LoadKind).MakeTemplateTsv(FilePath);
 end;
 
-procedure TMasterLoader.SetLoadOperator(LoadKind: TLoadKind);
+function TMasterLoader.GetLoadOperator(LoadKind: TLoadKind): ILoadOperator;
 begin
   if LoadKind = Client then begin
-    FLoadOperator := TClientLoadOperator.Create(FAccessor);
+    Result := TClientLoadOperator.Create(FAccessor);
+  end else begin
+    raise Exception.Create('unknown Load Kind');
   end;
 end;
 
