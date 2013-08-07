@@ -201,6 +201,9 @@ inherited ClientSearchframe: TClientSearchframe
         Top = 98
         Width = 23
         Height = 22
+        Hint = 'Add'
+        ParentShowHint = False
+        ShowHint = True
         OnClick = btnAddClick
       end
       object btnDelete: TSpeedButton
@@ -208,6 +211,9 @@ inherited ClientSearchframe: TClientSearchframe
         Top = 187
         Width = 23
         Height = 22
+        Hint = 'Delete'
+        ParentShowHint = False
+        ShowHint = True
         OnClick = btnDeleteClick
       end
     end

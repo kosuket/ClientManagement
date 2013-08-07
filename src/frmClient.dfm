@@ -226,7 +226,7 @@ inherited Clientframe: TClientframe
         Top = 24
         Width = 1158
         Height = 126
-        ActivePage = tbBasic
+        ActivePage = tbSchoolScore
         Align = alClient
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
@@ -239,10 +239,6 @@ inherited Clientframe: TClientframe
         object tbSchoolScore: TTabSheet
           Caption = 'Schools and Scores'
           ImageIndex = 1
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object pnlSchoolScore: TPanel
             Left = 0
             Top = 0

@@ -519,7 +519,7 @@ function TCounselingDialogframe.createInsertBRForCounselingSQL(clientId: Int64;b
       True: comma := '';
       False: comma := ',';
     end;
-    result := '''' + AnsiReplaceText(str,',','') + '''' + comma;
+    result := '''' + AnsiReplaceText(AnsiReplaceText(str,',','ÅC'),'''','Åf') + '''' + comma;
   end;
 var sl: TStringList;
    amt: Int64;
@@ -583,7 +583,7 @@ function TCounselingDialogframe.createInsertBRForPackageSQL: String;
       True: comma := '';
       False: comma := ',';
     end;
-    result := '''' + AnsiReplaceText(str,',','') + '''' + comma;
+    result := '''' + AnsiReplaceText(AnsiReplaceText(str,',','ÅC'),'''','Åf') + '''' + comma;
   end;
 var sl: TStringList;
    invoiceId,receiptFlg: Integer;
@@ -635,7 +635,7 @@ function TCounselingDialogframe.createInsertCounselingSQL(clientId: Int64; seq: 
       True: comma := '';
       False: comma := ',';
     end;
-    result := '''' + AnsiReplaceText(str,',','') + '''' + comma;
+    result := '''' + AnsiReplaceText(AnsiReplaceText(str,',','ÅC'),'''','Åf') + '''' + comma;
   end;
 var sl: TStringList;
 begin

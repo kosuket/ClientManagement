@@ -185,7 +185,7 @@ begin
   inherited;
   sl := TStringList.Create;
   sl.Add('SELECT ');
-  sl.Add('    C.CLIENT_ID,C.FIRST_NAME, C.LAST_NAME, C.EMAIL_ADDRESS, C.TOEFL, C.GMAT');
+  sl.Add('    C.CLIENT_ID,C.FIRST_NAME, C.LAST_NAME, C.EMAIL_ADDRESS, C.REST_HOUR, C.TOEFL, C.GMAT');
   sl.Add('FROM');
   sl.Add('    (SELECT ');
   sl.Add('            CL.CLIENT_ID,');
@@ -207,12 +207,14 @@ begin
   sl.Add('            CL.FUTURE_GOAL,');
   sl.Add('            CL.CLIENT_MEMO,');
   sl.Add('            CL.COUNSELOR_MEMO,');
+  sl.Add('            SUM(B.TOTAL_HOUR - B.CURRENT_HOUR) REST_HOUR,');
   sl.Add('            MAX(T.TOTAL) TOEFL,');
   sl.Add('            MAX(G.TOTAL) GMAT');
   sl.Add('    FROM');
   sl.Add('        CLIENT CL');
   sl.Add('    LEFT JOIN CLIENT_TOEFL T ON CL.CLIENT_ID = T.CLIENT_ID');
   sl.Add('    LEFT JOIN CLIENT_GMAT G ON CL.CLIENT_ID = G.CLIENT_ID');
+  sl.Add('    LEFT JOIN BILLING_REQUEST B ON CL.CLIENT_ID = B.CLIENT_ID AND ((B.BILLING_TYPE = 4 AND B.TOTAL_HOUR > B.CURRENT_HOUR) OR (B.BILLING_TYPE = 3))');
   sl.Add('    GROUP BY CL.CLIENT_ID) C');
   result := sl.Text;
   sl.Free;
@@ -229,7 +231,10 @@ var sl: TstringList;
 begin
   inherited;
   sl := TStringList.Create;
-  if edtFirstName.Text <> '' then sl.Add('FIRST_NAME LIKE ' + '''' + '%' + edtFirstName.Text + '%' + '''');
+  if edtFirstName.Text <> '' then begin
+    _checkforand(sl);
+    sl.Add('FIRST_NAME LIKE ' + '''' + '%' + edtFirstName.Text + '%' + '''');
+  end;
 
   if edtLastName.Text <> '' then begin
     _checkforand(sl);

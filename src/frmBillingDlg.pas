@@ -162,7 +162,7 @@ function TBillingDialogframe.createInsertInvoiceSQL(clientId: Int64; invoiceId: 
       True: comma := '';
       False: comma := ',';
     end;
-    result := '''' + AnsiReplaceText(str,',','ÅC') + '''' + comma;
+    result := '''' + AnsiReplaceText(AnsiReplaceText(str,',','ÅC'),'''','Åf') + '''' + comma;
   end;
 begin
   result := 'INSERT INTO INVOICE' +
@@ -170,8 +170,8 @@ begin
             'INVOICE_ID,' +
             'SUBJECT,' +
             'BODY,' +
-            'START_DATE' +
-            'END_DATE' +
+            'START_DATE,' +
+            'END_DATE,' +
             'RECEIPT_FLG,' +
             'INPUT_DATETIME)' +
             'VALUES' +
@@ -185,6 +185,8 @@ begin
             '0,' +
             'SYSDATE()' +
             ')';
+  ShowMessage(result);
+
 end;
 
 function TBillingDialogframe.createUpdateBRForInvoiceSQL(clientId,
