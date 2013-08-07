@@ -117,18 +117,18 @@ begin
   // CLIENT_GMAT
   FTest_date_gmat := TLoadColumn.Create(True, 'TEST_DATE_GMAT', TClientGmat, 'Test_date');
   FTotal_gmat := TLoadColumn.Create(True, 'TOTAL_GMAT', TClientGmat, 'Total');
-  FVerbal_gmat  := TLoadColumn.Create(True, 'VERBAL_GMAT', TClientGmat, 'Verbal_gmat');
-  FMath_gmat  := TLoadColumn.Create(True, 'MATH_GMAT', TClientGmat, 'Math_gmat');
-  FAwa_gmat  := TLoadColumn.Create(True, 'AWA_GMAT', TClientGmat, 'Awa_gmat');
-  FIntegrated_reasoning_gmat  := TLoadColumn.Create(True, 'INTEGRATED_REASONING_GMAT', TClientGmat, 'Integrated_reasoning_gmat');
-  FMemo_gmat  := TLoadColumn.Create(True, 'MEMO_GMAT', TClientGmat, 'Memo_gmat');
+  FVerbal_gmat  := TLoadColumn.Create(True, 'VERBAL_GMAT', TClientGmat, 'Verbal');
+  FMath_gmat  := TLoadColumn.Create(True, 'MATH_GMAT', TClientGmat, 'Math');
+  FAwa_gmat  := TLoadColumn.Create(True, 'AWA_GMAT', TClientGmat, 'Awa');
+  FIntegrated_reasoning_gmat  := TLoadColumn.Create(True, 'INTEGRATED_REASONING_GMAT', TClientGmat, 'Integrated_reasoning');
+  FMemo_gmat  := TLoadColumn.Create(True, 'MEMO_GMAT', TClientGmat, 'Memo');
   // CLIENT_TOEFL
   FTest_date_toefl := TLoadColumn.Create(True, 'TEST_DATE_TOEFL', TClientToefl, 'Test_date');
   FTotal_toefl := TLoadColumn.Create(True, 'TOTAL_TOEFL', TClientToefl, 'Total');
-  FReading_toefl  := TLoadColumn.Create(True, 'READING_TOEFL', TClientToefl, 'Reading_toefl');
-  FListening_toefl  := TLoadColumn.Create(True, 'LISTENING_TOEFL', TClientToefl, 'Listening_toefl');
-  FSpeaking_toefl  := TLoadColumn.Create(True, 'SPEAKING_TOEFL', TClientToefl, 'Speaking_toefl');
-  FWriting_toefl  := TLoadColumn.Create(True, 'WRITING_TOEFL', TClientToefl, 'Writing_toefl');
-  FMemo_toefl  := TLoadColumn.Create(True, 'MEMO_TOEFL', TClientToefl, 'Memo_toefl');
+  FReading_toefl  := TLoadColumn.Create(True, 'READING_TOEFL', TClientToefl, 'Reading');
+  FListening_toefl  := TLoadColumn.Create(True, 'LISTENING_TOEFL', TClientToefl, 'Listening');
+  FSpeaking_toefl  := TLoadColumn.Create(True, 'SPEAKING_TOEFL', TClientToefl, 'Speaking');
+  FWriting_toefl  := TLoadColumn.Create(True, 'WRITING_TOEFL', TClientToefl, 'Writing');
+  FMemo_toefl  := TLoadColumn.Create(True, 'MEMO_TOEFL', TClientToefl, 'Memo');
 end;
 end.
