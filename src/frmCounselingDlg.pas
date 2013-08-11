@@ -521,7 +521,7 @@ function TCounselingDialogframe.createInsertBRForCounselingSQL(clientId: Int64;b
       True: comma := '';
       False: comma := ',';
     end;
-    result := '''' + AnsiReplaceText(AnsiReplaceText(str,',','ÅC'),'''','Åf') + '''' + comma;
+    result := '''' + AnsiReplaceText(AnsiReplaceText(str,',','\,'),'''','\' + '''') + '''' + comma;
   end;
 var sl: TStringList;
    amt: Int64;
@@ -553,7 +553,7 @@ begin
     else if packageFlg = 1 then amt := Trunc(StrToInt64Def(edtCounselingAmount.Text,0)/2)
                            else amt := StrToInt64Def(edtCounselingAmount.Text,0);
     Add(_String(IntToStr(amt)));
-    Add(cmbCounselingTypeVal[cmbCounselingType.ItemIndex] + ',');
+    Add(cmbCounselingBillType[cmbCounselingType.ItemIndex] + ',');
     Add(_String(memoCounseling.Lines.Text));
     Add('SYSDATE(),');
     Add(FloatToStr(hour) + ',');
@@ -585,7 +585,7 @@ function TCounselingDialogframe.createInsertBRForPackageSQL: String;
       True: comma := '';
       False: comma := ',';
     end;
-    result := '''' + AnsiReplaceText(AnsiReplaceText(str,',','ÅC'),'''','Åf') + '''' + comma;
+    result := '''' + AnsiReplaceText(AnsiReplaceText(str,',','\,'),'''','\' + '''') + '''' + comma;
   end;
 var sl: TStringList;
    invoiceId,receiptFlg: Integer;
@@ -637,7 +637,7 @@ function TCounselingDialogframe.createInsertCounselingSQL(clientId: Int64; seq: 
       True: comma := '';
       False: comma := ',';
     end;
-    result := '''' + AnsiReplaceText(AnsiReplaceText(str,',','ÅC'),'''','Åf') + '''' + comma;
+    result := '''' + AnsiReplaceText(AnsiReplaceText(str,',','\,'),'''','\' + '''') + '''' + comma;
   end;
 var sl: TStringList;
 begin

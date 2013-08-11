@@ -77,8 +77,9 @@ if MessageDlg('Register Invoice Info Without Sending Email?',mtConfirmation,[mbY
   if not checkUninvoiced(g_ClientId) then begin
     if MessageDlg('The Bill(s) already invoiced exist on Billing Grid. Invoice?',mtConfirmation,[mbYes,mbNo],0,mbYes) <> mrYes then exit;
   end;
-  if executeInvoice(g_ClientId) then ModalResult := mrOK
-                      else ShowMessage('Failed to register Invoice Info on Database');
+  if executeInvoice(g_ClientId) then begin
+    ShowMessage('Invoice Info Registered (EMail hasn''t been sent)');
+  end else ShowMessage('Failed to register Invoice Info on Database');
 end;
 
 procedure TBillingDialogframe.btnReflectOnMailClick(Sender: TObject);
@@ -91,15 +92,15 @@ begin
   frmMailDialog.memoContents.Lines.Add('');
   frmMailDialog.memoContents.Lines.Add('Detail');
   frmMailDialog.memoContents.Lines.Add('Billing Info');
-  frmMailDialog.memoContents.Lines.Add('Billing Type, Book Date, Billing Amount');
+  frmMailDialog.memoContents.Lines.Add('Book Date, Billing Type, Billing Amount');
   for i := 1 to grdBilling.RowCount -1 do begin
-    frmMailDialog.memoContents.Lines.Add(grdBilling.Cells[2,i] + ',' + grdBilling.Cells[1,i] + ',' + grdBilling.Cells[3,i]);
+    frmMailDialog.memoContents.Lines.Add(grdBilling.Cells[1,i] + ', ' + grdBilling.Cells[2,i] + ', ' + grdBilling.Cells[3,i]);
   end;
   frmMailDialog.memoContents.Lines.Add('');
   frmMailDialog.memoContents.Lines.Add('Counseling Info');
   frmMailDialog.memoContents.Lines.Add('Counseling Date, Counseling Type, Counseling Hour');
   for i := 1 to grdCounseling.RowCount -1 do begin
-    frmMailDialog.memoContents.Lines.Add(grdCounseling.Cells[3,i] + ',' + grdCounseling.Cells[2,i] + ',' + grdCounseling.Cells[4,i]);
+    frmMailDialog.memoContents.Lines.Add(grdCounseling.Cells[2,i] + ', ' + grdCounseling.Cells[3,i] + ', ' + grdCounseling.Cells[4,i]);
   end;
 end;
 
@@ -193,7 +194,7 @@ function TBillingDialogframe.createInsertInvoiceSQL(clientId: Int64; invoiceId: 
       True: comma := '';
       False: comma := ',';
     end;
-    result := '''' + AnsiReplaceText(AnsiReplaceText(str,',','ÅC'),'''','Åf') + '''' + comma;
+    result := '''' + AnsiReplaceText(AnsiReplaceText(str,',','\,'),'''','\' + '''') + '''' + comma;
   end;
 begin
   result := 'INSERT INTO INVOICE' +
@@ -262,6 +263,9 @@ var sql: String;
     i,amt:Integer;
 begin
   amt := 0;
+  for i :=  0 to grdBilling.ColCount -1 do begin
+    grdBilling.Cells[i,1] := '';
+  end;
   sql := 'SELECT ' +
          '    BILL_ID,' +
          '    BOOK_DATE,' +
@@ -303,6 +307,9 @@ procedure TBillingDialogframe.getCounselingInfo;
 var sql: String;
     i:Integer;
 begin
+  for i :=  0 to grdCounseling.ColCount -1 do begin
+    grdCounseling.Cells[i,1] := '';
+  end;
   sql := 'SELECT ' +
          '    SEQ,' +
          '    BILL_ID,' +
