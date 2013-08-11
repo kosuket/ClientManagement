@@ -26,6 +26,13 @@ inherited BillingDialogframe: TBillingDialogframe
         Width = 974
         ExplicitWidth = 974
       end
+      object btnReflectOnMail: TSpeedButton [1]
+        Left = 491
+        Top = 2
+        Width = 23
+        Height = 22
+        OnClick = btnReflectOnMailClick
+      end
       inherited lblTitle: TPanel
         object btnSend: TSpeedButton
           Left = 1

@@ -31,10 +31,12 @@ type
     btnSend: TSpeedButton;
     btnReload: TSpeedButton;
     btnInvoice: TSpeedButton;
+    btnReflectOnMail: TSpeedButton;
     procedure cmbPeriodChange(Sender: TObject);
     procedure btnSendClick(Sender: TObject);
     procedure btnReloadClick(Sender: TObject);
     procedure btnInvoiceClick(Sender: TObject);
+    procedure btnReflectOnMailClick(Sender: TObject);
   private
     { Private declarations }
     procedure initializeBilling;
@@ -77,6 +79,28 @@ if MessageDlg('Register Invoice Info Without Sending Email?',mtConfirmation,[mbY
   end;
   if executeInvoice(g_ClientId) then ModalResult := mrOK
                       else ShowMessage('Failed to register Invoice Info on Database');
+end;
+
+procedure TBillingDialogframe.btnReflectOnMailClick(Sender: TObject);
+var i: Integer;
+begin
+  inherited;
+  frmMailDialog.edtSubject.Text := 'Invoice for ' + FormatDateTime('yyyy/mm/dd',edtFirstDate.Date) + ' Å` ' + FormatDateTime('yyyy/mm/dd',edtLastDate.Date);
+  frmMailDialog.memoContents.Lines.Add('');
+  frmMailDialog.memoContents.Lines.Add('Total Charge: ' + edtTotalCharge.Caption);
+  frmMailDialog.memoContents.Lines.Add('');
+  frmMailDialog.memoContents.Lines.Add('Detail');
+  frmMailDialog.memoContents.Lines.Add('Billing Info');
+  frmMailDialog.memoContents.Lines.Add('Billing Type, Book Date, Billing Amount');
+  for i := 1 to grdBilling.RowCount -1 do begin
+    frmMailDialog.memoContents.Lines.Add(grdBilling.Cells[2,i] + ',' + grdBilling.Cells[1,i] + ',' + grdBilling.Cells[3,i]);
+  end;
+  frmMailDialog.memoContents.Lines.Add('');
+  frmMailDialog.memoContents.Lines.Add('Counseling Info');
+  frmMailDialog.memoContents.Lines.Add('Counseling Date, Counseling Type, Counseling Hour');
+  for i := 1 to grdCounseling.RowCount -1 do begin
+    frmMailDialog.memoContents.Lines.Add(grdCounseling.Cells[3,i] + ',' + grdCounseling.Cells[2,i] + ',' + grdCounseling.Cells[4,i]);
+  end;
 end;
 
 procedure TBillingDialogframe.btnReloadClick(Sender: TObject);
