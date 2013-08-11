@@ -549,8 +549,10 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
               Font.Height = -11
               Font.Name = 'Georgia'
               Font.Style = []
+              ItemIndex = 1
               ParentFont = False
               TabOrder = 3
+              Text = 'Private'
               Items.Strings = (
                 'Corporate'
                 'Private')
@@ -582,6 +584,7 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
               Width = 165
               Height = 21
               TabOrder = 5
+              Text = '0'
             end
             object cmbAcademicAward: TComboBox
               Left = 104
@@ -594,8 +597,10 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
               Font.Height = -11
               Font.Name = 'Georgia'
               Font.Style = []
+              ItemIndex = 1
               ParentFont = False
               TabOrder = 8
+              Text = 'No'
               Items.Strings = (
                 'Yes'
                 'No')
@@ -611,8 +616,10 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
               Font.Height = -11
               Font.Name = 'Georgia'
               Font.Style = []
+              ItemIndex = 1
               ParentFont = False
               TabOrder = 9
+              Text = 'No'
               Items.Strings = (
                 'Yes'
                 'No')
@@ -628,8 +635,10 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
               Font.Height = -11
               Font.Name = 'Georgia'
               Font.Style = []
+              ItemIndex = 1
               ParentFont = False
               TabOrder = 10
+              Text = 'No'
               Items.Strings = (
                 'Yes'
                 'No')
@@ -659,8 +668,10 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
               Font.Height = -11
               Font.Name = 'Georgia'
               Font.Style = []
+              ItemIndex = 1
               ParentFont = False
               TabOrder = 13
+              Text = 'No'
               Items.Strings = (
                 'Yes'
                 'No')
