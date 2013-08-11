@@ -181,6 +181,7 @@ begin
     frmBillingDlg.edtFirstDate.DateTime := edtFirstDate.DateTime;
     frmBillingDlg.edtLastDate.DateTime := edtLastDate.DateTime;
     frmBillingDlg.g_ClientId := StrToIntDef(DBGrid1.Fields[0].Text,-1);
+    frmBillingDlg.g_DebugMode := m_DebugMode;
     frmBillingDlg.initialize(omBilling);
     frmBillingDlg.ShowModal;
   finally

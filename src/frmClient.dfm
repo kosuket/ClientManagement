@@ -3,7 +3,6 @@ inherited Clientframe: TClientframe
   ClientHeight = 595
   ClientWidth = 1158
   Position = poScreenCenter
-  ExplicitLeft = -437
   ExplicitWidth = 1174
   ExplicitHeight = 633
   PixelsPerInch = 96
@@ -787,6 +786,21 @@ inherited Clientframe: TClientframe
                 ParentFont = False
                 Layout = tlBottom
               end
+              object lblGender: TLabel
+                Left = 302
+                Top = 67
+                Width = 95
+                Height = 21
+                AutoSize = False
+                Caption = 'Gender'
+                Font.Charset = ANSI_CHARSET
+                Font.Color = clWindowText
+                Font.Height = -13
+                Font.Name = 'Georgia'
+                Font.Style = []
+                ParentFont = False
+                Layout = tlBottom
+              end
               object edtFirstName: TEdit
                 Left = 103
                 Top = 13
@@ -831,28 +845,28 @@ inherited Clientframe: TClientframe
                 Top = 94
                 Width = 181
                 Height = 22
-                TabOrder = 4
+                TabOrder = 5
               end
               object edtDegree: TEdit
                 Left = 104
                 Top = 121
                 Width = 181
                 Height = 22
-                TabOrder = 5
+                TabOrder = 7
               end
               object edtMajor: TEdit
                 Left = 398
                 Top = 121
                 Width = 181
                 Height = 22
-                TabOrder = 6
+                TabOrder = 8
               end
               object edtGPA: TEdit
                 Left = 398
                 Top = 94
                 Width = 181
                 Height = 22
-                TabOrder = 7
+                TabOrder = 6
               end
               object cmbAcademicAward: TComboBox
                 Left = 104
@@ -866,7 +880,7 @@ inherited Clientframe: TClientframe
                 Font.Name = 'Georgia'
                 Font.Style = []
                 ParentFont = False
-                TabOrder = 8
+                TabOrder = 9
                 Items.Strings = (
                   'All'
                   'Yes'
@@ -884,7 +898,7 @@ inherited Clientframe: TClientframe
                 Font.Name = 'Georgia'
                 Font.Style = []
                 ParentFont = False
-                TabOrder = 9
+                TabOrder = 10
                 Items.Strings = (
                   'All'
                   'Yes'
@@ -902,7 +916,7 @@ inherited Clientframe: TClientframe
                 Font.Name = 'Georgia'
                 Font.Style = []
                 ParentFont = False
-                TabOrder = 10
+                TabOrder = 11
                 Items.Strings = (
                   'All'
                   'Yes'
@@ -913,14 +927,14 @@ inherited Clientframe: TClientframe
                 Top = 175
                 Width = 181
                 Height = 22
-                TabOrder = 11
+                TabOrder = 12
               end
               object edtWorkPlace: TEdit
                 Left = 104
                 Top = 202
                 Width = 181
                 Height = 22
-                TabOrder = 12
+                TabOrder = 13
               end
               object cmbUseEnglish: TComboBox
                 Left = 398
@@ -934,7 +948,7 @@ inherited Clientframe: TClientframe
                 Font.Name = 'Georgia'
                 Font.Style = []
                 ParentFont = False
-                TabOrder = 13
+                TabOrder = 14
                 Items.Strings = (
                   'All'
                   'Yes'
@@ -945,7 +959,25 @@ inherited Clientframe: TClientframe
                 Top = 229
                 Width = 475
                 Height = 22
-                TabOrder = 14
+                TabOrder = 15
+              end
+              object cmbGender: TComboBox
+                Left = 398
+                Top = 67
+                Width = 83
+                Height = 22
+                Style = csOwnerDrawFixed
+                Font.Charset = ANSI_CHARSET
+                Font.Color = clWindowText
+                Font.Height = -11
+                Font.Name = 'Georgia'
+                Font.Style = []
+                ParentFont = False
+                TabOrder = 4
+                Items.Strings = (
+                  'All'
+                  'Male'
+                  'Female')
               end
             end
           end

@@ -79,6 +79,8 @@ type
     edtKanjiF: TEdit;
     lblKanjiL: TLabel;
     edtKanjiL: TEdit;
+    lblGender: TLabel;
+    cmbGender: TComboBox;
     procedure grdSchoolClick(Sender: TObject);
     procedure cmbSchoolClick(Sender: TObject);
     procedure cmbRankClick(Sender: TObject);
@@ -474,6 +476,7 @@ begin
     Add('MIDDLE_NAME,');
     Add('KANJI_LAST_NAME,');
     Add('KANJI_FIRST_NAME,');
+    Add('GENDER,');
     Add('EMAIL_ADDRESS,');
     Add('WORK_PLACE,');
     Add('SPONSORED_FLG,');
@@ -496,6 +499,7 @@ begin
     Add('''' + '''' + ',');
     Add(_String(edtKanjiL.Text));
     Add(_String(edtKanjiF.Text));
+    Add(IntToStr(cmbGender.ItemIndex) + ',');
     Add(_String(edtEmail.Text));
     Add(_String(edtWorkPlace.Text));
     Add(_Div(cmbSponsored.ItemIndex));
@@ -626,6 +630,7 @@ begin
     Add('MIDDLE_NAME =' + _String(''));
     Add('KANJI_LAST_NAME =' + _String(edtKanjiL.Text));
     Add('KANJI_FIRST_NAME =' + _String(edtKanjiF.Text));
+    Add('GENDER =' + IntToStr(cmbGender.ItemIndex) + ',');
     Add('EMAIL_ADDRESS =' + _String(edtEmail.Text));
     Add('WORK_PLACE =' + _String(edtWorkPlace.Text));
     Add('SPONSORED_FLG =' + _Div(cmbSponsored.ItemIndex));
@@ -755,7 +760,8 @@ begin
          'USE_ENGLISH_AT_WORK_FLG,' +
          'FUTURE_GOAL,' +
          'CLIENT_MEMO,' +
-         'COUNSELOR_MEMO' +
+         'COUNSELOR_MEMO,' +
+         'GENDER' +
          ' FROM CLIENT ' +
          ' WHERE CLIENT_ID = ' + IntToStr(g_ClientId);
   loadQuery(sql);
@@ -764,6 +770,7 @@ begin
   //MiddleName
   edtKanjiL.Text := cDataSet.Fields[4].AsString;
   edtKanjiF.Text := cDataSet.Fields[5].AsString;
+  cmbGender.ItemIndex := CDataSet.Fields[21].AsInteger;
   edtEmail.Text := cDataSet.Fields[6].AsString;
   edtWorkPlace.Text := cDataSet.Fields[7].AsSTring;
   cmbSponsored.ItemIndex := getcmbIndex(cDataSet.Fields[8].AsInteger);

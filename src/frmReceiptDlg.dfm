@@ -2,7 +2,6 @@ inherited ReceiptDialogframe: TReceiptDialogframe
   Caption = 'ReceiptDialogframe'
   ClientHeight = 581
   ClientWidth = 981
-  ExplicitLeft = 0
   ExplicitWidth = 997
   ExplicitHeight = 619
   PixelsPerInch = 96
@@ -10,10 +9,14 @@ inherited ReceiptDialogframe: TReceiptDialogframe
   inherited pnlBase: TPanel
     Width = 981
     Height = 581
+    ExplicitWidth = 981
+    ExplicitHeight = 581
     inherited pnlTitle: TPanel
       Width = 979
+      ExplicitWidth = 979
       inherited Image1: TImage
         Width = 977
+        ExplicitWidth = 977
       end
       inherited lblTitle: TPanel
         Left = 1
@@ -22,9 +25,10 @@ inherited ReceiptDialogframe: TReceiptDialogframe
         Height = 25
         Align = alClient
         ParentColor = True
-        ExplicitLeft = 9
-        ExplicitTop = 4
-        ExplicitHeight = 20
+        ExplicitLeft = 1
+        ExplicitTop = 1
+        ExplicitWidth = 977
+        ExplicitHeight = 25
         object lblName: TLabel
           Left = 12
           Top = 2
@@ -104,7 +108,7 @@ inherited ReceiptDialogframe: TReceiptDialogframe
           Height = 21
           Alignment = taRightJustify
           NumbersOnly = True
-          TabOrder = 0
+          TabOrder = 1
           Text = '0'
         end
         object chFullPaid: TCheckBox
@@ -120,7 +124,7 @@ inherited ReceiptDialogframe: TReceiptDialogframe
           Font.Name = 'Georgia'
           Font.Style = []
           ParentFont = False
-          TabOrder = 1
+          TabOrder = 0
           OnClick = chFullPaidClick
         end
         object btnReceive: TButton
@@ -164,10 +168,6 @@ inherited ReceiptDialogframe: TReceiptDialogframe
       BevelOuter = bvNone
       Caption = 'pnlBilling'
       TabOrder = 1
-      ExplicitLeft = 136
-      ExplicitTop = 80
-      ExplicitWidth = 185
-      ExplicitHeight = 41
     end
   end
 end

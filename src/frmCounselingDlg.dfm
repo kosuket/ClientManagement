@@ -333,7 +333,7 @@ inherited CounselingDialogframe: TCounselingDialogframe
         Font.Name = 'Georgia'
         Font.Style = []
         ParentFont = False
-        TabOrder = 1
+        TabOrder = 2
         OnChange = edtCounselingDateChange
       end
       object edtStartTime: TDateTimePicker
@@ -351,7 +351,7 @@ inherited CounselingDialogframe: TCounselingDialogframe
         Font.Style = []
         Kind = dtkTime
         ParentFont = False
-        TabOrder = 2
+        TabOrder = 3
         OnChange = edtStartTimeChange
       end
       object edtEndTime: TDateTimePicker
@@ -368,21 +368,22 @@ inherited CounselingDialogframe: TCounselingDialogframe
         Font.Style = []
         Kind = dtkTime
         ParentFont = False
-        TabOrder = 3
+        TabOrder = 4
         OnChange = edtEndTimeChange
       end
       object edtContentType: TEdit
         Left = 128
         Top = 76
-        Width = 103
+        Width = 478
         Height = 22
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
         Font.Height = -11
         Font.Name = 'Georgia'
         Font.Style = []
+        MaxLength = 200
         ParentFont = False
-        TabOrder = 4
+        TabOrder = 5
       end
       object cbPanicFee: TCheckBox
         Left = 8
@@ -397,7 +398,7 @@ inherited CounselingDialogframe: TCounselingDialogframe
         Font.Name = 'Georgia'
         Font.Style = []
         ParentFont = False
-        TabOrder = 5
+        TabOrder = 8
         OnClick = cbPanicFeeClick
       end
       object memoNextAction: TRichEdit
@@ -405,6 +406,7 @@ inherited CounselingDialogframe: TCounselingDialogframe
         Top = 106
         Width = 478
         Height = 64
+        MaxLength = 5000
         ScrollBars = ssBoth
         TabOrder = 6
       end
@@ -413,6 +415,7 @@ inherited CounselingDialogframe: TCounselingDialogframe
         Top = 177
         Width = 478
         Height = 64
+        MaxLength = 5000
         ScrollBars = ssBoth
         TabOrder = 7
       end
@@ -429,7 +432,7 @@ inherited CounselingDialogframe: TCounselingDialogframe
         Font.Style = []
         NumbersOnly = True
         ParentFont = False
-        TabOrder = 8
+        TabOrder = 9
         Text = '0'
       end
       object cbCounselingPaid: TCheckBox
@@ -445,7 +448,7 @@ inherited CounselingDialogframe: TCounselingDialogframe
         Font.Name = 'Georgia'
         Font.Style = []
         ParentFont = False
-        TabOrder = 9
+        TabOrder = 1
       end
     end
     object gbPackage: TGroupBox
@@ -577,7 +580,7 @@ inherited CounselingDialogframe: TCounselingDialogframe
         Height = 22
         Alignment = taRightJustify
         NumbersOnly = True
-        TabOrder = 2
+        TabOrder = 3
         Text = '0'
       end
       object memoBilling: TRichEdit
@@ -586,7 +589,7 @@ inherited CounselingDialogframe: TCounselingDialogframe
         Width = 471
         Height = 62
         ScrollBars = ssBoth
-        TabOrder = 3
+        TabOrder = 4
       end
       object cbPackagePaid: TCheckBox
         Left = 16
@@ -601,7 +604,7 @@ inherited CounselingDialogframe: TCounselingDialogframe
         Font.Name = 'Georgia'
         Font.Style = []
         ParentFont = False
-        TabOrder = 4
+        TabOrder = 2
       end
     end
   end

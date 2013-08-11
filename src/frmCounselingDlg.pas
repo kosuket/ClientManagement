@@ -100,6 +100,7 @@ type
     g_FirstName: String;
     g_LastName: String;
     g_PackageHours: Double;
+    g_DebugMode: Boolean;
     constructor Create(AOwner: TComponent; Accessor: TMySQLAccessor); reintroduce; overload; override;
     procedure initialize(OpenMode:TOpenMode);
   end;
@@ -494,6 +495,7 @@ constructor TCounselingDialogframe.Create(AOwner: TComponent;
   Accessor: TMySQLAccessor);
 begin
   inherited;
+  g_DebugMode := False;
   ClientIdList := TStringList.Create;
   ClientPkgBillIdList := TStringList.Create;
   ClientAlphaList := TStringList.Create;
@@ -505,12 +507,14 @@ function TCounselingDialogframe.createDeleteBRForCancelCounselingSQL(clientId,
   seq: Int64): String;
 begin
   result := 'DELETE FROM BILLING_REQUEST WHERE CLIENT_ID = ' + IntToStr(clientId) + ' AND COUNSELING_SEQ = ' + IntToStr(seq);
+  if g_DebugMode then ShowMessage(result);
 end;
 
 function TCounselingDialogframe.createDeleteCounselingForCancelSQL(clientId,
   seq: Int64): String;
 begin
   result := 'DELETE FROM COUNSELING WHERE CLIENT_ID = ' + IntToStr(clientId) + ' AND SEQ = ' + IntToStr(seq);
+  if g_DebugMode then ShowMessage(result);
 end;
 
 function TCounselingDialogframe.createInsertBRForCounselingSQL(clientId: Int64;billId: Int64; hour: Double; packageFlg: Integer; seq: Int64): String;
@@ -573,6 +577,7 @@ begin
     Add(IntToStr(receiptFlg));
     Add(')');
     result := Text;
+    if g_DebugMode then ShowMessage(result);
   end;
   sl.Free;
 end;
@@ -625,6 +630,7 @@ begin
     Add(IntToStr(receiptFlg));
     Add(')');
     result := Text;
+    if g_DebugMode then ShowMessage(result);
   end;
   sl.Free;
 end;
@@ -673,6 +679,7 @@ begin
     Add(FloatToStr(hour));
     Add(')');
     result := Text;
+    if g_DebugMode then ShowMessage(result);
   end;
   sl.Free;
 end;
@@ -681,6 +688,7 @@ function TCounselingDialogframe.createUpdateBRForCancelCounselingSQL(clientId,
   billId: Int64; subHour: Double): String;
 begin
   result := 'UPDATE BILLING_REQUEST SET CURRENT_HOUR = CURRENT_HOUR - ' + FloatToStr(subHour) + ' WHERE CLIENT_ID = ' + IntToStr(clientId) + ' AND BILL_ID = ' + IntToStr(billId);
+  if g_DebugMode then ShowMessage(result);
 end;
 
 function TCounselingDialogframe.createUpdateBRForCounselingSQL(clientId,
@@ -689,6 +697,7 @@ var i: Integer;
 begin
   if alphaFlg = 1 then result := 'UPDATE BILLING_REQUEST SET TOTAL_HOUR = TOTAL_HOUR + ' + FloatToStr(hour) +', CURRENT_HOUR = CURRENT_HOUR + ' + FloatToStr(hour) + ' WHERE CLIENT_ID = ' + IntToStr(clientId) + ' AND BILL_ID = ' + IntToStr(billId)
                   else result := 'UPDATE BILLING_REQUEST SET CURRENT_HOUR = CURRENT_HOUR + ' + FloatToStr(hour) + ' WHERE CLIENT_ID = ' + IntToStr(clientId) + ' AND BILL_ID = ' + IntToStr(billId);
+  if g_DebugMode then ShowMessage(result);
 end;
 
 function TCounselingDialogframe.createUpdateClForPackageSQL(clientId: Int64; ptDiv: Integer): String;
@@ -699,6 +708,7 @@ begin
     ptStandard: strFlg := 'STANDARD_FLG';
   end;
   result := 'UPDATE CLIENT SET '+ strFlg + ' = 1 WHERE CLIENT_ID = ' + IntToStr(clientId);
+  if g_DebugMode then ShowMessage(result);
 end;
 
 procedure TCounselingDialogframe.edtCounselingDateChange(Sender: TObject);

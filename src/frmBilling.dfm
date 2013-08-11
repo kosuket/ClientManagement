@@ -1,6 +1,5 @@
 inherited Billingframe: TBillingframe
   Caption = 'Billingframe'
-  ExplicitLeft = 8
   PixelsPerInch = 96
   TextHeight = 13
   inherited pnlBase: TPanel

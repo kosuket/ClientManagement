@@ -1,6 +1,5 @@
 inherited Counselingframe: TCounselingframe
   Caption = 'Counselingframe'
-  ExplicitLeft = 8
   PixelsPerInch = 96
   TextHeight = 13
   inherited pnlBase: TPanel
@@ -274,7 +273,7 @@ inherited Counselingframe: TCounselingframe
           Font.Name = 'Georgia'
           Font.Style = []
           ParentFont = False
-          TabOrder = 0
+          TabOrder = 2
           OnChange = cmbPeriodChange
           Items.Strings = (
             'All'
@@ -295,7 +294,7 @@ inherited Counselingframe: TCounselingframe
           Font.Name = 'Georgia'
           Font.Style = []
           ParentFont = False
-          TabOrder = 1
+          TabOrder = 3
         end
         object edtLastDate: TDateTimePicker
           Left = 355
@@ -310,7 +309,7 @@ inherited Counselingframe: TCounselingframe
           Font.Name = 'Georgia'
           Font.Style = []
           ParentFont = False
-          TabOrder = 2
+          TabOrder = 4
         end
         object edtFirstName: TEdit
           Left = 104
@@ -323,7 +322,7 @@ inherited Counselingframe: TCounselingframe
           Font.Name = 'Georgia'
           Font.Style = []
           ParentFont = False
-          TabOrder = 3
+          TabOrder = 0
         end
         object edtLastName: TEdit
           Left = 325
@@ -336,7 +335,7 @@ inherited Counselingframe: TCounselingframe
           Font.Name = 'Georgia'
           Font.Style = []
           ParentFont = False
-          TabOrder = 4
+          TabOrder = 1
         end
         object cmbCounselingType: TComboBox
           Left = 104

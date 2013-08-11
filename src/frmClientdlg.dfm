@@ -517,11 +517,30 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
               Transparent = False
               Layout = tlBottom
             end
+            object lblGender: TLabel
+              Left = 286
+              Top = 94
+              Width = 95
+              Height = 21
+              AutoSize = False
+              Caption = 'Gender'
+              Color = clCream
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -13
+              Font.Name = 'Georgia'
+              Font.Style = []
+              ParentColor = False
+              ParentFont = False
+              Transparent = False
+              Layout = tlBottom
+            end
             object edtFirstName: TEdit
               Left = 103
               Top = 13
               Width = 166
               Height = 21
+              MaxLength = 45
               TabOrder = 0
             end
             object edtLastName: TEdit
@@ -529,6 +548,7 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
               Top = 13
               Width = 166
               Height = 21
+              MaxLength = 45
               TabOrder = 1
             end
             object edtEmail: TEdit
@@ -536,7 +556,8 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
               Top = 67
               Width = 444
               Height = 21
-              TabOrder = 2
+              MaxLength = 45
+              TabOrder = 4
             end
             object cmbSponsored: TComboBox
               Left = 104
@@ -551,7 +572,7 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
               Font.Style = []
               ItemIndex = 1
               ParentFont = False
-              TabOrder = 3
+              TabOrder = 5
               Text = 'Private'
               Items.Strings = (
                 'Corporate'
@@ -562,28 +583,31 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
               Top = 121
               Width = 165
               Height = 21
-              TabOrder = 4
+              MaxLength = 200
+              TabOrder = 7
             end
             object edtDegree: TEdit
               Left = 104
               Top = 148
               Width = 165
               Height = 21
-              TabOrder = 6
+              MaxLength = 45
+              TabOrder = 9
             end
             object edtMajor: TEdit
               Left = 382
               Top = 148
               Width = 165
               Height = 21
-              TabOrder = 7
+              MaxLength = 45
+              TabOrder = 10
             end
             object edtGPA: TEdit
               Left = 382
               Top = 121
               Width = 165
               Height = 21
-              TabOrder = 5
+              TabOrder = 8
               Text = '0'
             end
             object cmbAcademicAward: TComboBox
@@ -599,7 +623,7 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
               Font.Style = []
               ItemIndex = 1
               ParentFont = False
-              TabOrder = 8
+              TabOrder = 11
               Text = 'No'
               Items.Strings = (
                 'Yes'
@@ -618,7 +642,7 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
               Font.Style = []
               ItemIndex = 1
               ParentFont = False
-              TabOrder = 9
+              TabOrder = 12
               Text = 'No'
               Items.Strings = (
                 'Yes'
@@ -637,7 +661,7 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
               Font.Style = []
               ItemIndex = 1
               ParentFont = False
-              TabOrder = 10
+              TabOrder = 13
               Text = 'No'
               Items.Strings = (
                 'Yes'
@@ -648,14 +672,16 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
               Top = 202
               Width = 165
               Height = 21
-              TabOrder = 11
+              MaxLength = 45
+              TabOrder = 14
             end
             object edtWorkPlace: TEdit
               Left = 104
               Top = 229
               Width = 165
               Height = 21
-              TabOrder = 12
+              MaxLength = 1000
+              TabOrder = 15
             end
             object cmbUseEnglish: TComboBox
               Left = 382
@@ -670,7 +696,7 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
               Font.Style = []
               ItemIndex = 1
               ParentFont = False
-              TabOrder = 13
+              TabOrder = 16
               Text = 'No'
               Items.Strings = (
                 'Yes'
@@ -681,16 +707,17 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
               Top = 256
               Width = 443
               Height = 21
-              TabOrder = 14
+              MaxLength = 2000
+              TabOrder = 17
             end
             object edtDate: TDateTimePicker
               Left = 291
-              Top = 94
+              Top = 120
               Width = 186
               Height = 21
               Date = 41455.633558726860000000
               Time = 41455.633558726860000000
-              TabOrder = 15
+              TabOrder = 20
               Visible = False
               OnExit = edtDateExit
             end
@@ -699,30 +726,53 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
               Top = 283
               Width = 443
               Height = 63
+              MaxLength = 4000
               ScrollBars = ssBoth
-              TabOrder = 16
+              TabOrder = 18
             end
             object memoCounselorMemo: TRichEdit
               Left = 104
               Top = 352
               Width = 443
               Height = 63
+              MaxLength = 4000
               ScrollBars = ssBoth
-              TabOrder = 17
+              TabOrder = 19
             end
             object edtKanjiF: TEdit
               Left = 103
               Top = 40
               Width = 166
               Height = 21
-              TabOrder = 18
+              MaxLength = 50
+              TabOrder = 2
             end
             object edtKanjiL: TEdit
               Left = 381
               Top = 40
               Width = 166
               Height = 21
-              TabOrder = 19
+              MaxLength = 50
+              TabOrder = 3
+            end
+            object cmbGender: TComboBox
+              Left = 382
+              Top = 94
+              Width = 83
+              Height = 22
+              Style = csOwnerDrawFixed
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Georgia'
+              Font.Style = []
+              ItemIndex = 0
+              ParentFont = False
+              TabOrder = 6
+              Text = 'Male'
+              Items.Strings = (
+                'Male'
+                'Female')
             end
           end
         end

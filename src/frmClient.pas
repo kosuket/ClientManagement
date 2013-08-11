@@ -67,6 +67,8 @@ type
     btnClear: TSpeedButton;
     btnImport: TSpeedButton;
     btnTemlpate: TSpeedButton;
+    lblGender: TLabel;
+    cmbGender: TComboBox;
     procedure btnAddClick(Sender: TObject);
     procedure DBGrid1DblClick(Sender: TObject);
     procedure btnMailClick(Sender: TObject);
@@ -106,6 +108,10 @@ const
   '-1',
   '1',
   '0');
+  cmbDivGender : Array[0..2] of String =(
+  '-1',
+  '0',
+  '1');
 implementation
 
 {$R *.dfm}
@@ -255,6 +261,7 @@ begin
   sl.Add('            CL.FUTURE_GOAL,');
   sl.Add('            CL.CLIENT_MEMO,');
   sl.Add('            CL.COUNSELOR_MEMO,');
+  sl.Add('            CL.GENDER,');
   sl.Add('            SUM(B.TOTAL_HOUR - B.CURRENT_HOUR) REST_HOUR,');
   sl.Add('            MAX(T.TOTAL) TOEFL,');
   sl.Add('            MAX(G.TOTAL) GMAT');
@@ -291,6 +298,10 @@ begin
   if edtEmail.Text <> '' then begin
     _checkforand(sl);
     sl.Add('EMAIL_ADDRESS LIKE ' + '''' + '%' + edtEmail.Text + '%' + '''');
+  end;
+  if cmbGender.ItemIndex <> cmbIndexAll then begin
+    _checkforand(sl);
+    sl.Add('GENDER = '  + cmbDivGender[cmbGender.ItemIndex]);
   end;
   if cmbSponsored.ItemIndex <> cmbIndexAll then begin
     _checkforand(sl);
@@ -414,6 +425,7 @@ begin
       cDataSet.Next;
     end;
     cDataSet.Close;
+    cmbGender.ItemIndex := 0;
     cmbSponsored.ItemIndex := 0;
     cmbAcademicAward.ItemIndex := 0;
     cmbPublication.ItemIndex := 0;

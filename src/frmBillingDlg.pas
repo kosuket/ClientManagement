@@ -57,6 +57,7 @@ type
     g_InvoiceId: Int64;
     g_Subject: String;
     g_Body: String;
+    g_DebugMode: Boolean;
     constructor create(AOwner:TComponent; Accessor: TMySQLAccessor); reintroduce; overload; override;
     procedure initialize(om:TOpenMode);
   end;
@@ -183,6 +184,7 @@ begin
   frmMailDialog := TMailDlgframe.Create(Self, Accessor);
   frmMailDialog.pnlBase.Parent := pnlMail;
   frmMailDialog.pnlTitle.Visible := False;
+  g_DebugMode := False;
   setupGrid;
 end;
 
@@ -217,7 +219,7 @@ begin
             '0,' +
             'SYSDATE()' +
             ')';
-  ShowMessage(result);
+  if g_DebugMode then ShowMessage(result);
 
 end;
 

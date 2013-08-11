@@ -1,6 +1,7 @@
 inherited Receiptframe: TReceiptframe
   Caption = 'Receiptframe'
-  ExplicitLeft = 8
+  ExplicitWidth = 767
+  ExplicitHeight = 477
   PixelsPerInch = 96
   TextHeight = 13
   inherited pnlBase: TPanel
@@ -256,7 +257,7 @@ inherited Receiptframe: TReceiptframe
           Font.Name = 'Georgia'
           Font.Style = []
           ParentFont = False
-          TabOrder = 3
+          TabOrder = 6
         end
         object edtLastName: TEdit
           Left = 316
@@ -269,7 +270,7 @@ inherited Receiptframe: TReceiptframe
           Font.Name = 'Georgia'
           Font.Style = []
           ParentFont = False
-          TabOrder = 4
+          TabOrder = 7
         end
         object cmbEndDate: TComboBox
           Left = 95
@@ -284,7 +285,7 @@ inherited Receiptframe: TReceiptframe
           Font.Style = []
           ItemIndex = 1
           ParentFont = False
-          TabOrder = 5
+          TabOrder = 3
           Text = 'This Month'
           OnChange = cmbEndDateChange
           Items.Strings = (
@@ -306,7 +307,7 @@ inherited Receiptframe: TReceiptframe
           Font.Name = 'Georgia'
           Font.Style = []
           ParentFont = False
-          TabOrder = 6
+          TabOrder = 4
         end
         object edtLastEndDate: TDateTimePicker
           Left = 346
@@ -321,7 +322,7 @@ inherited Receiptframe: TReceiptframe
           Font.Name = 'Georgia'
           Font.Style = []
           ParentFont = False
-          TabOrder = 7
+          TabOrder = 5
         end
         object chkReceived: TCheckBox
           Left = 7

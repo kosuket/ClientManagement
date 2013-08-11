@@ -71,6 +71,7 @@ begin
   inherited;
   try
     frmCounselingDialog := TCounselingDialogframe.Create(Self, Accessor);
+    frmCounselingDialog.g_DebugMode := m_DebugMode;
     frmCounselingDialog.initialize(omNew);
     frmCounselingDialog.ShowModal;
   finally
@@ -191,6 +192,7 @@ begin
   inherited;
   try
     frmCounselingDialog := TCounselingDialogframe.Create(Self, Accessor);
+    frmCounselingDialog.g_DebugMode := m_DebugMode;
     frmCounselingDialog.g_ClientId := DBGrid1.Fields[0].AsInteger;
     frmCounselingDialog.g_SEQ      := DBGrid1.Fields[1].AsInteger;
     frmCounselingDialog.g_FirstName:= DBGrid1.Fields[2].AsString;

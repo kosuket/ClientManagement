@@ -23,7 +23,6 @@ object MailSettingframe: TMailSettingframe
     Color = clGrayText
     ParentBackground = False
     TabOrder = 0
-    ExplicitHeight = 202
     object lblHost: TLabel
       Left = 24
       Top = 16
@@ -167,7 +166,7 @@ object MailSettingframe: TMailSettingframe
       Font.Name = 'Georgia'
       Font.Style = []
       ParentFont = False
-      TabOrder = 1
+      TabOrder = 3
     end
     object edtUserName: TEdit
       Left = 104
@@ -180,7 +179,7 @@ object MailSettingframe: TMailSettingframe
       Font.Name = 'Georgia'
       Font.Style = []
       ParentFont = False
-      TabOrder = 2
+      TabOrder = 4
     end
     object edtPort: TSpinEdit
       Left = 104
@@ -189,7 +188,7 @@ object MailSettingframe: TMailSettingframe
       Height = 22
       MaxValue = 0
       MinValue = 0
-      TabOrder = 3
+      TabOrder = 1
       Value = 0
     end
     object edtPassword: TMaskEdit
@@ -198,7 +197,7 @@ object MailSettingframe: TMailSettingframe
       Width = 288
       Height = 21
       PasswordChar = '*'
-      TabOrder = 4
+      TabOrder = 5
       Text = ''
     end
     object btnOK: TButton
@@ -208,7 +207,7 @@ object MailSettingframe: TMailSettingframe
       Height = 25
       Caption = 'OK'
       ModalResult = 1
-      TabOrder = 5
+      TabOrder = 7
       OnClick = btnOKClick
     end
     object btnCancel: TButton
@@ -218,7 +217,7 @@ object MailSettingframe: TMailSettingframe
       Height = 25
       Caption = 'Cancel'
       ModalResult = 2
-      TabOrder = 6
+      TabOrder = 8
     end
     object edtMailName: TEdit
       Left = 104
@@ -231,7 +230,7 @@ object MailSettingframe: TMailSettingframe
       Font.Name = 'Georgia'
       Font.Style = []
       ParentFont = False
-      TabOrder = 7
+      TabOrder = 2
     end
     object chbBCC: TCheckBox
       Left = 104
@@ -245,7 +244,7 @@ object MailSettingframe: TMailSettingframe
       Font.Name = 'Georgia'
       Font.Style = []
       ParentFont = False
-      TabOrder = 8
+      TabOrder = 6
     end
   end
 end
