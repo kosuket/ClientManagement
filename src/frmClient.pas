@@ -8,7 +8,7 @@ uses
   Vcl.AppEvnts, Datasnap.Provider, Data.DB, Datasnap.DBClient, Data.SqlExpr,
   Vcl.StdCtrls, Vcl.Imaging.jpeg, Vcl.ExtCtrls, Vcl.Samples.Spin, Vcl.ComCtrls,
   Vcl.Grids, Vcl.DBGrids, FWGridBasefrm,frmClientdlg,frmMaildlg, Vcl.Buttons,
-  Vcl.Menus, MySQLAccessor;
+  Vcl.Menus, MySQLAccessor,ClientInserter,Client, MasterLoader;
 
 type
   TClientframe = class(TFWGridBaseframe)
@@ -65,6 +65,8 @@ type
     pmMail: TMenuItem;
     btnAdd: TSpeedButton;
     btnClear: TSpeedButton;
+    btnImport: TSpeedButton;
+    btnTemlpate: TSpeedButton;
     procedure btnAddClick(Sender: TObject);
     procedure DBGrid1DblClick(Sender: TObject);
     procedure btnMailClick(Sender: TObject);
@@ -72,6 +74,8 @@ type
     procedure pmDetailClick(Sender: TObject);
     procedure pmMailClick(Sender: TObject);
     procedure pmGridPopup(Sender: TObject);
+    procedure btnImportClick(Sender: TObject);
+    procedure btnTemlpateClick(Sender: TObject);
   private
     { Private declarations }
       slSchoolId: TStringList;
@@ -132,6 +136,27 @@ begin
   clearCond(pgctrlCond);
 end;
 
+procedure TClientframe.btnImportClick(Sender: TObject);
+var
+  Dlg: TOpenDialog;
+  Loader: TMasterLoader;
+begin
+  inherited;
+  Dlg := TOpenDialog.Create(Self);
+  Loader := TMasterLoader.Create(Accessor);
+  try
+    Dlg.Title := 'Generate Client Masters From File';
+    Dlg.Filter := 'TSV file (*.tsv)|*.TSV|CSV file (*.csv)|*.CSV|All files (*.*)|*.*';
+    if Dlg.Execute then begin
+      Loader.LoadFile(TLoadKind.Client, Dlg.FileName);
+      ShowMessage('File Loaded');
+    end;
+  finally
+    Loader.Free;
+    Dlg.Free;
+  end;
+end;
+
 procedure TClientframe.btnMailClick(Sender: TObject);
 var slRecepient,slAddress: TStringList;
     i: Integer;
@@ -155,6 +180,29 @@ begin
     slRecepient.Free;
     slAddress.Free;
     frmMailDialog.Destroy;
+  end;
+end;
+
+procedure TClientframe.btnTemlpateClick(Sender: TObject);
+var
+  Dlg: TSaveDialog;
+  Loader: TMasterLoader;
+begin
+  inherited;
+  Dlg := TSaveDialog.Create(Self);
+  Loader := TMasterLoader.Create(Accessor);
+  try
+    Dlg.Title := 'Create Empty File with Header';
+    Dlg.Filter := 'TSV file (*.tsv)|*.TSV';
+    Dlg.Options := [ofOverwritePrompt,ofEnableSizing];
+    if Dlg.Execute then begin
+      if Pos('.',Dlg.FileName)= 0 then Dlg.FileName := Dlg.FileName + '.tsv';
+      Loader.MakeTemplate(TLoadKind.Client, Dlg.FileName);
+      ShowMessage('Output Template');
+    end;
+  finally
+    Loader.Free;
+    Dlg.Free;
   end;
 end;
 
@@ -356,6 +404,7 @@ var i: Integer;
 begin
   inherited;
   try
+    SaveDialog1.Title := 'Export Displayed Client Data on Grid as CSV';
     slSchoolId.Add('-1');
     cmbSchoolName.Items.Add('All');
     loadQuery('SELECT SCHOOL_ID, SCHOOL_NAME FROM SCHOOL');

@@ -24,7 +24,18 @@ uses
   frmCounseling in 'frmCounseling.pas' {Counselingframe},
   frmCounselingDlg in 'frmCounselingDlg.pas' {CounselingDialogframe},
   frmReceipt in 'frmReceipt.pas' {Receiptframe},
-  frmReceiptDlg in 'frmReceiptDlg.pas' {ReceiptDialogframe};
+  frmReceiptDlg in 'frmReceiptDlg.pas' {ReceiptDialogframe},
+  ClientInserter in 'Dao\ClientInserter.pas',
+  Client in 'Data\Client.pas',
+  ClientGmat in 'Data\ClientGmat.pas',
+  ClientToefl in 'Data\ClientToefl.pas',
+  DBImportableData in 'Data\DBImportableData.pas',
+  MasterLoader in 'Master\Loader\MasterLoader.pas',
+  LoadOperator in 'Master\Loader\LoadOperator.pas',
+  ClientLoadOperator in 'Master\ClientLoader\ClientLoadOperator.pas',
+  LoadColumn in 'Master\Loader\LoadColumn.pas',
+  LoadColumns in 'Master\Loader\LoadColumns.pas',
+  ClientLoadColumns in 'Master\ClientLoader\ClientLoadColumns.pas';
 
 {$R *.res}
 

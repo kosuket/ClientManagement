@@ -84,6 +84,9 @@ object FWGridBaseframe: TFWGridBaseframe
         Color = clWindow
         ParentBackground = False
         TabOrder = 0
+        DesignSize = (
+          751
+          35)
         object Image1: TImage
           Left = 0
           Top = 0
@@ -362,6 +365,22 @@ object FWGridBaseframe: TFWGridBaseframe
           TabOrder = 0
           OnClick = btnLoadClick
         end
+        object btnExport: TButton
+          Left = 680
+          Top = 7
+          Width = 63
+          Height = 24
+          Anchors = [akTop, akRight]
+          Caption = 'Export'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Georgia'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 1
+          OnClick = btnExportClick
+        end
       end
       object Panel1: TPanel
         Left = 0
@@ -403,5 +422,9 @@ object FWGridBaseframe: TFWGridBaseframe
   end
   object ApplicationEvents1: TApplicationEvents
     Left = 528
+  end
+  object SaveDialog1: TSaveDialog
+    Options = [ofOverwritePrompt, ofHideReadOnly, ofEnableSizing]
+    Left = 480
   end
 end

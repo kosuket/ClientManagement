@@ -1,7 +1,6 @@
 inherited Receiptframe: TReceiptframe
   Caption = 'Receiptframe'
-  ExplicitWidth = 767
-  ExplicitHeight = 477
+  ExplicitLeft = 8
   PixelsPerInch = 96
   TextHeight = 13
   inherited pnlBase: TPanel
@@ -12,8 +11,8 @@ inherited Receiptframe: TReceiptframe
     inherited Panel2: TPanel
       Top = 204
       Height = 235
-      ExplicitTop = 172
-      ExplicitHeight = 267
+      ExplicitTop = 204
+      ExplicitHeight = 235
       inherited DBGrid1: TDBGrid
         Height = 235
         OnDblClick = DBGrid1DblClick
@@ -24,7 +23,7 @@ inherited Receiptframe: TReceiptframe
       ExplicitHeight = 201
       inherited pnlCondBar: TPanel
         Top = 166
-        ExplicitTop = 134
+        ExplicitTop = 166
       end
       inherited Panel1: TPanel
         object btnClear: TSpeedButton
@@ -104,7 +103,6 @@ inherited Receiptframe: TReceiptframe
         DockSite = True
         ParentBackground = False
         TabOrder = 2
-        ExplicitHeight = 110
         object lblStartDate: TLabel
           Left = 8
           Top = 13

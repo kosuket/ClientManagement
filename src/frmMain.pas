@@ -24,7 +24,6 @@ type
     MainMenu1: TMainMenu;
     mmFile: TMenuItem;
     mmExit: TMenuItem;
-    mmEdit: TMenuItem;
     mmOption: TMenuItem;
     ImageList1: TImageList;
     pnlClient: TPanel;
@@ -39,6 +38,9 @@ type
     imgCounseling: TImage;
     pnlReceipt: TPanel;
     Image1: TImage;
+    mmImportClient: TMenuItem;
+    mmExportClientFileTemplate: TMenuItem;
+    mmExportGrid: TMenuItem;
     procedure SQLConnection1Login(Database: TSQLConnection;
       LoginParams: TStrings);
     procedure pnlBillingMouseDown(Sender: TObject; Button: TMouseButton;
@@ -78,6 +80,9 @@ type
     procedure pnlReceiptMouseLeave(Sender: TObject);
     procedure pnlReceiptMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
+    procedure mmImportClientClick(Sender: TObject);
+    procedure mmExportClientFileTemplateClick(Sender: TObject);
+    procedure mmExportGridClick(Sender: TObject);
   private
     { Private declarations }
     Accessor: TMySQLAccessor;
@@ -141,6 +146,10 @@ begin
   pnlBilling.Font.Style := [];
   pnlReceipt.Font.Style := [];
   pnlCustom.Font.Style := [];
+
+  //Set mmExportGrid.Visible
+  mmExportGrid.Enabled := True; //Maintenance Disable this on OnClick event
+
   pnl.Font.Style := [fsBold,fsItalic];
   pnl.Font.Color := clBlack;
   pnl.BevelOuter := bvNone;
@@ -295,6 +304,24 @@ begin
   reflectDebugMode(mmDebugMode.Checked);
 end;
 
+procedure TMainframe.mmExportClientFileTemplateClick(Sender: TObject);
+begin
+  frmClient.btnTemlpateClick(self);
+end;
+
+procedure TMainframe.mmExportGridClick(Sender: TObject);
+begin
+  if frmClient.pnlBase.Visible then frmClient.btnExportClick(self);
+  if frmCounselingSearch.pnlBase.Visible then frmCounselingSearch.btnExportClick(self);
+  if frmBillingSearch.pnlBase.Visible then frmBillingSearch.btnExportClick(self);
+  if frmReceiptSearch.pnlBase.Visible then frmReceiptSearch.btnExportClick(self);
+end;
+
+procedure TMainframe.mmImportClientClick(Sender: TObject);
+begin
+  frmClient.btnImportClick(self);
+end;
+
 procedure TMainframe.mmMailSettingClick(Sender: TObject);
 begin
   frmMailSetting := TMailSettingframe.Create(Self);
@@ -307,6 +334,7 @@ begin
   cleanPnlMain;
   frmDBEditor.Visible := True;
   behavePLBClick(pnlCustom,imgCustom);
+  mmExportGrid.Enabled := False;
 end;
 
 procedure TMainframe.pnlCustomMouseDown(Sender: TObject; Button: TMouseButton;

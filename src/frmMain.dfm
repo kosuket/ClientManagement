@@ -1035,9 +1035,18 @@ object Mainframe: TMainframe
       object mmExit: TMenuItem
         Caption = 'Exit'
       end
-    end
-    object mmEdit: TMenuItem
-      Caption = 'Edit'
+      object mmImportClient: TMenuItem
+        Caption = 'Import Client Data from File'
+        OnClick = mmImportClientClick
+      end
+      object mmExportClientFileTemplate: TMenuItem
+        Caption = 'Output Client Data File Template'
+        OnClick = mmExportClientFileTemplateClick
+      end
+      object mmExportGrid: TMenuItem
+        Caption = 'Export Grid Data as CSV'
+        OnClick = mmExportGridClick
+      end
     end
     object mmOption: TMenuItem
       Caption = 'Option'
@@ -1055,7 +1064,7 @@ object Mainframe: TMainframe
     Left = 528
     Top = 9
     Bitmap = {
-      494C010103000800A00010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010103000800A40010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
       000000000000000000000000000000000000FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF

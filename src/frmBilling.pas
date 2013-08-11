@@ -193,6 +193,7 @@ end;
 procedure TBillingframe.Initialize;
 begin
   inherited;
+  SaveDialog1.Title := 'Export Displayed Billing Data on Grid as CSV';
   clearCond(pnlAccounting);
 end;
 

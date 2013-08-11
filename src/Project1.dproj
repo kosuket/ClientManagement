@@ -164,6 +164,17 @@
             <Form>ReceiptDialogframe</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="Dao\ClientInserter.pas"/>
+        <DCCReference Include="Data\Client.pas"/>
+        <DCCReference Include="Data\ClientGmat.pas"/>
+        <DCCReference Include="Data\ClientToefl.pas"/>
+        <DCCReference Include="Data\DBImportableData.pas"/>
+        <DCCReference Include="Master\Loader\MasterLoader.pas"/>
+        <DCCReference Include="Master\Loader\LoadOperator.pas"/>
+        <DCCReference Include="Master\ClientLoader\ClientLoadOperator.pas"/>
+        <DCCReference Include="Master\Loader\LoadColumn.pas"/>
+        <DCCReference Include="Master\Loader\LoadColumns.pas"/>
+        <DCCReference Include="Master\ClientLoader\ClientLoadColumns.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

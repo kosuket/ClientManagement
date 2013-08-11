@@ -1,5 +1,6 @@
 inherited Billingframe: TBillingframe
   Caption = 'Billingframe'
+  ExplicitLeft = 8
   PixelsPerInch = 96
   TextHeight = 13
   inherited pnlBase: TPanel
@@ -24,9 +25,6 @@ inherited Billingframe: TBillingframe
       inherited pnlCondBar: TPanel
         Top = 121
         ExplicitTop = 121
-        DesignSize = (
-          751
-          35)
         inherited btnLoad: TButton
           Anchors = [akLeft, akBottom]
         end

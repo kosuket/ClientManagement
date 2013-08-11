@@ -226,6 +226,7 @@ end;
 procedure TReceiptframe.initialize;
 begin
   inherited;
+  SaveDialog1.Title := 'Export Displayed Receipt Data on Grid as CSV';
   clearCond(pnlAccounting);
 end;
 

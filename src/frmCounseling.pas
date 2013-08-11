@@ -205,6 +205,7 @@ end;
 procedure TCounselingframe.initialize;
 begin
   inherited;
+  SaveDialog1.Title := 'Export Displayed Counseling Data on Grid as CSV';
   cmbPeriod.ItemIndex := 1;
   cmbPeriod.OnChange(Self);
   cmbCounselingType.ItemIndex := 0;

@@ -22,7 +22,10 @@ type
     ApplicationEvents1: TApplicationEvents;
     Panel1: TPanel;
     Image2: TImage;
+    SaveDialog1: TSaveDialog;
+    btnExport: TButton;
     procedure btnLoadClick(Sender: TObject);
+    procedure btnExportClick(Sender: TObject);
   private
     { Private declarations }
     DataSource: TDataSource;
@@ -38,6 +41,7 @@ type
     function createSQLFix: String; virtual;
     function createWhere: String; virtual;
     procedure loadQuery(sql: String); virtual;
+    procedure exportFile;
     //グリッドメソッド
     function hasData: Boolean; virtual;
     procedure afterLoadProc;virtual;
@@ -98,6 +102,54 @@ begin
   //継承先で
 end;
 
+procedure TFWGridBaseframe.exportFile;
+var
+ F: TextFile;
+ CSVFile: String;
+ stl: TStringList;
+ i: Integer;
+begin
+ SaveDialog1.Filter := 'CSV file (*.csv)|*.CSV';
+ if SaveDialog1.Execute then
+ begin
+  if Pos('.',SaveDialog1.FileName)= 0 then SaveDialog1.FileName := SaveDialog1.FileName + '.csv';
+  CSVFile := SaveDialog1.FileName;
+ end
+ else
+ begin
+  Exit;
+ end;
+ stl := TStringList.Create;
+ try
+  //ファイル出力
+  AssignFile(F,CSVFile); //ファイルと実ファイル結びつける
+  ReWrite(F); //ファイルを新規作成して開く
+  DBGrid1.DataSource.DataSet.First;
+  //タイトル(フィールド)行の出力
+  for i := 0 to DBGrid1.DataSource.DataSet.FieldCount - 1 do
+  begin
+   stl.Add(DBGrid1.DataSource.DataSet.Fields[i].FieldName);
+  end;
+  Writeln(F,stl.CommaText);
+  stl.Clear;
+  //リスト出力
+  while Not(DBGrid1.DataSource.DataSet.Eof) do
+  begin
+   for i := 0 to DBGrid1.DataSource.DataSet.FieldCount - 1 do
+   begin
+    stl.Add(DBGrid1.DataSource.DataSet.Fields[i].AsString);
+   end;
+   Writeln(F,stl.CommaText); //テキストファイルに1行出力
+   stl.Clear;
+   DBGrid1.DataSource.DataSet.Next;
+  end;
+  CloseFile(F); //ファイルを閉じる
+  ShowMessage('File Saved');
+ finally
+  stl.Free;
+ end;
+end;
+
 function TFWGridBaseframe.hasData: Boolean;
 begin
   result := False;
@@ -129,6 +181,11 @@ end;
 procedure TFWGridBaseframe.afterLoadProc;
 begin
   //継承先で
+end;
+
+procedure TFWGridBaseframe.btnExportClick(Sender: TObject);
+begin
+  exportFile;
 end;
 
 procedure TFWGridBaseframe.btnLoadClick(Sender: TObject);
