@@ -112,6 +112,8 @@ type
     g_MailUserName: String;
     g_MailPassword: String;
     g_MailFrom: String;
+    g_MailName: String;
+    g_MailBCC: Boolean;
     constructor Create(AOwner: TComponent) ; override;
     destructor Destroy; override;
   end;
@@ -255,8 +257,11 @@ begin
   if Length(g_MailHost) > 0 then writer.WriteLine('MailHost='+g_MailHost);
   if g_MailPort > 0 then writer.WriteLine('MailPort='+IntToStr(g_MailPort));
   if Length(g_MailFrom) > 0 then writer.WriteLine('MailFrom='+g_MailFrom);
+  if Length(g_MailName) > 0 then writer.WriteLine('MailName='+g_MailName);
   if Length(g_MailUserName) > 0 then writer.WriteLine('MailUserName='+g_MailUserName);
   if Length(g_MailPassword) > 0 then writer.WriteLine('MailPassword='+g_MailPassword);
+  if g_MailBCC then writer.WriteLine('MailBCC=1')
+                 else writer.WriteLine('MailBCC=0');
   writer.Free;
 
   // Release child frames
@@ -279,6 +284,8 @@ begin
   g_MailUserName := '';
   g_MailPassword := '';
   g_MailFrom := '';
+  g_MailName := '';
+  g_MailBCC := False;
 end;
 
 procedure TMainframe.mmDebugModeClick(Sender: TObject);

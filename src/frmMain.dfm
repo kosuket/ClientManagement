@@ -524,7 +524,6 @@ object Mainframe: TMainframe
       OnMouseEnter = pnlCustomMouseEnter
       OnMouseLeave = pnlCustomMouseLeave
       OnMouseUp = pnlCustomMouseUp
-      ExplicitTop = 100
       object imgCustom: TImage
         Left = 0
         Top = 0
@@ -853,8 +852,6 @@ object Mainframe: TMainframe
       OnMouseEnter = pnlReceiptMouseEnter
       OnMouseLeave = pnlReceiptMouseLeave
       OnMouseUp = pnlReceiptMouseUp
-      ExplicitLeft = -1
-      ExplicitTop = 115
       object Image1: TImage
         Left = 0
         Top = 0
@@ -1058,7 +1055,7 @@ object Mainframe: TMainframe
     Left = 528
     Top = 9
     Bitmap = {
-      494C0101030008009C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010103000800A00010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
       000000000000000000000000000000000000FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF

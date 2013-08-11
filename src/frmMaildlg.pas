@@ -203,8 +203,20 @@ begin
     IdSmtp.Connect;
     progressbar1.Position := 50;
     msg.Subject := subject;
-    msg.Recipients.EMailAddresses := mailto;
+    for i := 0 to sgRecepient.RowCount -1 do begin
+      with msg.Recipients.Add do begin
+        Name := sgRecepient.Cells[0,i];
+        Address := sgRecepient.Cells[1,i];
+      end;
+    end;
     msg.From.Text := Mainframe.g_MailFrom;
+    if Mainframe.g_MailBCC then begin
+      with msg.BccList.Add do begin
+        Name := Mainframe.g_MailName;
+        Address := Mainframe.g_MailFrom;
+      end;
+    end;
+    ShowMessage('BCC Count: ' + InttoStr(msg.BccList.Count));
     msg.Body.Text := body;
     msg.ContentType := 'multipart/mixed';
     for i  := 0 to lbAttachment.Items.Count -1 do TIdAttachmentFile.Create(Msg.MessageParts, lbAttachment.Items[i]).FileIsTempFile := True;

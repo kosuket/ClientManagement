@@ -97,6 +97,8 @@ begin
     if LowerCase(Copy(line,1,12)) = 'mailusername' then Mainframe.g_MailUserName := Copy(line,14,line.Length - 13);
     if LowerCase(Copy(line,1,12)) = 'mailpassword' then Mainframe.g_MailPassword := Copy(line,14,line.Length - 13);
     if LowerCase(Copy(line,1,8)) = 'mailfrom' then Mainframe.g_MailFrom := Copy(line,10,line.Length - 9);
+    if LowerCase(Copy(line,1,8)) = 'mailname' then Mainframe.g_MailName := Copy(line,10,line.Length - 9);
+    if Lowercase(Trim(line))='mailbcc=1' then Mainframe.g_MailBCC := True;
   end;
   reader.Free;
 end;

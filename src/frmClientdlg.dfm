@@ -158,8 +158,8 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
           Top = 0
           Width = 587
           Height = 276
-          VertScrollBar.Range = 400
-          VertScrollBar.Size = 400
+          VertScrollBar.Range = 427
+          VertScrollBar.Size = 427
           Align = alLeft
           AutoScroll = False
           BevelInner = bvNone
@@ -169,7 +169,7 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             Left = 0
             Top = 0
             Width = 566
-            Height = 400
+            Height = 427
             Align = alClient
             BevelOuter = bvNone
             Color = clCream
@@ -213,7 +213,7 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             end
             object lblEmail: TLabel
               Left = 8
-              Top = 40
+              Top = 67
               Width = 95
               Height = 21
               AutoSize = False
@@ -231,7 +231,7 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             end
             object lblSponsored: TLabel
               Left = 8
-              Top = 67
+              Top = 94
               Width = 95
               Height = 21
               AutoSize = False
@@ -249,7 +249,7 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             end
             object lblUniversityName: TLabel
               Left = 8
-              Top = 94
+              Top = 121
               Width = 95
               Height = 21
               AutoSize = False
@@ -267,7 +267,7 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             end
             object lblDegree: TLabel
               Left = 8
-              Top = 121
+              Top = 148
               Width = 95
               Height = 21
               AutoSize = False
@@ -285,7 +285,7 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             end
             object lblMajor: TLabel
               Left = 286
-              Top = 121
+              Top = 148
               Width = 95
               Height = 21
               AutoSize = False
@@ -303,7 +303,7 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             end
             object lblGPA: TLabel
               Left = 286
-              Top = 94
+              Top = 121
               Width = 95
               Height = 21
               AutoSize = False
@@ -321,7 +321,7 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             end
             object lblAcademicAward: TLabel
               Left = 8
-              Top = 148
+              Top = 175
               Width = 95
               Height = 21
               AutoSize = False
@@ -339,7 +339,7 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             end
             object lblPublication: TLabel
               Left = 286
-              Top = 148
+              Top = 175
               Width = 95
               Height = 21
               AutoSize = False
@@ -357,7 +357,7 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             end
             object lblStudyAbroad: TLabel
               Left = 8
-              Top = 175
+              Top = 202
               Width = 95
               Height = 21
               AutoSize = False
@@ -375,7 +375,7 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             end
             object lblPlace: TLabel
               Left = 286
-              Top = 175
+              Top = 202
               Width = 95
               Height = 21
               AutoSize = False
@@ -393,7 +393,7 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             end
             object lblWorkPlace: TLabel
               Left = 8
-              Top = 202
+              Top = 229
               Width = 95
               Height = 21
               AutoSize = False
@@ -411,7 +411,7 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             end
             object lblUseEnglish: TLabel
               Left = 286
-              Top = 202
+              Top = 229
               Width = 95
               Height = 21
               AutoSize = False
@@ -429,7 +429,7 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             end
             object lblFutureGoal: TLabel
               Left = 8
-              Top = 229
+              Top = 256
               Width = 95
               Height = 21
               AutoSize = False
@@ -447,7 +447,7 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             end
             object lblClientMemo: TLabel
               Left = 9
-              Top = 256
+              Top = 283
               Width = 95
               Height = 21
               AutoSize = False
@@ -465,11 +465,47 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             end
             object lblCounselorMemo: TLabel
               Left = 9
-              Top = 325
+              Top = 352
               Width = 95
               Height = 21
               AutoSize = False
               Caption = 'Counselor'
+              Color = clCream
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -13
+              Font.Name = 'Georgia'
+              Font.Style = []
+              ParentColor = False
+              ParentFont = False
+              Transparent = False
+              Layout = tlBottom
+            end
+            object lblKnjiF: TLabel
+              Left = 8
+              Top = 40
+              Width = 95
+              Height = 21
+              AutoSize = False
+              Caption = 'Kanji First'
+              Color = clCream
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -13
+              Font.Name = 'Georgia'
+              Font.Style = []
+              ParentColor = False
+              ParentFont = False
+              Transparent = False
+              Layout = tlBottom
+            end
+            object lblKanjiL: TLabel
+              Left = 286
+              Top = 40
+              Width = 95
+              Height = 21
+              AutoSize = False
+              Caption = 'Kanji Last'
               Color = clCream
               Font.Charset = ANSI_CHARSET
               Font.Color = clWindowText
@@ -497,14 +533,14 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             end
             object edtEmail: TEdit
               Left = 103
-              Top = 40
+              Top = 67
               Width = 444
               Height = 21
               TabOrder = 2
             end
             object cmbSponsored: TComboBox
               Left = 104
-              Top = 67
+              Top = 94
               Width = 83
               Height = 22
               Style = csOwnerDrawFixed
@@ -521,35 +557,35 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             end
             object edtUniversityName: TEdit
               Left = 104
-              Top = 94
+              Top = 121
               Width = 165
               Height = 21
               TabOrder = 4
             end
             object edtDegree: TEdit
               Left = 104
-              Top = 121
+              Top = 148
               Width = 165
               Height = 21
               TabOrder = 6
             end
             object edtMajor: TEdit
               Left = 382
-              Top = 121
+              Top = 148
               Width = 165
               Height = 21
               TabOrder = 7
             end
             object edtGPA: TEdit
               Left = 382
-              Top = 94
+              Top = 121
               Width = 165
               Height = 21
               TabOrder = 5
             end
             object cmbAcademicAward: TComboBox
               Left = 104
-              Top = 148
+              Top = 175
               Width = 83
               Height = 22
               Style = csOwnerDrawFixed
@@ -566,7 +602,7 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             end
             object cmbPublication: TComboBox
               Left = 381
-              Top = 148
+              Top = 175
               Width = 83
               Height = 22
               Style = csOwnerDrawFixed
@@ -583,7 +619,7 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             end
             object cmbStudyAbroad: TComboBox
               Left = 104
-              Top = 175
+              Top = 202
               Width = 83
               Height = 22
               Style = csOwnerDrawFixed
@@ -600,21 +636,21 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             end
             object edtPlace: TEdit
               Left = 382
-              Top = 175
+              Top = 202
               Width = 165
               Height = 21
               TabOrder = 11
             end
             object edtWorkPlace: TEdit
               Left = 104
-              Top = 202
+              Top = 229
               Width = 165
               Height = 21
               TabOrder = 12
             end
             object cmbUseEnglish: TComboBox
               Left = 382
-              Top = 202
+              Top = 229
               Width = 83
               Height = 22
               Style = csOwnerDrawFixed
@@ -631,14 +667,14 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             end
             object edtFutureGoal: TEdit
               Left = 104
-              Top = 229
+              Top = 256
               Width = 443
               Height = 21
               TabOrder = 14
             end
             object edtDate: TDateTimePicker
               Left = 291
-              Top = 67
+              Top = 94
               Width = 186
               Height = 21
               Date = 41455.633558726860000000
@@ -649,7 +685,7 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             end
             object memoClientMemo: TRichEdit
               Left = 104
-              Top = 256
+              Top = 283
               Width = 443
               Height = 63
               ScrollBars = ssBoth
@@ -657,11 +693,25 @@ inherited frmClientCarteDlg: TfrmClientCarteDlg
             end
             object memoCounselorMemo: TRichEdit
               Left = 104
-              Top = 325
+              Top = 352
               Width = 443
               Height = 63
               ScrollBars = ssBoth
               TabOrder = 17
+            end
+            object edtKanjiF: TEdit
+              Left = 103
+              Top = 40
+              Width = 166
+              Height = 21
+              TabOrder = 18
+            end
+            object edtKanjiL: TEdit
+              Left = 381
+              Top = 40
+              Width = 166
+              Height = 21
+              TabOrder = 19
             end
           end
         end

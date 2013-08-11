@@ -75,6 +75,10 @@ type
     memoClientMemo: TRichEdit;
     lblCounselorMemo: TLabel;
     memoCounselorMemo: TRichEdit;
+    lblKnjiF: TLabel;
+    edtKanjiF: TEdit;
+    lblKanjiL: TLabel;
+    edtKanjiL: TEdit;
     procedure grdSchoolClick(Sender: TObject);
     procedure cmbSchoolClick(Sender: TObject);
     procedure cmbRankClick(Sender: TObject);
@@ -467,6 +471,8 @@ begin
     Add('LAST_NAME,');
     Add('FIRST_NAME,');
     Add('MIDDLE_NAME,');
+    Add('KANJI_LAST_NAME,');
+    Add('KANJI_FIRST_NAME,');
     Add('EMAIL_ADDRESS,');
     Add('WORK_PLACE,');
     Add('SPONSORED_FLG,');
@@ -487,6 +493,8 @@ begin
     Add(_String(edtLastName.Text));
     Add(_String(edtFirstName.Text));
     Add('''' + '''' + ',');
+    Add(_String(edtKanjiL.Text));
+    Add(_String(edtKanjiF.Text));
     Add(_String(edtEmail.Text));
     Add(_String(edtWorkPlace.Text));
     Add(_Div(cmbSponsored.ItemIndex));
@@ -615,6 +623,8 @@ begin
     Add('LAST_NAME =' + _String(edtLastName.Text));
     Add('FIRST_NAME =' + _String(edtFirstName.Text));
     Add('MIDDLE_NAME =' + _String(''));
+    Add('KANJI_LAST_NAME =' + _String(edtKanjiL.Text));
+    Add('KANJI_FIRST_NAME =' + _String(edtKanjiF.Text));
     Add('EMAIL_ADDRESS =' + _String(edtEmail.Text));
     Add('WORK_PLACE =' + _String(edtWorkPlace.Text));
     Add('SPONSORED_FLG =' + _Div(cmbSponsored.ItemIndex));
@@ -728,6 +738,8 @@ begin
          'LAST_NAME,' +
          'FIRST_NAME,' +
          'MIDDLE_NAME,' +
+         'KANJI_LAST_NAME,' +
+         'KANJI_FIRST_NAME,' +
          'EMAIL_ADDRESS,' +
          'WORK_PLACE,' +
          'SPONSORED_FLG,' +
@@ -749,21 +761,23 @@ begin
   edtLastName.Text := cDataSet.Fields[1].AsString;
   edtFirstName.Text := cDataSet.Fields[2].AsString;
   //MiddleName
-  edtEmail.Text := cDataSet.Fields[4].AsString;
-  edtWorkPlace.Text := cDataSet.Fields[5].AsSTring;
-  cmbSponsored.ItemIndex := getcmbIndex(cDataSet.Fields[6].AsInteger);
-  edtUniversityName.Text := cDataSet.Fields[7].AsString;
-  edtMajor.Text := cDataSet.Fields[8].AsString;
-  edtDegree.Text := cDataSet.Fields[9].AsString;
-  edtGPA.Text := cDataSet.Fields[10].AsString;
-  cmbAcademicAward.ItemIndex := getcmbIndex(cDataSet.Fields[11].AsInteger);
-  cmbPublication.ItemIndex := getcmbIndex(cDataSet.Fields[12].AsInteger);
-  cmbStudyAbroad.ItemIndex := getcmbIndex(cDataSet.Fields[13].AsInteger);
-  edtPlace.Text := cDataSet.Fields[14].AsString;
-  cmbUseEnglish.ItemIndex := getcmbIndex(cDataSet.Fields[15].AsInteger);
-  edtFutureGoal.Text := cDataSet.Fields[16].AsString;
-  memoClientMemo.Text := cDataSet.Fields[17].AsString;
-  memoCounselorMemo.Text := cDataSet.Fields[18].AsString;
+  edtKanjiL.Text := cDataSet.Fields[4].AsString;
+  edtKanjiF.Text := cDataSet.Fields[5].AsString;
+  edtEmail.Text := cDataSet.Fields[6].AsString;
+  edtWorkPlace.Text := cDataSet.Fields[7].AsSTring;
+  cmbSponsored.ItemIndex := getcmbIndex(cDataSet.Fields[8].AsInteger);
+  edtUniversityName.Text := cDataSet.Fields[9].AsString;
+  edtMajor.Text := cDataSet.Fields[10].AsString;
+  edtDegree.Text := cDataSet.Fields[11].AsString;
+  edtGPA.Text := cDataSet.Fields[12].AsString;
+  cmbAcademicAward.ItemIndex := getcmbIndex(cDataSet.Fields[13].AsInteger);
+  cmbPublication.ItemIndex := getcmbIndex(cDataSet.Fields[14].AsInteger);
+  cmbStudyAbroad.ItemIndex := getcmbIndex(cDataSet.Fields[15].AsInteger);
+  edtPlace.Text := cDataSet.Fields[16].AsString;
+  cmbUseEnglish.ItemIndex := getcmbIndex(cDataSet.Fields[17].AsInteger);
+  edtFutureGoal.Text := cDataSet.Fields[18].AsString;
+  memoClientMemo.Text := cDataSet.Fields[19].AsString;
+  memoCounselorMemo.Text := cDataSet.Fields[20].AsString;
   cDataSet.Close;
 end;
 

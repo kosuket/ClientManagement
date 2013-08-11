@@ -2,7 +2,7 @@ object MailSettingframe: TMailSettingframe
   Left = 0
   Top = 0
   Caption = 'MailSettingframe'
-  ClientHeight = 202
+  ClientHeight = 262
   ClientWidth = 418
   Color = clGrayText
   Font.Charset = DEFAULT_CHARSET
@@ -17,12 +17,13 @@ object MailSettingframe: TMailSettingframe
     Left = 0
     Top = 0
     Width = 418
-    Height = 202
+    Height = 262
     Align = alClient
     BevelOuter = bvNone
     Color = clGrayText
     ParentBackground = False
     TabOrder = 0
+    ExplicitHeight = 202
     object lblHost: TLabel
       Left = 24
       Top = 16
@@ -59,7 +60,7 @@ object MailSettingframe: TMailSettingframe
     end
     object lblMailFrom: TLabel
       Left = 24
-      Top = 76
+      Top = 106
       Width = 73
       Height = 21
       AutoSize = False
@@ -76,7 +77,7 @@ object MailSettingframe: TMailSettingframe
     end
     object lblUserName: TLabel
       Left = 24
-      Top = 106
+      Top = 136
       Width = 73
       Height = 21
       AutoSize = False
@@ -93,11 +94,45 @@ object MailSettingframe: TMailSettingframe
     end
     object lblPassword: TLabel
       Left = 24
-      Top = 136
+      Top = 166
       Width = 73
       Height = 21
       AutoSize = False
       Caption = 'Password'
+      Color = clGrayText
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWhite
+      Font.Height = -11
+      Font.Name = 'Georgia'
+      Font.Style = []
+      ParentColor = False
+      ParentFont = False
+      Layout = tlCenter
+    end
+    object lblMailName: TLabel
+      Left = 24
+      Top = 76
+      Width = 73
+      Height = 21
+      AutoSize = False
+      Caption = 'Disp Name'
+      Color = clGrayText
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWhite
+      Font.Height = -11
+      Font.Name = 'Georgia'
+      Font.Style = []
+      ParentColor = False
+      ParentFont = False
+      Layout = tlCenter
+    end
+    object lblBCC: TLabel
+      Left = 24
+      Top = 196
+      Width = 73
+      Height = 21
+      AutoSize = False
+      Caption = 'BCC Myself'
       Color = clGrayText
       Font.Charset = ANSI_CHARSET
       Font.Color = clWhite
@@ -123,7 +158,7 @@ object MailSettingframe: TMailSettingframe
     end
     object edtMailFrom: TEdit
       Left = 104
-      Top = 76
+      Top = 106
       Width = 288
       Height = 22
       Font.Charset = ANSI_CHARSET
@@ -136,7 +171,7 @@ object MailSettingframe: TMailSettingframe
     end
     object edtUserName: TEdit
       Left = 104
-      Top = 106
+      Top = 136
       Width = 288
       Height = 22
       Font.Charset = ANSI_CHARSET
@@ -159,7 +194,7 @@ object MailSettingframe: TMailSettingframe
     end
     object edtPassword: TMaskEdit
       Left = 104
-      Top = 136
+      Top = 166
       Width = 288
       Height = 21
       PasswordChar = '*'
@@ -168,7 +203,7 @@ object MailSettingframe: TMailSettingframe
     end
     object btnOK: TButton
       Left = 24
-      Top = 168
+      Top = 228
       Width = 82
       Height = 25
       Caption = 'OK'
@@ -178,12 +213,39 @@ object MailSettingframe: TMailSettingframe
     end
     object btnCancel: TButton
       Left = 111
-      Top = 168
+      Top = 228
       Width = 84
       Height = 25
       Caption = 'Cancel'
       ModalResult = 2
       TabOrder = 6
+    end
+    object edtMailName: TEdit
+      Left = 104
+      Top = 76
+      Width = 288
+      Height = 22
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Georgia'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 7
+    end
+    object chbBCC: TCheckBox
+      Left = 104
+      Top = 197
+      Width = 14
+      Height = 17
+      Alignment = taLeftJustify
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWhite
+      Font.Height = -11
+      Font.Name = 'Georgia'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 8
     end
   end
 end
