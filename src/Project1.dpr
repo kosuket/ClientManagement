@@ -23,7 +23,8 @@ uses
   frmBillingDlg in 'frmBillingDlg.pas' {BillingDialogframe},
   frmCounseling in 'frmCounseling.pas' {Counselingframe},
   frmCounselingDlg in 'frmCounselingDlg.pas' {CounselingDialogframe},
-  frmReceipt in 'frmReceipt.pas' {Receiptframe};
+  frmReceipt in 'frmReceipt.pas' {Receiptframe},
+  frmReceiptDlg in 'frmReceiptDlg.pas' {ReceiptDialogframe};
 
 {$R *.res}
 
@@ -32,5 +33,6 @@ begin
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TMainframe, Mainframe);
   Application.CreateForm(TReceiptframe, Receiptframe);
+  Application.CreateForm(TReceiptDialogframe, ReceiptDialogframe);
   Application.Run;
 end.

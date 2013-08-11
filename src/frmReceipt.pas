@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, FWGridBasefrm, Vcl.AppEvnts,
   Vcl.StdCtrls, Vcl.Imaging.jpeg, Vcl.ExtCtrls, Vcl.Grids, Vcl.DBGrids,
-  Vcl.ComCtrls, Vcl.Buttons;
+  Vcl.ComCtrls, Vcl.Buttons, frmReceiptDlg,MySQLAccessor;
 
 type
   TReceiptframe = class(TFWGridBaseframe)
@@ -26,9 +26,11 @@ type
     Label2: TLabel;
     edtLastEndDate: TDateTimePicker;
     btnClear: TSpeedButton;
+    chkReceived: TCheckBox;
     procedure cmbStartDateChange(Sender: TObject);
     procedure cmbEndDateChange(Sender: TObject);
     procedure btnClearClick(Sender: TObject);
+    procedure DBGrid1DblClick(Sender: TObject);
   private
     { Private declarations }
     procedure clearCond(ctrl:TWinControl);
@@ -38,6 +40,7 @@ type
     function createWhere: String;  override;
   public
     { Public declarations }
+    frmReceiptDialog: TReceiptDialogframe;
     procedure initialize; override;
   end;
 
@@ -146,6 +149,10 @@ begin
           + '    CL.LAST_NAME,'
           + '    I.START_DATE,'
           + '    I.END_DATE,'
+          + '    CASE RECEIPT_FLG '
+          + '      WHEN 0 THEN "NOT RECEIVED" '
+          + '      WHEN 1 THEN "RECEIVED" END "RECEIPT_FLG",'
+          + '    I.BILLING_AMOUNT,'
           + '    I.SUBJECT,'
           + '    I.BODY,'
           + '    I.RECEIPT_FLG'
@@ -179,9 +186,41 @@ begin
     _checkforand(sl);
     sl.Add(' I.END_DATE BETWEEN ' + '''' + FormatDateTime('yyyy/mm/dd',edtFirstEndDate.Date) + '''' + ' AND ' + '''' + FormatDateTime('yyyy/mm/dd',edtLastEndDate.Date) + '''');
   end;
+  if not chkReceived.Checked then begin
+    _checkforand(sl);
+    sl.Add(' I.RECEIPT_FLG = 0');
+  end;
+
   if sl.Count > 0 then sl.Insert(0,' WHERE ');
-  sl.Add(' ORDER BY I.INVOICE_ID DESC');
+  sl.Add(' ORDER BY I.CLIENT_ID, I.INVOICE_ID DESC');
   result := sl.Text;
+end;
+
+procedure TReceiptframe.DBGrid1DblClick(Sender: TObject);
+var slRecepient,slAddress: TStringList;
+begin
+  inherited;
+  slRecepient := TStringList.Create;
+  slAddress := TStringList.Create;
+  try
+    //slAddress.Add(DBGrid1.Fields[3].Text);
+    frmReceiptDialog := TReceiptDialogframe.Create(Self, Accessor);
+    frmReceiptDialog.g_StartDate := DBGrid1.Fields[4].AsDateTime;
+    frmReceiptDialog.g_EndDate := DBGrid1.Fields[5].AsDateTime;
+    frmReceiptDialog.g_ClientId := StrToIntDef(DBGrid1.Fields[0].Text,-1);
+    frmReceiptDialog.g_ClientName := DBGrid1.Fields[2].Text + ' ' + DBGrid1.Fields[3].Text;
+    frmReceiptDialog.g_InvoiceId := StrToIntDef(DBGrid1.Fields[1].Text,-1);
+    frmReceiptDialog.g_BillingAmount := DBGrid1.Fields[7].AsInteger;
+    frmReceiptDialog.g_ReceiptFlg := StrToIntDef(DBGrid1.Fields[10].Text,-1);
+    frmReceiptDialog.g_Subject := DBGrid1.Fields[8].Text;
+    frmReceiptDialog.g_Body := DBGrid1.Fields[9].Text;
+    frmReceiptDialog.initialize;
+    frmReceiptDialog.ShowModal;
+  finally
+    slRecepient.Free;
+    slAddress.Free;
+    frmReceiptDialog.Destroy;
+  end;
 end;
 
 procedure TReceiptframe.initialize;

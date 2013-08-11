@@ -9,6 +9,7 @@ uses
   Datasnap.DBClient, Datasnap.Provider, Vcl.Buttons, MySQLAccessor,Data.DBXCommon,System.AnsiStrings;
 
 type
+  TOpenMode = (omBilling,omReceipt);
   TBillingDialogframe = class(TFWSQLBaseDialogframe)
     pnlMail: TPanel;
     Splitter1: TSplitter;
@@ -36,8 +37,11 @@ type
     procedure btnInvoiceClick(Sender: TObject);
   private
     { Private declarations }
+    procedure initializeBilling;
+    procedure initializeReceipt;
     procedure getCounselingInfo;
     procedure getBillingInfo;
+    procedure getReceiptInfo;
     function executeInvoice(clientId:Int64): Boolean;
     function createInsertInvoiceSQL(clientId:Int64; invoiceId: Int64): String;
     function createUpdateBRForInvoiceSQL(clientId:Int64; invoiceId: Int64): String;
@@ -48,8 +52,11 @@ type
     { Public declarations }
     frmMailDialog: TMailDlgframe;
     g_ClientId: Int64;
+    g_InvoiceId: Int64;
+    g_Subject: String;
+    g_Body: String;
     constructor create(AOwner:TComponent; Accessor: TMySQLAccessor); reintroduce; overload; override;
-    procedure initialize;
+    procedure initialize(om:TOpenMode);
   end;
 
 var
@@ -238,7 +245,8 @@ begin
          '      WHEN 1 THEN "Counseling" '  +
          '      WHEN 2 THEN "Seminar" ' +
          '      WHEN 3 THEN "Alpha Package" ' +
-         '      WHEN 4 THEN "Standard Package" END "BILLING TYPE",' +
+         '      WHEN 4 THEN "Standard Package" ' +
+         '      WHEN 99 THEN "Carry-Over From Last Month" END "BILLING TYPE",' +
          '    BOOK_AMOUNT,' +
          '    MEMO,' +
          '    TOTAL_HOUR,' +
@@ -309,9 +317,67 @@ begin
                                       else result := 0;
 end;
 
-procedure TBillingDialogframe.initialize;
+procedure TBillingDialogframe.getReceiptInfo;
+var sql: String;
+    i,amt:Integer;
+begin
+  amt := 0;
+  sql := 'SELECT ' +
+         '    BILL_ID,' +
+         '    BOOK_DATE,' +
+         '    CASE BILLING_TYPE ' +
+         '      WHEN 1 THEN "Counseling" '  +
+         '      WHEN 2 THEN "Seminar" ' +
+         '      WHEN 3 THEN "Alpha Package" ' +
+         '      WHEN 4 THEN "Standard Package" END "BILLING TYPE",' +
+         '    BOOK_AMOUNT,' +
+         '    MEMO,' +
+         '    TOTAL_HOUR,' +
+         '    CURRENT_HOUR ' +
+         ' FROM' +
+         '    BILLING_REQUEST' +
+         ' WHERE CLIENT_ID = ' + IntToStr(g_ClientId);
+    //sql := sql + ' AND BOOK_DATE BETWEEN ' + '''' + FormatDateTime('yyyy/mm/dd',edtFirstDate.Date) + '''' + ' AND ' + '''' + FormatDateTime('yyyy/mm/dd',edtLastDate.Date) + '''';
+    sql := sql + ' AND INVOICE_ID = ' + IntToStr(g_InvoiceId);
+  sql := sql +' ORDER BY BILL_ID';
+  loadQuery(sql);
+  if cDataSet.RecordCount = 0 then grdBilling.RowCount := 2
+                                    else grdBilling.RowCount := cDataSet.RecordCount + 1;
+  for i := 1 to cDataSet.RecordCount do begin
+    grdBilling.Cells[0,i] := cDataSet.Fields[0].AsString;
+    grdBilling.Cells[1,i] := cDataSet.Fields[1].AsString;
+    grdBilling.Cells[2,i] := cDataSet.Fields[2].AsString;
+    grdBilling.Cells[3,i] := cDataSet.Fields[3].AsString;
+    grdBilling.Cells[4,i] := cDataSet.Fields[4].AsString;
+    grdBilling.Cells[5,i] := cDataSet.Fields[5].AsString;
+    grdBilling.Cells[6,i] := cDataSet.Fields[6].AsString;
+    amt := amt + StrToIntDef(grdBilling.Cells[3,i],0);
+    cDataSet.Next;
+  end;
+  edtTotalCharge.Caption := 'Åè' + FormatFloat('#,##0', amt);
+end;
+
+procedure TBillingDialogframe.initialize(om:TOpenMode);
+begin
+  case om of
+    omBilling: initializeBilling;
+    omReceipt: initializeReceipt;
+  end;
+end;
+
+procedure TBillingDialogframe.initializeBilling;
 begin
   getBillingInfo;
+  getCounselingInfo;
+end;
+
+procedure TBillingDialogframe.initializeReceipt;
+begin
+  frmMailDialog.pnlAddress.Visible := False;
+  frmMailDialog.pnlAttachment.Visible := False;
+  frmMailDialog.edtSubject.Text := g_Subject;
+  frmMailDialog.memoContents.Text := g_Body;
+  getReceiptInfo;
   getCounselingInfo;
 end;
 

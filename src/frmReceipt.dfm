@@ -1,27 +1,29 @@
 inherited Receiptframe: TReceiptframe
   Caption = 'Receiptframe'
-  ExplicitLeft = -30
+  ExplicitWidth = 767
+  ExplicitHeight = 477
   PixelsPerInch = 96
   TextHeight = 13
   inherited pnlBase: TPanel
     inherited Splitter1: TSplitter
-      Top = 169
+      Top = 201
       ExplicitTop = 169
     end
     inherited Panel2: TPanel
-      Top = 172
-      Height = 267
+      Top = 204
+      Height = 235
       ExplicitTop = 172
       ExplicitHeight = 267
       inherited DBGrid1: TDBGrid
-        Height = 267
+        Height = 235
+        OnDblClick = DBGrid1DblClick
       end
     end
     inherited pnlCondition: TPanel
-      Height = 169
-      ExplicitHeight = 169
+      Height = 201
+      ExplicitHeight = 201
       inherited pnlCondBar: TPanel
-        Top = 134
+        Top = 166
         ExplicitTop = 134
       end
       inherited Panel1: TPanel
@@ -95,13 +97,14 @@ inherited Receiptframe: TReceiptframe
         Left = 0
         Top = 24
         Width = 751
-        Height = 110
+        Height = 142
         Align = alClient
         BevelOuter = bvNone
         Color = clCream
         DockSite = True
         ParentBackground = False
         TabOrder = 2
+        ExplicitHeight = 110
         object lblStartDate: TLabel
           Left = 8
           Top = 13
@@ -321,6 +324,20 @@ inherited Receiptframe: TReceiptframe
           Font.Style = []
           ParentFont = False
           TabOrder = 7
+        end
+        object chkReceived: TCheckBox
+          Left = 7
+          Top = 110
+          Width = 173
+          Height = 17
+          Caption = 'Show Received Invoices'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Georgia'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 8
         end
       end
     end
