@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, FWSQLBaseDlgfrm, Data.FMTBcd, Data.DB,System.AnsiStrings,
-  Data.SqlExpr, Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.ComCtrls, MySQLAccessor, frmClientSearch,Data.DBXCommon, System.DateUtils;
+  Data.SqlExpr, Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.ComCtrls, MySQLAccessor, frmClientSearch,Data.DBXCommon, System.DateUtils,frmClientdlg;
 
 type
   TOpenMode = (omNew,omModify);
@@ -56,6 +56,7 @@ type
     procedure cbPanicFeeClick(Sender: TObject);
     procedure edtCounselingDateChange(Sender: TObject);
     procedure btnCancelClick(Sender: TObject);
+    procedure lblClientClick(Sender: TObject);
   private
     { Private declarations }
     m_OpenMode: TOpenMode;
@@ -93,6 +94,7 @@ type
   public
     { Public declarations }
     frmSearchClient: TClientSearchframe;
+    frmClientDialog: TfrmClientCarteDlg;
     g_ClientId: Int64;
     g_SEQ: Int64;
     g_FirstName: String;
@@ -848,6 +850,30 @@ begin
     itCounseling: result := bookCounseling;
     itSeminar: result := bookCounseling;
     itPackage: result := bookPackage;
+  end;
+end;
+
+procedure TCounselingDialogframe.lblClientClick(Sender: TObject);
+var slTemp: TStringList;
+begin
+  inherited;
+  slTemp := TStringList.Create;
+  slTemp.Add('');
+  try
+    if ClientIdList.Count <= 0 then exit;
+    frmClientDialog := TfrmClientCarteDlg.Create(Self, Accessor);
+    try
+      frmClientDialog.SchoolList := slTemp;
+      frmClientDialog.slSchoolId := slTemp;
+      frmClientDialog.g_ClientId := StrToInt64Def(ClientIdList[0],-1);
+      frmClientDialog.initialize(omReference);
+      //frmClientDialog.g_DebugMode := m_DebugMode;
+      frmClientDialog.ShowModal;
+    finally
+      frmClientDialog.Destroy;
+    end;
+  finally
+    slTemp.Free;
   end;
 end;
 

@@ -75,6 +75,7 @@ inherited CounselingDialogframe: TCounselingDialogframe
         Top = 11
         Width = 478
         Height = 25
+        Hint = 'Click to show detailed Client info'
         AutoSize = False
         Color = clWindow
         Font.Charset = ANSI_CHARSET
@@ -84,8 +85,11 @@ inherited CounselingDialogframe: TCounselingDialogframe
         Font.Style = []
         ParentColor = False
         ParentFont = False
+        ParentShowHint = False
+        ShowHint = True
         Transparent = False
         Layout = tlCenter
+        OnClick = lblClientClick
       end
       object btnClient: TButton
         Left = 8

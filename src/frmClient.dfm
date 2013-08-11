@@ -394,6 +394,10 @@ inherited Clientframe: TClientframe
         end
         object tbBasic: TTabSheet
           Caption = 'Basic Info'
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object ScrollBox1: TScrollBox
             Left = 0
             Top = 0

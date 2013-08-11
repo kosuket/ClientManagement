@@ -10,7 +10,7 @@ uses
   Vcl.AppEvnts, MySQLAccessor,System.AnsiStrings;
 
 type
-  TOpenMode = (omNew,omModify);
+  TOpenMode = (omNew,omModify,omReference);
   TfrmClientCarteDlg = class(TFWSQLBaseDialogframe)
     ScrollBox1: TScrollBox;
     btnOK: TButton;
@@ -108,6 +108,7 @@ type
     m_OpenMode: TOpenMode;
     procedure initializeNew;
     procedure initializeModify;
+    procedure initializeReference;
     procedure setupGrid;
     procedure setupCombobox;
     function AddNewRecord: String;
@@ -1081,6 +1082,7 @@ begin
   case m_OpenMode of
     omNew: initializeNew;//新規作成
     omModify: initializeModify;//変更
+    omReference: initializeReference;//参照
   end;
 end;
 
@@ -1100,6 +1102,20 @@ begin
   //ClientId最大値取得
   loadQuery('SELECT MAX(CLIENT_ID) + 1 FROM CLIENT');
   g_ClientId := StrToIntDef(cDataSet.Fields[0].AsString,-1);
+end;
+
+procedure TfrmClientCarteDlg.initializeReference;
+begin
+  pnlTitle.Visible := False;
+  //ClientIdからclient、client_school_map、client_toefl、client_gmat取得
+  getClientInfo;
+  getSchoolInfo;
+  getGMATInfo;
+  getTOEFLInfo;
+  pnlBasic.Enabled := False;
+  pnlUpperGrid.Enabled := False;
+  pnlGMAT.Enabled := False;
+  pnlTOEFL.Enabled := False;
 end;
 
 function TfrmClientCarteDlg.isDynamicComp(Sender: TObject): Boolean;
