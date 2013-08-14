@@ -1,5 +1,5 @@
 inherited CounselingDialogframe: TCounselingDialogframe
-  Caption = 'CounselingDialogframe'
+  Caption = 'Counseling'
   ClientHeight = 510
   ClientWidth = 637
   Position = poScreenCenter

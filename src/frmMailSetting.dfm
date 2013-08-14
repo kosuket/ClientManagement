@@ -1,7 +1,7 @@
 object MailSettingframe: TMailSettingframe
   Left = 0
   Top = 0
-  Caption = 'MailSettingframe'
+  Caption = 'Mail Setting'
   ClientHeight = 262
   ClientWidth = 418
   Color = clGrayText

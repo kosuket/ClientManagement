@@ -1,5 +1,5 @@
 inherited ReceiptDialogframe: TReceiptDialogframe
-  Caption = 'ReceiptDialogframe'
+  Caption = 'Receipt'
   ClientHeight = 581
   ClientWidth = 981
   ExplicitWidth = 997

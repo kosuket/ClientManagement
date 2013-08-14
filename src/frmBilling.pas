@@ -138,29 +138,38 @@ function TBillingframe.createWhere: String;
     if sl.Count > cnt then sl.Add(' AND ');
   end;
 var sl: TstringList;
-   cnt: Integer;
+   cnt,befWhereCnt: Integer;
+   whereFlg: Boolean;
 begin
   inherited;
+  whereFlg := False;
+  befWhereCnt := 0;
   sl := TStringList.Create;
   if cmbPeriod.ItemIndex <> 0 then begin
     sl.Add(' AND B.BOOK_DATE BETWEEN ' + '''' + FormatDateTime('yyyy/mm/dd',edtFirstDate.Date) + '''' + ' AND ' + '''' + FormatDateTime('yyyy/mm/dd',edtLastDate.Date) + '''');
+    befWhereCnt := befWhereCnt + 1;
   end;
-  sl.Add('GROUP BY C.CLIENT_ID) A');
+  sl.Add(' GROUP BY C.CLIENT_ID) A');
+  befWhereCnt := befWhereCnt + 1;
+
   cnt := sl.Count;
   if Length(edtFirstName.Text) > 0 then begin
     _checkforand(sl,cnt);
     sl.Add(' A.FIRST_NAME = ' + '''' + edtFirstName.Text + '''');
+    whereFlg := True;
   end;
   if Length(edtLastName.Text) > 0 then begin
     _checkforand(sl,cnt);
     sl.Add(' A.LAST_NAME = ' + '''' + edtLastName.Text + '''');
+    whereFlg := True;
   end;
   if chkExcludeZero.Checked then begin
     _checkforand(sl,cnt);
     sl.Add(' A.CHARGE > 0 ');
+    whereFlg := True;
   end;
-  if sl.Count > 2 then begin
-    sl.Insert(2,' WHERE ');
+  if whereFlg then begin
+    sl.Insert(befWhereCnt,' WHERE ');
   end;
   result := sl.Text;
   sl.Free;

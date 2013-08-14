@@ -56,6 +56,9 @@ inherited ClientSearchframe: TClientSearchframe
           Anchors = [akLeft, akBottom]
           ExplicitLeft = 10
         end
+        inherited btnExport: TButton
+          TabOrder = 2
+        end
         object btnOK: TButton
           Left = 91
           Top = 7

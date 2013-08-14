@@ -135,7 +135,9 @@ begin
   sl.Add('            CL.MIDDLE_NAME,');
   sl.Add('            CL.EMAIL_ADDRESS,');
   sl.Add('            CL.WORK_PLACE,');
-  sl.Add('            CL.SPONSORED_FLG,');
+  sl.Add('    CASE CL.SPONSORED_FLG ');
+  sl.Add('      WHEN 0 THEN "Private" ');
+  sl.Add('      WHEN 1 THEN "Corporate" END "SPONSORED_FLG",');
   sl.Add('            CL.UNIVERSITY_NAME,');
   sl.Add('            CL.UNIVERSITY_MAJOR,');
   sl.Add('            CL.UNIVERSITY_DEGREE,');

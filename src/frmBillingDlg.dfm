@@ -1,5 +1,5 @@
 inherited BillingDialogframe: TBillingDialogframe
-  Caption = 'BillingDialogframe'
+  Caption = 'Billing'
   ClientHeight = 575
   ClientWidth = 978
   ExplicitWidth = 994

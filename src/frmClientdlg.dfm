@@ -1,5 +1,5 @@
 inherited frmClientCarteDlg: TfrmClientCarteDlg
-  Caption = 'frmClientCarteDlg'
+  Caption = 'Client'
   ClientHeight = 595
   ClientWidth = 1158
   Position = poScreenCenter

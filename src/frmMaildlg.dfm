@@ -1,5 +1,5 @@
 inherited MailDlgframe: TMailDlgframe
-  Caption = 'MailDlgframe'
+  Caption = 'Email'
   ClientHeight = 509
   ExplicitWidth = 434
   ExplicitHeight = 547
@@ -108,8 +108,6 @@ inherited MailDlgframe: TMailDlgframe
         BorderStyle = bsNone
         ScrollBars = ssBoth
         TabOrder = 1
-        ExplicitTop = 49
-        ExplicitHeight = 383
       end
       object pnlAttachment: TPanel
         Left = 0
