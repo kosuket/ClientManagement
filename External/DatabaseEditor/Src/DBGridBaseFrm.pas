@@ -27,7 +27,16 @@ type
     procedure GetInsertFiles(DirPath: string; var FilePaths: TStrings);
     procedure GetImportFiles(DirPath: string; var FilePaths: TStrings);
     procedure ExecuteSqlFiles(FilePaths: TStrings);
+    procedure ExecuteSqlCommandFile(FilePath: string);
+    procedure ExecuteSqlReplaceFile(FilePath: string);
     procedure ImportFiles(FilePaths: TStrings);
+    procedure CreateTable(FilePath: string);
+    procedure DropTable(TableName: string);
+    procedure ImportBackUp(FilePath, TableName: string);
+    procedure DeleteBackUp(FilePath: string);
+    function IsReplace(FilePath: string): Boolean;
+    function GetTableName(FilePath: string): string;
+    function BackUpTable(TableName: string): string;
   protected
     Accessor: TMySQLAccessor;
     CDataSet: TClientDataSet;
@@ -53,6 +62,8 @@ var
   FrmDBGridBase: TFrmDBGridBase;
 
 implementation
+uses
+  StrUtils;
 
 {$R *.dfm}
 
@@ -61,6 +72,15 @@ implementation
 procedure TFrmDBGridBase.AddRow;
 begin
   CDataSet.Insert;
+end;
+
+function TFrmDBGridBase.BackUpTable(TableName: string): string;
+var
+  BkFilePath: string;
+begin
+  BkFilePath := GetCurrentDir + '\bk' + TableName;
+  ExportData(BkFilePath, TableName);
+  Result := BkFilePath;
 end;
 
 procedure TFrmDBGridBase.Commit;
@@ -89,6 +109,11 @@ begin
   CsvLoader := TCsvLoader.Create(Accessor);
 end;
 
+procedure TFrmDBGridBase.CreateTable(FilePath: string);
+begin
+  ExecuteSqlCommandFile(FilePath);
+end;
+
 destructor TFrmDBGridBase.Destroy;
 begin
   CsvLoader.Free;
@@ -97,6 +122,14 @@ begin
   Provider.Free;
   DataSource.Free;
   inherited;
+end;
+
+procedure TFrmDBGridBase.DropTable(TableName: string);
+var
+  Sql: string;
+begin
+  Sql := 'DROP TABLE ' + TableName;
+  Accessor.ExecuteUpdate(Sql);
 end;
 
 procedure TFrmDBGridBase.DuplicateRow;
@@ -117,6 +150,11 @@ begin
   end;
 end;
 
+procedure TFrmDBGridBase.DeleteBackUp(FilePath: string);
+begin
+  DeleteFile(FilePath);
+end;
+
 procedure TFrmDBGridBase.DeleteRow;
 begin
   if CDataSet.RecordCount > 0 then begin
@@ -129,6 +167,24 @@ begin
   Parent := AParent;
   Align := alClient;
   BorderStyle := bsNone;
+end;
+
+procedure TFrmDBGridBase.ExecuteSqlCommandFile(FilePath: string);
+var
+  Commands: TStrings;
+  i: Integer;
+begin
+  Commands := TStringList.Create;
+  try
+    GetSqlCommandsFromFile(FilePath, Commands);
+    for i := 0 to Commands.Count - 1 do begin
+      if Length(Commands[i]) > 0 then begin
+        Accessor.ExecuteUpdate(Commands[i]);
+      end;
+    end;
+  finally
+    Commands.Free;
+  end;
 end;
 
 procedure TFrmDBGridBase.ExecuteSqlDirectory(DirPath: string);
@@ -166,20 +222,11 @@ begin
 end;
 
 procedure TFrmDBGridBase.ExecuteSqlFile(FilePath: string);
-var
-  Commands: TStrings;
-  i: Integer;
 begin
-  Commands := TStringList.Create;
-  try
-    GetSqlCommandsFromFile(FilePath, Commands);
-    for i := 0 to Commands.Count - 1 do begin
-      if Length(Commands[i]) > 0 then begin
-        Accessor.ExecuteUpdate(Commands[i]);
-      end;
-    end;
-  finally
-    Commands.Free;
+  if IsReplace(FilePath) then begin
+    ExecuteSqlReplaceFile(FilePath);
+  end else begin
+    ExecuteSqlCommandFile(FilePath);
   end;
 end;
 
@@ -190,6 +237,24 @@ begin
   for i := 0 to FilePaths.Count - 1 do begin
     ExecuteSqlFile(FilePaths[i]);
   end;
+end;
+
+procedure TFrmDBGridBase.ExecuteSqlReplaceFile(FilePath: string);
+var
+  TableName, BackUpFile: string;
+begin
+  // Determine target table
+  TableName := GetTableName(FilePath);
+  // Export Backup
+  BackUpFile := BackUpTable(TableName);
+  // Drop
+  DropTable(TableName);
+  // Create
+  CreateTable(FilePath);
+  // Import Backup
+  ImportBackUp(BackUpFile, TableName);
+  // Delete Backup
+  DeleteBackUp(BackUpFile);
 end;
 
 procedure TFrmDBGridBase.ExportData(DestFile, Table: string);
@@ -243,6 +308,21 @@ begin
   end;
 end;
 
+function TFrmDBGridBase.GetTableName(FilePath: string): string;
+var
+  Parts: TStrings;
+begin
+  // Assume '{filename}_replace.sql'
+  Parts := TStringList.Create;
+  try
+    Parts.LineBreak := '_replace.sql';
+    Parts.Text := ExtractFileName(FilePath);
+    Result := Parts.strings[0];
+  finally
+    Parts.Free;
+  end;
+end;
+
 procedure TFrmDBGridBase.GetUpdateFiles(DirPath: string;
   var FilePaths: TStrings);
 begin
@@ -252,6 +332,11 @@ end;
 procedure TFrmDBGridBase.ImportData(DestFile: string);
 begin
   CsvLoader.Execute(DestFile);
+end;
+
+procedure TFrmDBGridBase.ImportBackUp(FilePath, TableName: string);
+begin
+  ImportData(FilePath, TableName);
 end;
 
 procedure TFrmDBGridBase.ImportData(DestFile, Table: string);
@@ -266,6 +351,14 @@ begin
   for i := 0 to FilePaths.Count - 1 do begin
     ImportData(FilePaths[i]);
   end;
+end;
+
+function TFrmDBGridBase.IsReplace(FilePath: string): Boolean;
+var
+  Ext: string;
+begin
+  Ext := ExtractFileExt(FilePath);
+  Result := AnsiEndsText('_replace' + Ext, FilePath);
 end;
 
 procedure TFrmDBGridBase.LoadQuery(Sql: string);
