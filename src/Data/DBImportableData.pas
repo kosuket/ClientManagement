@@ -120,17 +120,44 @@ end;
 
 procedure TDBImportableData.SetPropertyValue(var Prp: TRttiProperty; Value: string);
 begin
+  // String
   if IsString(Prp) then begin
     Prp.SetValue(Self, Value);
-  end else if IsReal(Prp) then begin
-    Prp.SetValue(Self, StrToFloat(Value));
-  end else if IsInt(Prp) then begin
-    Prp.SetValue(Self, StrToInt(Value));
-  end else if IsDateTime(Prp) then begin
-    Prp.SetValue(Self, StrToDateTime(Value, DateFormat));
-  end else begin
-    raise Exception.Create('unknown datatype:' + Prp.PropertyType.Name);
+    Exit;
   end;
+
+  // Real
+  if IsReal(Prp) then begin
+    if Length(Value) > 0 then begin
+      Prp.SetValue(Self, StrToFloat(Value));
+    end else begin
+      Prp.SetValue(Self, 0);
+    end;
+    Exit;
+  end;
+
+  // Int
+  if IsInt(Prp) then begin
+    if Length(Value) > 0 then begin
+      Prp.SetValue(Self, StrToInt(Value));
+    end else begin
+      Prp.SetValue(Self, 0);
+    end;
+    Exit;
+  end;
+
+  // DateTime
+  if IsDateTime(Prp) then begin
+    if Length(Value) > 0 then begin
+      Prp.SetValue(Self, StrToDateTime(Value, DateFormat));
+    end else begin
+      Prp.SetValue(Self, 0);
+    end;
+    Exit;
+  end;
+
+  // Illegal: Unknown Type
+  raise Exception.Create('unknown datatype:' + Prp.PropertyType.Name);
 end;
 
 procedure TDBImportableData.SetValue(Column, Value: string);

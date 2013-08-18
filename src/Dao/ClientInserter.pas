@@ -7,6 +7,8 @@ type TClientInserter = class
   private
     Accessor: TMySQLAccessor;
     function GetNewClientId: Int64;
+    function IsValid(CGmat: TClientGmat): Boolean; overload;
+    function IsValid(CToefl: TClientToefl): Boolean; overload;
     procedure InsertClientGmat(CGmat: TClientGmat);
     procedure InsertClientToefl(CToefl: TClientToefl);
   public
@@ -43,13 +45,13 @@ begin
   Client.Client_id := GetNewClientId;
   InsertClient(Client);
   // CLIENT_GMAT
-  if Assigned(CGmat) then begin
+  if IsValid(CGmat) then begin
     CGmat.Client_id := Client.Client_id;
     CGmat.Score_no := 1;
     InsertClientGmat(CGmat);
   end;
   // CLIENT_TOEFL
-  if Assigned(CToefl) then begin
+  if IsValid(CToefl) then begin
     CToefl.Client_id := Client.Client_id;
     CToefl.Score_no := 1;
     InsertClientToefl(CToefl);
@@ -69,6 +71,32 @@ end;
 procedure TClientInserter.InsertClientToefl(CToefl: TClientToefl);
 begin
   Accessor.ExecuteUpdate(CToefl.GetInsertSql);
+end;
+
+function TClientInserter.IsValid(CGmat: TClientGmat): Boolean;
+begin
+  if not Assigned(CGMat) then begin
+    Result := False;
+    Exit;
+  end;
+  if CGMat.Test_date = 0 then begin
+    Result := False;
+    Exit;
+  end;
+  Result := True;
+end;
+
+function TClientInserter.IsValid(CToefl: TClientToefl): Boolean;
+begin
+  if not Assigned(CToefl) then begin
+    Result := False;
+    Exit;
+  end;
+  if CToefl.Test_date = 0 then begin
+    Result := False;
+    Exit;
+  end;
+  Result := True;
 end;
 
 end.
