@@ -79,7 +79,7 @@ begin
     Result := False;
     Exit;
   end;
-  if CGMat.Test_date = 0 then begin
+  if CGMat.Total = 0 then begin
     Result := False;
     Exit;
   end;
@@ -92,7 +92,7 @@ begin
     Result := False;
     Exit;
   end;
-  if CToefl.Test_date = 0 then begin
+  if CToefl.Total = 0 then begin
     Result := False;
     Exit;
   end;
